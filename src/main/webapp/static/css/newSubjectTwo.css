@@ -1,0 +1,34 @@
+.layer{font-family: "MicroSoft YaHei";position: fixed;width: 474px;height: 300px;background: #fff;top: 50%;margin-top: -150px;left: 50%;margin-left: -237px;}
+.layer h5{height: 30px;line-height: 30px;text-indent: 10px;text-align: left;background: #4f9de8;color: #fff;}
+
+.layer .buttonW{width: 205px;margin: 45px auto 0;}
+.layer button{cursor: pointer;font-family: "MicroSoft YaHei";width: 91px;height: 27px;display: inline-block;border: none;border-radius: 4px;color: #fff;}
+.layer button.cancel{background: #fba22c;float: left;}
+.layer button.save{background: #408ae1;float: right;}
+.layer button.cancel:hover{background: #fcb34c;}
+.layer button.cancel:active{background: #ee8f11;}
+.layer button.save:hover{background: #59a6ff;}
+.layer button.save:active{background: #216ec8;}
+
+.h6-kr{height: 30px;line-height: 30px;background: #4f9de8;text-align: left;color: #fff;font-size: 14px;text-indent: 11px;}
+.h6-kr i{background: url(../images/icon.png) no-repeat;}
+.h6-kr i{position: absolute;width: 30px;height: 30px;background:url(../images/icon.png) #4f9de8 11px -452px;top: 0;right: 0;}
+.h6-kr i:hover{ background:url(../images/icon.png) #63aee8 -13px -452px; }
+.h6-kr i:active{ background:url(../images/icon.png) #3d91e9 -37px -452px; }
+
+/*新增科目弹层*/
+.newSubjectTwo{display: none;}
+.newSubjectTwo-ptxt{border: 1px solid #dadbdd;background: #f4f9ff;width: 310px;height: 55px;margin: 16px auto 0;padding-top: 7px;}
+.newSubjectTwo-ptxt p{height: 24px;line-height: 24px;text-align: left;text-indent: 10px;}
+.ul-newSubjectTwo{width: 245px;margin: 60px auto 16px;}
+.ul-newSubjectTwo li{height: 26px;line-height: 26px;}
+.ul-newSubjectTwo li:first-child{margin-bottom: 36px}
+.ul-newSubjectTwo li label{width: 58px;height: 26px;line-height: 26px;text-align: right;float: left;font-size: 14px;}
+.ul-newSubjectTwo li.lifir{margin-bottom: 0;height: 32px;}
+.ul-newSubjectTwo li em{float: left;height: 32px;line-height: 32px;font-size: 12px;}
+.ul-newSubjectTwo li input,.ul-newSubjectTwo li select{float: right;height: 26px;line-height: 26px;font-size: 14px;text-align: left;text-indent: 5px;color: #555;border: 1px solid #a4a4a4;}
+.ul-newSubjectTwo li input.inp-length{width: 165px;}
+.ul-newSubjectTwo li select.inp-name{width: 167px;height: 28px;}
+
+.inp-col{color: #4f9de8;}
+.sp-time{float: right;width: 30px;height: 100%;}

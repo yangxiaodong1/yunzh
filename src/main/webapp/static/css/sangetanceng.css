@@ -1,0 +1,75 @@
+.layer{font-family: "MicroSoft YaHei";position: fixed;width: 474px;height: 300px;background: #fff;top: 50%;margin-top: -150px;left: 50%;margin-left: -237px;z-index: 10;}
+.layer h5{height: 30px;line-height: 30px;text-indent: 10px;text-align: left;background: #4f9de8;color: #fff;}
+
+.layer .buttonW{width: 205px;margin: 0 auto;}
+.layer button{cursor: pointer;font-family: "MicroSoft YaHei";width: 91px;height: 27px;display: inline-block;border: none;border-radius: 4px;color: #fff;}
+.layer button.cancel{background: #fba22c;float: left;}
+.layer button.save{background: #408ae1;float: right;}
+.layer button.cancel:hover{background: #fcb34c;}
+.layer button.cancel:active{background: #ee8f11;}
+.layer button.save:hover{background: #59a6ff;}
+.layer button.save:active{background: #216ec8;}
+
+.h6-kr{height: 30px;line-height: 30px;background: #4f9de8;text-align: left;color: #fff;font-size: 14px;text-indent: 11px;}
+.h6-kr i{background: url(../images/icon.png) no-repeat;}
+.h6-kr i{position: absolute;width: 30px;height: 30px;background:url(../images/icon.png) #4f9de8 11px -452px;top: 0;right: 0;}
+.h6-kr i:hover{ background:url(../images/icon.png) #63aee8 -13px -452px; }
+.h6-kr i:active{ background:url(../images/icon.png) #3d91e9 -37px -452px; }
+
+/* 标错反馈弹层 */
+.ul-wrongreason{width: 313px;margin: 30px auto 5px;}
+.ul-wrongreason li{width: 100%;float: left;text-align: left;height: 15px;line-height: 15px;margin-bottom: 15px;}
+.ul-wrongreason li input[type="checkbox"]{width: 15px;height: 15px;float: left;border: 1px solid #a1a1a1;background: none;}
+.ul-wrongreason li input.inp-check{width: 15px;height: 15px;float: left;border: 1px solid #a1a1a1;background: none;margin-right: 10px;}
+.ul-wrongreason li input.inp-txt{width: 244px;height: 26px;display: inline-block;float: right;border: 1px solid #999999;margin-top: -7px;}
+
+
+/*票据跨期弹层*/
+.ul-NegoInstrument{width: 220px;margin: 30px auto 28px;}
+.ul-NegoInstrument li{height: 26px;line-height: 26px;margin-bottom: 16px;}
+.ul-NegoInstrument li label{width: 58px;height: 26px;line-height: 26px;text-align: right;margin-right: 10px;float: left;font-size: 14px;}
+.ul-NegoInstrument li input{float: left;height: 26px;line-height: 26px;font-size: 14px;}
+.ul-NegoInstrument li input.inp-tx{border: none;width: 152px;}
+.ul-NegoInstrument li input.inp-val{text-align: center;width: 115px;}
+.inp-col{color: #4f9de8;}
+.sp-time{float: right;width: 30px;height: 100%;background: url(../images/icon.png) -80px -451px;}
+
+/*温馨提示*/
+.ul-kindlyReminder{width: 140px;margin: 50px auto 50px;}
+.ul-kindlyReminder li{width: 100%;float: left;font-size: 14px;height: 30px;line-height: 30px;text-align: center;}
+.txt-col{color: #d82020;}
+
+/*存为模板*/
+
+.ul-template{width: 245px;margin: 60px auto 14px;}
+.ul-template li:nth-child(1){height: 26px;line-height: 26px;margin-bottom: 36px;}
+.ul-template li:nth-child(2){height: 15px;line-height: 15px;margin-bottom: 36px;}
+.ul-template label{width: 60px;float: left;margin-right: 15px;font-size: 14px;}
+.ul-template li:nth-child(1) input{border: 1px solid #999999;width: 164px;height: 26px;}
+.ul-template input{float: left;}
+
+/*新建模板*/
+.tbvoucher{z-index: 10;}
+.tbvoucher h5{height: 30px;line-height: 30px;text-indent: 10px;text-align: left;background: #4f9de8;color: #fff;}
+.tbvoucher{font-family: "MicroSoft YaHei";position: fixed;width: 1140px;top: 0;left: 50%;margin-left:-570px;background: #fff;}
+.tbvoucher .body{width: 1072px;margin: 34px auto;border: 1px solid #c3c3c3}
+.lab-vou{margin-right: 10px;}
+.tbvoucher .body .voucher-top{margin-top: 10px;}
+.savevoucher{width: 90px;height: 27px;line-height: 27px;color: #fff;background: #4f9de8;position: absolute;right: 0px;bottom: -46px;border-radius: 4px;cursor: pointer;}
+
+/*发票列表页面新建凭证*/
+.savevoucher-list{width: 90px;height: 27px;line-height: 27px;color: #fff;background: #4f9de8;position: absolute;right: 0px;bottom: -46px;border-radius: 4px;cursor: pointer;}
+
+/*弹窗与遮罩*/
+.dialog{z-index: 10;}
+
+/* .tbvoucher .body{height:330px;overflow-y:auto;} */
+
+
+/*新增科目弹层*/
+.newPop{display: none;}
+.newPop p.prompt{height: 24px;line-height: 130px;text-align: center;height: 130px;font-size: 16px;}
+.newPop .buttonW{margin-top: 20px;}
+
+.inp-col{color: #4f9de8;}
+.sp-time{float: right;width: 30px;height: 100%;}

@@ -1,0 +1,21 @@
+/*设置部分公共样式*/
+.account-wrapper{min-width: 1055px;background: #eff1f3;font-family: "Microsoft Yahei";padding: 0 20px 10px;}
+.account-wrapper .h2-tit{width: 100%;text-align: center;font: 24px/50px "Microsoft Yahei";color: #1b1b1b;}
+.account-wrapper .th-left span{position: relative;float: left;width: auto;height: 25px;line-height: 45px;text-align: left;}
+.account-wrapper .th-left{float: left;}
+.mr8{margin-right: 8px;}
+
+.account-wrapper .th{height: 27px;position: relative;}
+.account-wrapper .th-right{float: right;height: 27px;}
+.account-wrapper .th-right span{float: right;width: 90px;height: 27px;background: #4f9de8;color: #fff;margin-left: 6px;font:12px/27px "Microsoft Yahei";cursor: pointer;border-radius: 4px;}
+.account-wrapper .th-right span:hover{background: #58a6ff;}
+.account-wrapper .th-right span:active{background: #3789db;}
+
+.account-wrapper .tb{min-width: 1058px;margin-top: 22px;overflow-y:auto;}
+.table-account-wrapper{width: 100%;}
+.table-account-wrapper thead tr th{background: #3498db;height: 28px;line-height: 28px;color: #fff;border-right: 1px solid #dadada;font-weight: normal;}
+.table-account-wrapper thead tr th:last-child{border-right: none;}
+.table-account-wrapper tbody tr td{height: 28px;line-height: 28px;border-right: 1px solid #dadada;border-bottom: 1px solid #dadada;text-align: center;}
+.table-account-wrapper tbody tr:nth-child(2n+1){background: #ffffff;}
+.table-account-wrapper tbody tr:nth-child(2n){background: #f4f7fa;}
+.table-account-wrapper tbody tr td:first-child{border-left: 1px solid #dadada;}

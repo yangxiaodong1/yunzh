@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.books.dao.AccountbalanceDao">
+
+	<sql id="accountbalanceColumns">
+		a.id AS "id",
+		a.fdbid AS "fdbid",
+		a.accunt_id AS "accuntId",
+		a.account_name AS "accountName",
+		a.acc_level AS "accLevel",
+		a.detail AS
+		"detail",
+		a.parent_id AS "parent.id",
+		a.root_id AS "rootId",
+		a.group_id
+		AS "groupId",
+		a.dc AS "dc",
+		a.account_period AS "accountPeriod",
+		a.beginbalance AS "beginbalance",
+		a.debittotalamount AS
+		"debittotalamount",
+		a.credittotalamount AS "credittotalamount",
+		a.ytddebittotalamount AS "ytddebittotalamount",
+		a.ytdcredittotalamount
+		AS "ytdcredittotalamount",
+		a.endbalance AS "endbalance",
+		a.create_by AS
+		"createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS
+		"updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="accountbalanceJoins">
+	</sql>
+
+	<select id="get" resultType="Accountbalance">
+		SELECT
+		<include refid="accountbalanceColumns" />
+		FROM accountbalance a
+		<include refid="accountbalanceJoins" />
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="Accountbalance">
+		SELECT
+		<include refid="accountbalanceColumns" />
+		FROM accountbalance a
+		<include refid="accountbalanceJoins" />
+		<where>
+			<!-- a.del_flag = #{DEL_FLAG_NORMAL} -->
+			<if test="fdbid != null and fdbid != ''">
+				AND a.fdbid = #{fdbid}
+			</if>
+			<if test="accountPeriod != null and accountPeriod != '' and periodEnd !=null and periodEnd !=''">
+				AND a.account_period BETWEEN #{accountPeriod} AND #{periodEnd}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="Accountbalance">
+		SELECT
+		<include refid="accountbalanceColumns" />
+		FROM accountbalance a
+		<include refid="accountbalanceJoins" />
+		<where>
+			<!-- a.del_flag = 1 -->
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO accountbalance(
+		id,
+		fdbid,
+		accunt_id,
+		account_name,
+		acc_level,
+		detail,
+		parent_id,
+		root_id,
+		group_id,
+		dc,
+		account_period,
+		beginbalance,
+		debittotalamount,
+		credittotalamount,
+		ytddebittotalamount,
+		ytdcredittotalamount,
+		endbalance,
+		create_by,
+		create_date,
+		update_by,
+		update_date,
+		remarks,
+		del_flag
+		) VALUES (
+		#{id},
+		#{fdbid},
+		#{accuntId},
+		#{accountName},
+		#{accLevel},
+		#{detail},
+		#{parent.id},
+		#{rootId},
+		#{groupId},
+		#{dc},
+		#{accountPeriod},
+		#{beginbalance},
+		#{debittotalamount},
+		#{credittotalamount},
+		#{ytddebittotalamount},
+		#{ytdcredittotalamount},
+		#{endbalance},
+		#{createBy.id},
+		#{createDate},
+		#{updateBy.id},
+		#{updateDate},
+		#{remarks},
+		#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE accountbalance SET
+		fdbid = #{fdbid},
+		accunt_id =
+		#{accuntId},
+		account_name = #{accountName},
+		acc_level = #{accLevel},
+		detail = #{detail},
+		parent_id = #{parent.id},
+		root_id = #{rootId},
+		group_id = #{groupId},
+		dc = #{dc},
+		account_period = #{accountPeriod},
+		beginbalance = #{beginbalance},
+		debittotalamount = #{debittotalamount},
+		credittotalamount = #{credittotalamount},
+		ytddebittotalamount =
+		#{ytddebittotalamount},
+		ytdcredittotalamount = #{ytdcredittotalamount},
+		endbalance = #{endbalance},
+		update_by = #{updateBy.id},
+		update_date =
+		#{updateDate},
+		remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE accountbalance SET
+		del_flag =
+		#{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<select id="findListByAccountId" resultType="Accountbalance">
+		select * from accountbalance a
+		<where>
+			1 = 1
+			<if test="accountP != null and accountP != ''">
+				AND a.account_period = #{accountP}
+			</if>
+			<if test="fdbid != null and fdbid != ''">
+				AND a.fdbid = #{fdbid}
+			</if>
+			AND accunt_id in
+			<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</where>
+	</select>
+
+	<select id="findListByAccId" resultType="Accountbalance">
+		select * from accountbalance a
+		<where>
+			1 = 1
+			<if test="accountP != null and accountP != ''">
+				AND a.account_period = #{accountP}
+			</if>
+			<if test="fdbid != null and fdbid != ''">
+				AND a.fdbid = #{fdbid}
+			</if>
+			AND id in
+			<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</where>
+	</select>
+
+	<!-- 金额发生变化的科目 总账显示所有发生金额变化的科目调用 科目明细表调用 -->
+	<select id="findHappenByAcc" resultType="Accountbalance">
+		select
+		<include refid="accountbalanceColumns" />
+		from accountbalance a
+		<where>
+			1 = 1
+			<if test="fdbid != null and fdbid != ''">
+				AND a.fdbid = #{fdbid}
+			</if>
+			<if test="accountPeriod != null and accountPeriod != '' and periodEnd !=null and periodEnd !=''">
+				AND a.account_period BETWEEN #{accountPeriod} AND #{periodEnd}
+			</if>
+			<if test="accountPeriod != null and accountPeriod != '' and periodEnd ==null and periodEnd ==''">
+				and a.account_period = #{accountPeriod}
+			</if>
+			<if test="accId != null and accId != ''">
+				AND a.id = #{accId}
+			</if>
+			<if test="accLevel != null and accLevel != ''">
+				AND a.acc_level = #{accLevel}
+			</if>
+		</where>
+		<!-- ORDER BY a.account_period DESC -->
+		group by a.accunt_id
+	</select>
+	<!-- 根据年份和科目id显示信息 -->
+	<select id="findListByAccIdLikeYear" resultType="Accountbalance">
+		select * from accountbalance a
+		<where>
+			1 = 1
+			<if test="accYear != null and accYear != ''">
+				AND a.account_period like #{accYear}
+			</if>
+			<if test="id != null and id != '' ">
+				AND a.id = #{id}
+			</if>
+			<if test="fdbid != null and fdbid != ''">
+				AND a.fdbid = #{fdbid}
+			</if>
+			<if test="list != null and list != ''">
+				AND a.id in
+				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+		</where>
+		ORDER BY a.account_period asc
+	</select>
+	<!-- 根据父级科目id查询子级科目 -->
+	<select id="findSublevelAcc" resultType="Accountbalance">
+		select * from accountbalance a
+		<where>
+			1 = 1
+			<if test="accountPeriod != null and accountPeriod != '' and periodEnd !=null and periodEnd !=''">
+				AND a.account_period BETWEEN #{accountPeriod} AND #{periodEnd}
+			</if>
+			<if test="accountPeriod != null and accountPeriod != '' and periodEnd ==null and periodEnd ==''">
+				and a.account_period = #{accountPeriod}
+			</if>
+			<if test="fdbid != null and fdbid != ''">
+				AND a.fdbid = #{fdbid}
+			</if>
+			<if test="parentId != null and parentId != ''">
+				AND a.parent_id = #{parentId}
+			</if>
+		</where>
+	</select>
+
+</mapper>

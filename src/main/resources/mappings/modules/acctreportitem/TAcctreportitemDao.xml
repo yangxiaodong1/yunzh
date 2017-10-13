@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.acctreportitem.dao.TAcctreportitemDao">
+    
+	<sql id="tAcctreportitemColumns">
+		a.fdbid AS "fdbid",
+		a.report_id AS "reportId",
+		a.reportitem AS "reportitem",
+		a.accountid AS "accountid",
+		a.ftype AS "ftype",
+		a.op AS "op",
+		a.acctyearperiod AS "acctyearperiod",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="tAcctreportitemJoins">
+	</sql>
+    
+	<select id="get" resultType="TAcctreportitem">
+		SELECT 
+			<include refid="tAcctreportitemColumns"/>
+		FROM t_acctreportitem a
+		<include refid="tAcctreportitemJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TAcctreportitem">
+		SELECT 
+			<include refid="tAcctreportitemColumns"/>
+		FROM t_acctreportitem a
+		<include refid="tAcctreportitemJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="fdbid != null and fdbid != ''">
+				AND a.fdbid = #{fdbid}
+			</if>
+			<if test="reportId != null and reportId != ''">
+				AND a.report_id = #{reportId}
+			</if>
+			<if test="reportitem != null and reportitem != ''">
+				AND a.reportitem = #{reportitem}
+			</if>
+			<if test="accountid != null and accountid != ''">
+				AND a.accountid = #{accountid}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TAcctreportitem">
+		SELECT 
+			<include refid="tAcctreportitemColumns"/>
+		FROM t_acctreportitem a
+		<include refid="tAcctreportitemJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_acctreportitem(
+			fdbid,
+			report_id,
+			reportitem,
+			accountid,
+			ftype,
+			op,
+			acctyearperiod,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{fdbid},
+			#{reportId},
+			#{reportitem},
+			#{accountid},
+			#{ftype},
+			#{op},
+			#{acctyearperiod},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_acctreportitem SET 	
+			fdbid = #{fdbid},
+			report_id = #{reportId},
+			reportitem = #{reportitem},
+			accountid = #{accountid},
+			ftype = #{ftype},
+			op = #{op},
+			acctyearperiod = #{acctyearperiod},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE t_acctreportitem SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	<delete id="deleteAcctreporttitemById">
+		delete from t_acctreportitem where id= #{id}
+	</delete>
+	
+	<insert id="savaAcctreporttitem">
+		INSERT INTO t_acctreportitem(
+			fdbid,
+			report_id,
+			reportitem,
+			accountid,
+			ftype,
+			op,
+			acctyearperiod			
+		) VALUES (
+			#{fdbid},
+			#{reportId},
+			#{reportitem},
+			#{accountid},
+			#{ftype},
+			#{op},
+			#{acctyearperiod}
+		)
+	</insert>
+</mapper>

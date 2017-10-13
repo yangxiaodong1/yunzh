@@ -1,0 +1,12 @@
+
+.d-batchAddPop{width: 298px;margin: 20px auto;padding: 8px 40px 0 12px;border: 1px solid #dfdfdf;}
+.ul-batchAddPop{width: 269px;}
+.ul-batchAddPop li{width: 269px;height: 26px;float: left;margin-bottom: 4px;}
+.ul-batchAddPop li input{width: 267px;height: 24px;border: none;border: 1px solid #d6d6d6;text-indent: 12px;}
+.p-tip{color: #b9b9b9;text-align: left;height: 30px;line-height: 30px;}
+
+.liadd{position: relative;}
+.liadd i{position: absolute;width: 20px;height: 20px;background: url(../images/add1.png) top center no-repeat;top: 3px;right: -27px;}
+.liadd i:hover{background: url(../images/add2.png) top center no-repeat;}
+.liadd i:active{background: url(../images/add3.png) top center no-repeat;}
+.ul-batchAddPop li input.iptnone{background: #ebebeb;border:none;}

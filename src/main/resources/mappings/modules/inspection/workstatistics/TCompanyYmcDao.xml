@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.inspection.dao.workstatistics.TCompanyYmcDao">
+    
+	<sql id="tCompanyYmcColumns">
+		a.id AS "id",
+		a.company_id AS "companyId",
+		a.ymonth AS "ymonth",
+		a.ymonth_count AS "ymonthCount",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="tCompanyYmcJoins">
+	</sql>
+    
+	<select id="get" resultType="TCompanyYmc">
+		SELECT 
+			<include refid="tCompanyYmcColumns"/>
+		FROM t_company_ymc a
+		<include refid="tCompanyYmcJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TCompanyYmc">
+		SELECT 
+			<include refid="tCompanyYmcColumns"/>
+		FROM t_company_ymc a
+		<include refid="tCompanyYmcJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="companyId != null and companyId != ''">
+				AND a.company_id = #{companyId}
+			</if>
+			<if test="ymonth != null and ymonth != ''">
+				AND a.ymonth = #{ymonth}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	<select id="findAllList" resultType="TCompanyYmc">
+		SELECT 
+			<include refid="tCompanyYmcColumns"/>
+		FROM t_company_ymc a
+		<include refid="tCompanyYmcJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	<select id="findYMCountBycompanyId" resultType="TCompanyYmc">
+	select count(*) AS 'ymonthCount' from t_customer a inner join sys_user b on a.supervisor =b.id 
+where a.out_of_service='0' and a.del_flag='0' and b.company_id=#{companyId}
+and DATE_FORMAT(a.create_date,'%Y%m')=DATE_FORMAT(CURDATE(),'%Y%m')
+	</select>
+	
+	<select id="insertTerm" resultType="TCompanyYmc">
+		select * from t_company_ymc WHERE ymonth=#{ymonth} and company_id=#{companyId};
+	</select>
+	
+	<select id="selectzjymc" resultType="TCompanyYmc">
+		select * from t_company_ymc 
+		where ymonth = 
+		(select ymonth from t_company_ymc where ymonth &lt; CONVERT(#{ymonth},SIGNED) AND company_id=#{companyId} order by ymonth desc limit 1) 
+		AND company_id=#{companyId};
+	</select>
+	<select id="MaxTCompanyYmcByCompanyId" resultType="TCompanyYmc">
+		select	a.id AS "id",
+		a.company_id AS "companyId",
+		a.ymonth AS "ymonth",
+		a.ymonth_count AS "ymonthCount",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+		from t_company_ymc a where a.company_id=#{0} order by ymonth desc limit 1
+		
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_company_ymc(
+			company_id,
+			ymonth,
+			ymonth_count,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{companyId},
+			#{ymonth},
+			#{ymonthCount},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	
+	<insert id="insertlist" parameterType="java.util.List">  
+    insert into t_company_ymc (
+    		company_id,
+			ymonth,
+			ymonth_count,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag)   
+    values  
+    <foreach collection="list" item="item" index="index" separator="," >  
+        (        
+        	#{item.companyId},
+			#{item.ymonth},
+			#{item.ymonthCount},
+			#{item.createBy.id},
+			#{item.createDate},
+			#{item.updateBy.id},
+			#{item.updateDate},
+			#{item.remarks},
+			#{item.delFlag}
+        )  
+    </foreach>  
+</insert>  
+	
+	
+	
+	
+	
+	<update id="update">
+		UPDATE t_company_ymc SET 	
+			company_id = #{companyId},
+			ymonth = #{ymonth},
+			ymonth_count = #{ymonthCount},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updatePlus">
+		UPDATE t_company_ymc SET
+			ymonth_count = ymonth_count+1
+		WHERE company_id = #{companyId}
+		AND ymonth = DATE_FORMAT(CURDATE(),'%Y%m')
+	</update>
+	<update id="updateSubtract">
+		UPDATE t_company_ymc SET
+			ymonth_count = ymonth_count-1
+		WHERE company_id = #{companyId}
+		AND ymonth = DATE_FORMAT(CURDATE(),'%Y%m')
+	</update>
+
+	<update id="updateymonthcount">
+		UPDATE t_company_ymc SET 	
+			ymonth_count = #{ymonthCount}
+		WHERE company_id = #{companyId} AND ymonth = #{ymonth}
+	</update>
+
+	<update id="updateSubtracts">
+		UPDATE t_company_ymc SET
+			ymonth_count = ymonth_count-#{ymonthCount}
+		WHERE company_id = #{companyId}
+		AND ymonth = DATE_FORMAT(CURDATE(),'%Y%m')
+	</update>
+	
+	<update id="delete">
+		UPDATE t_company_ymc SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

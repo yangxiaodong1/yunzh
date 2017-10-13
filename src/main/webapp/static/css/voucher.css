@@ -1,0 +1,142 @@
+/* reset ÷ÿ÷√—˘ Ω */
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td,hr,button,article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section {margin:0;padding:0;}
+html {-webkit-text-size-adjust: none;}
+body{font:12px/1.5 \5B8B\4F53,"Arial Narrow",HELVETICA;text-align:center;color: #555;}
+ol,ul{list-style:none;}
+h1,h2,h3,h4,h5,h6 { font-size: 100%;}
+img{border:none;vertical-align: top}
+i,em{font-style:normal;}
+input,select,option,textarea{font-size:12px;}
+a{text-decoration:none;} 
+a:hover{text-decoration:underline;}
+noscript,.spanclass,.contentdiv,.hidden{display:none;}
+.show,.block{display:block;}
+.mark,.fl,.subMark,.fr {display: inline;}
+.mark,.fl{float:left;} .subMark,.fr {float:right;}
+.f14 {font-size:14px;} .f16 {font-size:16px;}
+.clear{clear:both;height:0;line-height:0;font-size:0;overflow:hidden;}
+.clearfix{*zoom:1} .clearfix:after{content:"\20";clear:both;height:0;display:block;overflow:hidden}
+
+
+.c-right{float: left;padding: 22px 0 0 24px;}
+.edit .th .th-left .scrollleft,.edit .th .th-left .scrollright,.a-left,.a-right,.ul-pj em{background: url(../images/icon.png) no-repeat;}
+
+.edit{width: 1083px;float: left;background: #fff;padding: 0 40px 65px;border: 1px solid #dcdcdc;}
+.edit a:hover{text-decoration: none;}
+.edit-show{position: relative;font: 18px/38px "Microsoft Yahei";padding: 10px 0 7px;}
+.edit-show p{text-align: right;font:12px/27px "MicroSoft YaHei";color: #fff;float: right;padding-right: 25px;}
+.a-edit{position: absolute;width: 80px;height: 20px;color: #1e4d83;font:12px/20px "MicroSoft YaHei";margin:0 auto;top: 3px;left: 50%;margin-left: -10px;background: url(../images/icon_jt.png) #fff 10px 3px no-repeat;text-indent: 23px;text-align: left;}
+.sp-each{margin-right: 20px;float: left;}
+.sp-each i{float: left;width: 21px;height: 15px;cursor: pointer;}
+.edit .th{height: 27px;margin-bottom: 12px;}
+.edit .th  .th-left{float: left;}
+.edit .th  .th-left span{width: 28px;height: 27px;float: left;cursor: pointer;}
+.edit .th .th-left .scrollleft{margin-right: 6px;background-position: 0 0;}
+.edit .th .th-left .scrollright{background-position: -34px 0;}
+.edit .th .th-right span{float: right;width: 90px;height: 27px;background: #3091f2;margin-right: 11px;font:12px/27px "Microsoft Yahei";color: #fff;cursor: pointer;}
+.i-left{background: url(../images/icon_zjt.png) top center no-repeat;margin-right: 20px;}
+.i-right{background: url(../images/icon_yjt.png) top center no-repeat;}
+.edit .th a{float: left;width: 65px;height: 18px;background: #fff;border-right: 1px solid #e1e1e1;border-bottom: 1px solid #e1e1e1;color: #0f3663;margin-right: 7px;font:12px/18px "MicroSoft YaHei";}
+.edit .th a.a-save{float: right;margin-right: 46px;color: #4c5b6b;}
+.edit .tb{margin:0 auto;border: 1px solid #dcdcdc;padding-right: 40px;}
+.edit .tb .head span{float: left;font-size: 14px;font-family: "MicroSoft YaHei";color: #5a5a5a;line-height: 25px;vertical-align: bottom;}
+.i-big{font-size: 24px;vertical-align: bottom;margin-right: 11px;}
+.sp-b{margin-left:9.8%;margin-right: 10%;}
+.sp-data{margin-left: 8px;}
+.sp-fir select{width: 60px;height: 17px;border: 1px solid #dcdcdc;}
+.sp-data em{float: right;width: 93px;height: 17px;border: 1px solid #dcdcdc;}
+.edit .tb .head span.sp-num{float: right;}
+.edit .body{position: relative;padding-bottom: 10px}
+.tab-voucher{border-right: 1px solid #aaaaaa;margin-top: 5px;}
+.tab-voucher td,.tab-voucher th{border-top: 1px solid #aaaaaa;border-left: 1px solid #aaaaaa;font-size: 12px;font-family: "MicroSoft YaHei";color: #5a5a5a;}
+.tab-voucher th.col-summary,.tab-voucher th.col-subject{font-size: 14px;}
+.tab-voucher td.col-total{font-size: 16px;}
+.tab-voucher tbody td{height: 64px;}
+.make-person{text-align: left;font: 14px/30px "MicroSoft YaHei";text-indent: 26px;}
+.tr-consult td{text-align: left;text-indent: 2em;font-size: 14px;}
+.a-add{width: 18px;height: 18px;position: absolute;top: 12px;left: 2px;background: url(../images/icon_add.png) top center no-repeat;}
+.a-delete{width: 18px;height: 18px;position: absolute;bottom: 12px;left: 2px;background: url(../images/icon_delete.png) top center no-repeat;}
+
+.voucher-top{margin-top: 30px;margin-bottom: 35px;padding:0 0 0 20px}
+.vou-left{float: left;width: 165px;font: 12px/25px "Microsoft Yahei";color: #a5a4a4;text-align: left;}
+.date-wrap{float: left;color: #a5a4a4;}
+.vou-right{float: right;width: 160px;font: 12px/25px "Microsoft Yahei";color: #a5a4a4;text-align: right;}
+.voucher-top input{width: 94px;height: 25px;border: 1px solid #e5e5e5;}
+
+.tab-voucher .money-unit { height: 22px; line-height: 22px; font-weight: normal; border-top: 1px solid #dadada; text-align: center; }
+.tab-voucher .money-unit span { float: left; display: inline; width: 20px; height: 100%;background-color: #fff;border-right: 1px solid #aaaaaa;}
+.tab-voucher .money-unit .last{border: none;}
+.tab-voucher td{ height: 60px; }
+.tab-voucher td.col-debite, .tab-voucher td.col-credit, .tab-voucher td.col-money, .money-unit{background-image: url('../images/line.png');background-position: -1px 0;background-repeat:  repeat-y;position: relative;}
+.tab-voucher .col-operate{  text-align: center;width: 26px;border: none;}
+.col-summary{position: relative;width: 240px;}
+.col-summary .cell-val{width: 240px;height: 64px; line-height: 64px;word-break: break-all;word-wrap: break-word;}
+.col-summary .cell-val,.col-subject .cell-val{padding: 0;font-size: 14px;}
+.tab-voucher .col-option{width: 30px;text-align: center;}
+.tab-voucher .col-option{border-left:0;}
+.col-option .option{visibility: hidden;position: relative;width: 30px;}
+.col-option .option .selSub{display: block;width: 24px;height: 26px;cursor: pointer;color: #aaa;text-align: center;line-height: 26px;margin: 0 auto;}
+.col-subject{width: 240px;}
+.col-subject .cell-val{width: 240px;height: 64px;line-height: 64px;word-break: break-all;word-wrap: break-word;position: relative;}
+.col-subject input{width: 247px;height: 64px;word-break: break-all;word-wrap: break-word;position: absolute;top:0;left: 0;padding-right: 23px;border: 0;}
+.col-option .option .selSub, .col-option .option .selSummary, .col-option .option .balance{display: block;width: 24px;height: 26px;cursor: pointer;color: #aaa;text-align: center;line-height: 26px;margin: 0 auto;}
+.tab-voucher .col-debite .cell-val, .tab-voucher .col-credit .cell-val{font-family: 'tahoma'; font-weight: bold; font-size: 14px; letter-spacing: 12px; overflow: hidden; position: relative; right: -5px; *right: 4px;text-align: right;}
+.tab-voucher .col-debite input,.tab-voucher .col-credit input{width: 100%;height: 64px;border: none;text-align: right;position: absolute;top: 0;left: 0;}
+.col-summary input{width: 240px;padding-right: 30px;height: 64px;border: none;position: absolute;top: 0;left: 0;}
+.col-total,.col-debite1,.col-credit1{border-bottom: 1px solid #aaaaaa;}
+.col-total{text-align: left;text-indent: 2em;}
+.col-subject{position: relative;}
+.col-operate{position: relative;}
+
+.add-delete{display: none;}
+.entry-item  td.on .add-delete{display: block;}
+.ul-select{position: absolute;background: #fff;z-index: 10;width: 270px;height: 200px;overflow-y:auto;}
+.ul-select li{width: 100%;height: 28px;line-height: 28px;text-align: left;float: left;text-indent: 2px;cursor: pointer;}
+.ul-select li:hover{background: #ddd}
+
+.ul-word{position: absolute;left: -1px;display: none;}
+.ul-word li{width: 59px;height: 18px;line-height: 18px;font-size: 12px;font-family: "Microsoft Yahei";border: 1px solid #aaa;border-top:none;background: #d2d2d2;cursor: default;}
+
+.col-debite,.col-credit{width: 230px;}
+
+.pics{width: 100%;background: #f6f6f6;padding: 8px 0;border: 1px solid #eeeeee;margin-bottom: 14px;position: relative;}
+.pic-pj{width: 820px;margin:0 auto;height: 146px;overflow: hidden;}
+.ul-pj{margin-right: -53px;height: 146px;width: 10000px;}
+.ul-pj li{position: relative;float: left;padding: 15px 20px;border: 1px solid #b5b5b5;margin-right: 56px;display: inline;}
+.a-left{position: absolute;width: 13px;height: 21px;background-position: 0 -28px;left: 62px;top:50%;margin-top: -10px;}
+.a-right{position: absolute;width: 13px;height: 21px;background-position: -14px -28px;right: 62px;top:50%;margin-top: -10px;}
+.ul-pj em{position: absolute;width: 17px;height: 12px;top: 2px;right: 4px;background-position: 0 -50px;cursor: pointer;}
+
+.balance-pop{position: absolute;z-index: 1001;width: 130px;padding: 5px 10px;background-color: #fff;color: #555;border: 1px solid #4bb7f3;box-shadow: 0 0 3px rgba(0,162,255,0.4);} 
+.balance-pop b{position: absolute;
+    top: -7px;
+    left: 50%;
+    margin-left: -3px;
+    display: block;
+    height: 7px;
+    width: 13px;
+    overflow: hidden;
+    background: url('../images/page_spr_icons.png') no-repeat -144px -96px;}
+
+.balance-pop .close{position: absolute;
+    right: 0;
+    top: 0;
+    display: block;
+    width: 16px;
+    height: 16px;
+    overflow: hidden;
+    text-indent: -9999px;
+    background: url('../images/page_spr_icons.png') no-repeat -160px -96px;}
+
+.check-balance{color: #3ab2f4;
+    text-align: center;}
+
+.check-balance strong { float: left; }
+.check-balance a { float: right; display: inline; margin-right: 5px; color: #aaa; }
+.check-balance a:hover { color: #555; }
+
+/*357 540*/
+
+
+.bx-prev{ width:12px; height:26px; background:#f00;text-indent: -999999px;z-index: 999;  position: absolute; float:left; left:455px; top:110px;}
+.bx-next{ width:12px; height:26px;  background:#f00; text-indent: -999999px;z-index: 999;  position: absolute; top:110px;left:-15px;}

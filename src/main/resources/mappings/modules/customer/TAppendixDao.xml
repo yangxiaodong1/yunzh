@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.customer.dao.TAppendixDao">
+    
+	<sql id="tAppendixColumns">
+		a.id AS "id",
+		a.appendix_name AS "appendixName",
+		a.t_cus_id AS "tCusId",
+		a.appendix_type_name AS "appendixTypeName",
+		a.up_people AS "upPeople",
+		a.up_people_id AS "upPeopleId",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.update_date AS "updateDate",
+		a.duiying_state AS "duiyingState"
+	</sql>
+	
+	<sql id="tAppendixJoins">
+	</sql>
+    
+	<select id="get" resultType="TAppendix">
+		SELECT 
+			<include refid="tAppendixColumns"/>
+		FROM t_appendix a
+		<include refid="tAppendixJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TAppendix">
+		SELECT 
+			<include refid="tAppendixColumns"/>
+		FROM t_appendix a
+		<include refid="tAppendixJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TAppendix">
+		SELECT 
+			<include refid="tAppendixColumns"/>
+		FROM t_appendix a
+		<include refid="tAppendixJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findByState" resultType="TAppendix">
+		select * from t_appendix where duiying_state=#{duiyingState}
+	</select>
+	<!-- 根据客户id查找yang -->
+	<select id="findBytcusid" resultType="TAppendix">
+		<!-- select * from t_appendix where t_cus_id=#{tCusId} -->
+		SELECT 
+			<include refid="tAppendixColumns"/>
+		FROM t_appendix a
+		<include refid="tAppendixJoins"/>
+		WHERE  a.t_cus_id=#{tCusId}
+		
+	</select>
+	
+	<insert id="insert" keyProperty="id" useGeneratedKeys="true">
+		INSERT INTO t_appendix(
+			
+			appendix_name,
+			t_cus_id,
+			appendix_type_name,
+			up_people,
+			up_people_id,
+			create_by,
+			create_date,
+			update_by,
+			remarks,
+			del_flag,
+			update_date,
+			duiying_state
+		) VALUES (
+			
+			#{appendixName},
+			#{tCusId},
+			#{appendixTypeName},
+			#{upPeople},
+			#{upPeopleId},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{remarks},
+			#{delFlag},
+			#{updateDate},
+			#{duiyingState}
+		)
+	</insert>
+	
+	<insert id="insertNew">
+		INSERT INTO t_appendix(
+			id,
+			appendix_name,
+			t_cus_id,
+			appendix_type_name,
+			up_people,
+			up_people_id,
+			create_by,
+			create_date,
+			update_by,
+			remarks,
+			del_flag,
+			update_date,
+			duiying_state
+		) VALUES (
+			#{id},
+			#{appendixName},
+			#{tCusId},
+			#{appendixTypeName},
+			#{upPeople},
+			#{upPeopleId},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{remarks},
+			#{delFlag},
+			#{updateDate},
+			#{duiyingState}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_appendix SET 	
+			appendix_name = #{appendixName},
+			t_cus_id = #{tCusId},
+			appendix_type_name = #{appendixTypeName},
+			up_people = #{upPeople},
+			up_people_id = #{upPeopleId},
+			update_by = #{updateBy.id},
+			remarks = #{remarks},
+			update_date = #{updateDate},
+			duiying_state = #{duiyingState}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete" >
+		UPDATE t_appendix SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateCusid">
+		update t_appendix set t_cus_id = #{tCusId},duiying_state = #{duiyingState} where id=#{id}
+	</update>
+	
+	<delete id="deleteInfo">
+		delete from t_appendix where id=#{id}
+	</delete>
+	
+	<select id="selectId" resultType="string">
+	select  NEXTVAL('TestAppendix');
+	</select>
+</mapper>

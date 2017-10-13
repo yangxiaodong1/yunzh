@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.inspection.dao.workstatistics.TServiceChargeDao">
+    
+	<sql id="tServiceChargeColumns">
+		a.id AS "id",
+		a.customer_id AS "customerId",
+		a.payee_man AS "payeeMan",
+		a.sign_date AS "signDate",
+		a.service_date AS "serviceDate",
+		
+		ifnull(a.loan_money,0) AS "loanMoney",
+		ifnull(a.accountbook_money,0) AS "accountbookMoney",
+		a.mode_payment AS "modePayment",
+		ifnull(a.should_money,0) AS "shouldMoney",
+		ifnull(a.reality_money,0) AS "realityMoney",
+		a.remark AS "remark",
+		a.state AS "state",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.service_charge_no AS "serviceChargeNo",
+		b.customer_name AS "customerName",
+		c.name AS "loginName"
+	</sql>
+	
+	<sql id="tServiceChargeJoins">
+	right join t_customer b on a.customer_id=b.id inner join sys_user c on a.payee_man=c.id
+	</sql>
+   
+	<select id="get" resultType="TServiceCharge">
+		SELECT 
+			<include refid="tServiceChargeColumns"/>
+		FROM t_service_charge a 
+		<include refid="tServiceChargeJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	<select id="getMaxServicedate" resultType="String">
+		select max(substring_index(a.service_date,'~',-1)) from t_service_charge a where a.del_flag = #{DEL_FLAG_NORMAL} AND a.customer_id =#{customerId}
+	</select>
+	
+		<select id="getMaxServiceChargeNo" resultType="String">
+		select max(a.service_charge_no)+1 from t_service_charge a WHERE 
+		
+		 a.service_charge_no LIKE CONCAT(DATE_FORMAT(#{signDate},'%Y%m'),'%') AND
+		
+		 a.del_flag = #{DEL_FLAG_NORMAL} AND a.payee_man in 
+		
+		(select id from sys_user WHERE company_id=#{companyId} AND  del_flag = #{DEL_FLAG_NORMAL})
+		</select>
+	<select id="findList" resultType="TServiceCharge">
+		SELECT 
+			<include refid="tServiceChargeColumns"/>
+		FROM t_service_charge a 
+		<include refid="tServiceChargeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="customerName != null and customerName != ''">
+				AND b.customer_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{customerName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{customerName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{customerName},'%')</if>
+			</if>
+				
+			<if test="customerId != null and customerId != ''">
+				AND a.customer_id =#{customerId}
+			</if>
+			<if test="beginSignDate != null and  beginSignDate != '' ">
+				<![CDATA[AND (str_to_date(substring_index(a.service_date,'~',-1), '%Y%m') >= str_to_date(#{beginSignDate}, '%Y%m')
+				OR str_to_date(substring_index(a.service_date,'~',1), '%Y%m') >= str_to_date(#{beginSignDate}, '%Y%m'))
+				
+				]]> 
+			</if>
+			<if test="endSignDate != null and  endSignDate != ''">
+				<![CDATA[AND (str_to_date(substring_index(a.service_date,'~',-1), '%Y-%m') <= str_to_date(#{endSignDate}, '%Y%m')
+				OR str_to_date(substring_index(a.service_date,'~',1), '%Y%m') <= str_to_date(#{endSignDate}, '%Y%m'))
+				
+				]]> 
+			</if>
+			<if test="state != null and state != ''">
+				AND a.state = #{state}
+			</if>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	<select id="findListBycustomerIdAndPayeeMan" resultType="TServiceCharge">
+		SELECT 
+			<include refid="tServiceChargeColumns"/>
+		FROM t_service_charge a 
+		<include refid="tServiceChargeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="customerId != null and customerId != ''">
+				AND a.customer_id =#{customerId}
+			</if>
+				
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TServiceCharge">
+		SELECT 
+			<include refid="tServiceChargeColumns"/>
+		FROM t_service_charge a
+		<include refid="tServiceChargeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_service_charge(
+			customer_id,
+			sign_date,
+			service_date,
+			loan_money,
+			accountbook_money,
+			mode_payment,
+			should_money,
+			reality_money,
+			remark,
+			state,
+			payee_man,
+			service_charge_no,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{customerId},
+			#{signDate},
+			#{serviceDate},
+			#{loanMoney},
+			#{accountbookMoney},
+			#{modePayment},
+			#{shouldMoney},
+			#{realityMoney},
+			#{remark},
+			#{state},
+			#{payeeMan},
+			#{serviceChargeNo},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_service_charge SET 	
+			customer_id = #{customerId},
+			sign_date = #{signDate},
+			service_date = #{serviceDate},
+			loan_money = #{loanMoney},
+			accountbook_money = #{accountbookMoney},
+			mode_payment = #{modePayment},
+			should_money = #{shouldMoney},
+			reality_money = #{realityMoney},
+			remark = #{remark},
+			state = #{state},
+			payee_man = #{payeeMan},
+			service_charge_no = #{serviceChargeNo},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete FROM t_service_charge WHERE id = #{id}
+	</delete>
+	
+</mapper>

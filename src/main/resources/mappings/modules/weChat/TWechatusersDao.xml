@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.weChat.dao.TWechatusersDao">
+
+	<sql id="tWechatusersColumns">
+		a.id AS "id",
+		a.fdbid AS "fdbid",
+		a.officeCompanyName AS "officeCompanyName",
+		a.user_name AS "userName",
+		a.password AS "password",
+		a.plainTextPassword AS"plainTextPassword",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="tWechatusersJoins">
+	</sql>
+
+	<select id="get" resultType="TWechatusers">
+		SELECT
+		<include refid="tWechatusersColumns" />
+		FROM t_wechatusers a
+		<include refid="tWechatusersJoins" />
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="TWechatusers">
+		SELECT
+		<include refid="tWechatusersColumns" />
+		FROM t_wechatusers a
+		<include refid="tWechatusersJoins" />
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="TWechatusers">
+		SELECT
+		<include refid="tWechatusersColumns" />
+		FROM t_wechatusers a
+		<include refid="tWechatusersJoins" />
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO t_wechatusers(
+		id,
+		fdbid,
+		officeCompanyName,
+		user_name,
+		password,
+		create_by,
+		create_date,
+		update_by,
+		update_date,
+		remarks,
+		del_flag
+		) VALUES (
+		#{id},
+		#{fdbid},
+		#{officeCompanyName},
+		#{userName},
+		#{password},
+		#{createBy.id},
+		#{createDate},
+		#{updateBy.id},
+		#{updateDate},
+		#{remarks},
+		#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE t_wechatusers SET
+		fdbid = #{fdbid},
+		user_name = #{userName},
+		password = #{password},
+		update_by = #{updateBy.id},
+		update_date = #{updateDate},
+		remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE t_wechatusers SET
+		del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	<!-- 更改密码 yang -->
+	<update id="updatepwd">
+		UPDATE t_wechatusers SET
+		password = #{password},
+		plainTextPassword =#{plainTextPassword}
+		WHERE fdbid = #{fdbid}
+	</update>
+	<!-- 更改用户名 yang-->
+	<update id="updateuesrname">
+		UPDATE t_wechatusers SET 
+			user_name = #{userName}
+		WHERE fdbid = #{fdbid}
+	</update>
+	<select id="selectkWeChatUserPassword" resultType="java.lang.String">
+		select password from t_wechatusers
+		<where>
+			user_name = #{userName}
+		</where>
+	</select>
+
+	<select id="selectWeChatUserInfo" resultType="TWechatusers">
+		select
+		<include refid="tWechatusersColumns" />
+		FROM t_wechatusers a
+		<include refid="tWechatusersJoins" />
+		<where>
+			user_name = #{userName} and password = #{password}
+		</where>
+	</select>
+	<!-- 根据fdbid查找用户名密码 -->
+	<select id="selectByFdbid" resultType="TWechatusers">
+		select * from t_wechatusers
+		<where>
+			fdbid = #{fdbid}
+		</where>
+	</select>
+	<insert id="saveUserInfo">
+		INSERT INTO t_wechatusers(
+		fdbid,
+		officeCompanyName,
+		user_name,
+		plainTextPassword,
+		password
+		) VALUES (
+		#{fdbid},
+		#{officeCompanyName},
+		#{userName},
+		#{plainTextPassword},
+		#{password}
+		)
+	</insert>
+	<!-- 根据账户模糊查询 -->
+	<select id="selectLikeUserName" resultType="java.lang.Integer">
+		select COUNT(*) 
+			from t_wechatusers 
+		where 
+		user_name like concat(#{userName},'%');
+	</select>
+</mapper>

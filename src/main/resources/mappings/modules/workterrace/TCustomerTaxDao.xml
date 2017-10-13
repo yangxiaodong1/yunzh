@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.workterrace.dao.TCustomerTaxDao">
+    
+	<sql id="tCustomerTaxColumns">
+		a.id AS "id",
+		a.customer_id AS "customerId",
+		a.account_id AS "accountId",
+		a.account_name AS "accountName",
+		a.tax_base AS "taxBase",
+		a.tax_rate AS "taxRate",
+		a.tax_money AS "taxMoney",
+		a.tax_period AS "taxPeriod",
+		a.tax_date AS "taxDate",
+		a.remarks1 AS "remarks1",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="tCustomerTaxJoins">
+	</sql>
+    
+	<select id="get" resultType="TCustomerTax">
+		SELECT 
+			<include refid="tCustomerTaxColumns"/>
+		FROM t_customer_tax a
+		<include refid="tCustomerTaxJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TCustomerTax">
+		SELECT 
+			<include refid="tCustomerTaxColumns"/>
+		FROM t_customer_tax a
+		<include refid="tCustomerTaxJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="customerId != null and customerId != ''">
+				AND a.customer_id = #{customerId}
+			</if>
+			<if test="taxPeriod != null and taxPeriod != ''">
+				AND a.tax_period = #{taxPeriod}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	<select id="tCustomerTaxList" resultType="TCustomerTax">
+select tve.account_name AS "accountName",tve.credit AS "taxMoney",ta.rate AS "taxRate", convert(credit*100/rate,decimal(9,2)) AS "taxBase",ta.id AS "accountId"
+from t_voucher tv, t_voucher_exp tve,t_account ta
+where tv.id = tve.t_v_id and tv.if_auto=1 and tve.exp='税金计提' and tve.credit>0 
+and tv.fdbid=#{customerId} and tve.account_id=ta.id and ta.fdbid=#{customerId} and tve.fdbid=#{customerId} 
+and tv.account_period=#{taxPeriod}
+order by tve.exp_row_number
+
+	</select>
+	
+
+	
+	
+	
+	<select id="findAllList" resultType="TCustomerTax">
+		SELECT 
+			<include refid="tCustomerTaxColumns"/>
+		FROM t_customer_tax a
+		<include refid="tCustomerTaxJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_customer_tax(
+			customer_id,
+			account_id,
+			account_name,
+			tax_base,
+			tax_rate,
+			tax_money,
+			tax_period,
+			tax_date,
+			remarks1,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{customerId},
+			#{accountId},
+			#{accountName},
+			#{taxBase},
+			#{taxRate},
+			#{taxMoney},
+			#{taxPeriod},
+			#{taxDate},
+			#{remarks1},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_customer_tax SET 	
+			customer_id = #{customerId},
+			account_id = #{accountId},
+			account_name = #{accountName},
+			tax_base = #{taxBase},
+			tax_rate = #{taxRate},
+			tax_money = #{taxMoney},
+			tax_period = #{taxPeriod},
+			tax_date = #{taxDate},
+			remarks1 = #{remarks1},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE t_customer_tax SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

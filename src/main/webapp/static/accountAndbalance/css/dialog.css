@@ -1,0 +1,23 @@
+.layerS{font-family: "MicroSoft YaHei";position: fixed;width: 474px;height: 300px;background: #fff;top: 50%;margin-top: -150px;left: 50%;margin-left: -237px;}
+.layer h5{height: 30px;line-height: 30px;text-indent: 10px;text-align: left;background: #4f9de8;color: #fff;}
+
+.layerB{font-family: "MicroSoft YaHei";position: fixed;width: 760px;height: 400px;background: #fff;top: 50%;margin-top: -200px;left: 50%;margin-left: -380px;}
+
+.layer .buttonW{width: 205px;margin: 0 auto;}
+.layer button{cursor: pointer;font-family: "MicroSoft YaHei";width: 91px;height: 27px;display: inline-block;border: none;border-radius: 4px;color: #fff;}
+.layer button.cancel{background: #fba22c;float: left;}
+.layer button.fsave{background: #408ae1;float: right;}
+.layer button.cancel:hover{background: #fcb34c;}
+.layer button.cancel:active{background: #ee8f11;}
+.layer button.fsave:hover{background: #59a6ff;}
+.layer button.fsave:active{background: #216ec8;}
+
+.h6-kr{height: 30px;line-height: 30px;background: #4f9de8;text-align: left;color: #fff;font-size: 14px;text-indent: 11px;}
+.h6-kr i{background: url(../images/icon.png) no-repeat;}
+.h6-kr i{position: absolute;width: 30px;height: 30px;background:url(../images/icon.png) #4f9de8 11px -452px;top: 0;right: 0;}
+.h6-kr i:hover{ background:url(../images/icon.png) #63aee8 -13px -452px; }
+.h6-kr i:active{ background:url(../images/icon.png) #3d91e9 -37px -452px; }
+
+.mask{display: none;width: 100%;height: 100%;position: absolute;top: 0;left: 0;background: #aaaaaa;opacity: 0.7;filter:alpha(opacity=70);}
+.message-pop{display:none;position:fixed;top:40px;width:100%;text-align:center;z-index:1000;}
+.message-pop span{background:#4f9de8;padding:5px 75px;color:#fff;}

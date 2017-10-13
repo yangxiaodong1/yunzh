@@ -1,0 +1,20 @@
+.hr3{height:3px;}
+.remove_list li{width:330px;height:150px;float:left;border:1px #c8ddfa solid;margin:20px 4px 0 23px;}
+.remove_list .inner{padding:23px 15px 15px 15px;}
+.remove_list .img{width:73px;height:73px;background:url(../images/gzpt/img_remove.jpg) no-repeat;float:left;}
+.remove_list .txt{line-height:24px;}
+.remove_list .txt .tit_attr3 span{padding:0 6px 0 6px;}
+.tit_channel_1 {
+color: #484848;
+font-size: 24px;
+text-align: center;
+height: 34px;
+position:relative;
+}
+.tb{oveflow-x:hidden;overflow-y:auto;width:100%;top:0px;left:0;box-sizing:inherit;-webkit-box-sizing:inherit;}
+.btn-default2{color:#fff;background-color: #4f9de8;border-color: #4f9de8;}
+.btn-default2:hover{color:#fff;background-color: #58a6ff;}
+.btn-default2:focus{color:#fff;}
+
+.tit_channel_1 .btn-default2{position:absolute;right:15px;top:5px;padding-top:4px;padding-bottom:4px;}
+.tit_channel_1 .btn-default2 i{display:inline-block;background:url(../images/gzpt/ico_sys.jpg) no-repeat 0px center;padding:0 0 0 25px;font-style:normal;}

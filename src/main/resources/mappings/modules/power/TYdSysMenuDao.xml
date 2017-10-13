@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.power.dao.TYdSysMenuDao">
+    
+     <resultMap id="powerResult" type="TYdSysMenu">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="useable" column="useable" />
+		
+		<collection property="userList" ofType="User">
+			<id property="id" column="userList.id" />
+			
+		</collection> 
+		<collection property="menuList" ofType="Menu">
+			<id property="id" column="menuList.id" />
+		</collection>
+		
+	</resultMap>
+	<sql id="tYdSysMenuColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.useable AS "useable",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="tYdSysMenuJoins">
+	</sql>
+    
+	<select id="get" resultType="TYdSysMenu">
+		SELECT 
+			<include refid="tYdSysMenuColumns"/>
+		FROM t_yd_sys_menu a
+		<include refid="tYdSysMenuJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	<!-- 查出权限yang -->
+	<select id="findPower" resultType="TYdSysMenu">
+		SELECT 
+			a.name,a.id
+		FROM t_yd_sys_menu a
+		LEFT JOIN t_yd_sys_user_menu o ON o.menu_id = a.id
+		LEFT JOIN sys_user u ON u.id = o.user_id 
+	   where  u.id=#{user.id}
+	</select>
+	<!-- 
+	<select id="findList" resultType="TYdSysMenu">
+		SELECT 
+			<include refid="tYdSysMenuColumns"/>
+		FROM t_yd_sys_menu a
+		<include refid="tYdSysMenuJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	 -->
+	 
+	 <select id="findList" resultType="TYdSysMenu" resultMap="powerResult">
+		SELECT <!-- DISTINCT -->
+			<include refid="tYdSysMenuColumns"/>,
+			
+		FROM t_yd_sys_menu a
+		LEFT JOIN sys_office o ON o.id = a.office_id
+		LEFT JOIN sys_user_role ur ON ur.role_id = a.id
+		LEFT JOIN sys_user u ON u.id = ur.user_id
+		LEFT JOIN sys_role_office ro ON ro.role_id = a.id
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL} AND a.useable=#{useable}
+		<if test="user != null and user.id != null and user.id != ''">
+			AND u.id = #{user.id}
+		</if>
+		<if test="user != null and user.loginName != null and user.loginName != ''">
+			AND u.login_name = #{user.loginName}
+		</if>
+		<!-- 数据范围过滤 -->
+		${sqlMap.dsf}
+		ORDER BY o.code, a.name
+	</select>
+	<select id="findAllList" resultType="TYdSysMenu">
+		SELECT 
+			<include refid="tYdSysMenuColumns"/>
+		FROM t_yd_sys_menu a
+		<include refid="tYdSysMenuJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_yd_sys_menu(
+			id,
+			name,
+			useable,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{name},
+			#{useable},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_yd_sys_menu SET 	
+			name = #{name},
+			useable = #{useable},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE t_yd_sys_menu SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

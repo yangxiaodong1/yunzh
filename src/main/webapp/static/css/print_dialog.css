@@ -1,0 +1,20 @@
+
+.print_dialog {width: 1000px;background: #fff;position: absolute;top: 0;left: 50%;margin-left: -500px;display: none;}
+.print_dialog .title {line-height: 34px;font-size: 14px;font: 14px "Microsoft Yahei";line-height: 34px;margin: 0 0 10px;}
+.print_dialog .template {padding-top: 10px;overflow-y: auto; }
+.print_dialog .template_chose {float: left;cursor: pointer;}
+.print_dialog .container {width: 300px;height:350px;border: 1px solid #ccc;position: relative;margin-left: 20px;}
+/* .print_dialog .spe {padding-bottom:10px;} */
+.print_dialog .Serial_number {position: absolute;width: 0;height: 0;border-top: 28px solid #FF4830;border-right: 28px solid transparent;color: #fff;line-height: 0;font-size: 
+16px;top: 0;left: 0;}
+.print_dialog .Serial_number span {position: absolute;top: -18px;left: 6px;}
+.print_dialog table {width: 260px;margin: 20px auto;border-collapse: collapse;}
+.print_dialog table td,.print_dialog table th {border:1px solid #4f9de8;height: 24px;color: #989898;}
+.print_dialog table th {border-bottom:2px solid #4f9de8;}
+.print_dialog table.tb_dialog td {height: 12px;}
+.print_dialog table.tb_dialog {margin-bottom: 10px;}
+.print_dialog .note {line-height: 41px;color: red;text-align: left;text-indent: 22px;}
+.print_dialog .print_help {background: none;min-width: inherit;margin-right: 20px;padding-bottom: 47px; }
+.print_dialog .print_help span {width: 124px}
+.print_dialog .checked {position: absolute;top: 0;left: 0;width: 100%;height: 100%;display: none;border: 2px solid #438CD2;}
+.print_dialog .checked .checked_bg {background:#9CCBEF;opacity: 0.3;filter:alpha(opacity:30);width: 100%;height: 100%;position: absolute;left: 0;top: 0;}

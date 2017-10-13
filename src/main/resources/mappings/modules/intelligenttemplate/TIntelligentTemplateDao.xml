@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.intelligenttemplate.dao.TIntelligentTemplateDao">
+    
+	<sql id="tIntelligentTemplateColumns">
+		a.id AS "id",
+		a.company AS "company",
+		a.bill_type AS "billType",
+		a.count AS "count",
+		a.debit_account AS "debitAccount",
+		a.credit_account AS "creditAccount"
+	</sql>
+	
+	<sql id="tIntelligentTemplateJoins">
+	</sql>
+    
+	<select id="get" resultType="TIntelligentTemplate">
+		SELECT 
+			<include refid="tIntelligentTemplateColumns"/>
+		FROM t_intelligent_template a
+		<include refid="tIntelligentTemplateJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TIntelligentTemplate">
+		SELECT 
+			<include refid="tIntelligentTemplateColumns"/>
+		,(select ta.account_name FROM t_account ta where ta.id = a.debit_account )  as debitAccountName
+		,(select ta.account_name FROM t_account ta where ta.id = a.credit_account )  as creditAccountName
+		FROM t_intelligent_template a
+		<include refid="tIntelligentTemplateJoins"/>
+		<where>
+			 1 = 1
+		<if test="company != null and company != '' " >
+			AND	a.company = #{company }
+		</if>
+		<if test="billType != null and billType != '' " >
+			AND	a.bill_type = #{billType}
+		</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TIntelligentTemplate">
+		SELECT 
+			<include refid="tIntelligentTemplateColumns"/>
+		FROM t_intelligent_template a
+		<include refid="tIntelligentTemplateJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_intelligent_template(
+			id,
+			company,
+			bill_type,
+			count,
+			debit_account,
+			credit_account
+		) VALUES (
+			#{id},
+			#{company},
+			#{billType},
+			#{count},
+			#{debitAccount},
+			#{creditAccount}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_intelligent_template SET 	
+			company = #{company},
+			bill_type = #{billType},
+			count = #{count},
+			debit_account = #{debitAccount},
+			credit_account = #{creditAccount}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_intelligent_template
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

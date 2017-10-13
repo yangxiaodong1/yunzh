@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.inspection.dao.workstatistics.TWorkGatherInfoDao">
+    
+	<sql id="tWorkGatherInfoColumns">
+		a.id AS "id",
+		a.by_year AS "byYear",
+		a.customer_name AS "customerName",
+		a.bill_sum AS "billSum",
+		a.voucher_sum AS "voucherSum",
+		a.shunt_sum AS "shuntSum",
+		a.worker_name AS "workerName",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="tWorkGatherInfoJoins">
+	</sql>
+    
+	<select id="get" resultType="TWorkGatherInfo">
+		SELECT 
+			<include refid="tWorkGatherInfoColumns"/>
+		FROM t_work_gather_info a
+		<include refid="tWorkGatherInfoJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TWorkGatherInfo">
+		
+
+select a.id,
+a.customer_name AS "customerName",
+b.name AS "workerName",
+b.company_id,ifnull(c.billSum,0)  AS 'billSum',
+ifnull(c.voucherSum,0) AS 'voucherSum',
+ifnull(c.shuntSum,0)   AS 'shuntSum'
+from t_customer a left join
+(
+select a.id, t_v_work_gatherInfo_1.ymcount AS 'billSum',t_v_work_gatherInfo_2.ymcount AS 'voucherSum',t_v_work_gatherInfo_3.ymcount  AS 'shuntSum'
+from 
+t_customer a left join
+t_v_work_gatherInfo_2 on a.id= t_v_work_gatherInfo_2.id left join
+t_v_work_gatherInfo_1 on a.id= t_v_work_gatherInfo_1.id left join
+t_v_work_gatherInfo_3 on a.id= t_v_work_gatherInfo_3.id 
+	<where>
+a.del_flag = #{DEL_FLAG_NORMAL} AND  a.out_of_service='0'
+			<if test="byYear != null and byYear != ''">
+				AND t_v_work_gatherInfo_1.by_year = #{byYear} AND t_v_work_gatherInfo_2.by_year = #{byYear} AND t_v_work_gatherInfo_3.by_year = #{byYear} 
+			</if>
+			</where>
+ ) c on  a.id=c.id left join 
+sys_user  b on a.supervisor=b.id 
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} AND  a.out_of_service='0'
+			<if test="customerName != null and customerName != ''">
+				AND a.customer_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{customerName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{customerName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{customerName},'%')</if>
+			</if>
+			<if test="companyId != null and companyId  != ''">
+				AND  b.company_Id=#{companyId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY (a.id+0)
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TWorkGatherInfo">
+		SELECT 
+			<include refid="tWorkGatherInfoColumns"/>
+		FROM t_work_gather_info a
+		<include refid="tWorkGatherInfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_work_gather_info(
+			id,
+			by_year,
+			customer_name,
+			bill_sum,
+			voucher_sum,
+			shunt_sum,
+			worker_name,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{byYear},
+			#{customerName},
+			#{billSum},
+			#{voucherSum},
+			#{shuntSum},
+			#{workerName},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_work_gather_info SET 	
+			by_year = #{byYear},
+			customer_name = #{customerName},
+			bill_sum = #{billSum},
+			voucher_sum = #{voucherSum},
+			shunt_sum = #{shuntSum},
+			worker_name = #{workerName},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE t_work_gather_info SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

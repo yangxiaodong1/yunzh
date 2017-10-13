@@ -1,0 +1,107 @@
+.row_01 {
+	width: 300px;
+}
+.row_02 {
+	width: 10px;
+}
+.table_jz2,.border_01 {
+	border: 1px solid #ddd;
+}
+.border_01 input {
+	border: none;
+	width: 148px;
+	height: 24px;	
+}
+.calender_width input.form-conrotl{float:left;}
+.center {
+	text-align: center;
+}
+.select {
+	width: 150px;
+	height: 26px;
+	line-height: 24px;
+}
+.calender_width{
+	width: 180px;
+}
+.btn_yes {
+	background: url(../imgs/01.jpg) center center no-repeat;
+}
+.btn_yes:hover {
+	background: url(../imgs/07.jpg) center center no-repeat;
+}
+.btn_yes_hover {
+	background: url(../imgs/01_01.jpg) center center no-repeat;
+}
+.btn_doc_hover {
+	background-position:-97px -199px;
+}
+.btn_edit_hover {
+	background-position:0 -75px;
+}
+label.checked {
+	margin-bottom: 0;
+	margin-top: 5px;
+}
+.cal_bg {
+	width: 30px;
+	height: 26px;
+	background: url(../imgs/04.jpg) center center no-repeat;
+	border-left: 1px solid #ddd;
+	cursor: pointer;
+}
+.con {
+	color: #ccc;
+	margin-top: 5px;
+}
+.lab {
+	vertical-align: top;
+	line-height: 26px;
+}
+.chk_1 {
+    display: none;
+}
+ 
+/*******STYLE 1*******/
+.chk_1 + label {
+	background-color: #FFF;
+	border: 1px solid #C1CACA;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05);
+	padding: 9px;
+	display: inline-block;
+	position: relative;
+	margin-right: 5px;
+}
+.chk_1 + label:active {
+	box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px 1px 3px rgba(0,0,0,0.1);
+}
+
+.chk_1:checked + label {
+	background-color: #ECF2F7;
+	border: 1px solid #92A1AC;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05), inset 15px 10px -12px rgba(255, 255, 255, 0.1);
+	color: #243441;
+}
+
+.chk_1:checked + label:after {
+	content: '\2714';
+	position: absolute;
+	top: -4px;
+	left: 0px;
+	color: #758794;
+	width: 100%;
+	text-align: center;
+	font-size: 1.4em;
+/*	padding: 1px 0 0 0;*/
+/*	vertical-align: text-top;*/
+}
+.no_data {
+	width:871px;
+	text-align:center;
+}
+.no_data img {
+	margin-top: 100px;
+}
+.table_container {
+	border-bottom: 0px solid #ddd;
+}

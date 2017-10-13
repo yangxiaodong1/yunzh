@@ -1,0 +1,23 @@
+.main-con{padding:10px 10px 0;width: 960px;margin: 0 auto;}
+	.main-con .label_note {line-height: 36px;color:#555;}
+	.mask{z-index:1;}
+	.layerS {z-index: 2;height: auto;}
+	.layerS .h6-kr {margin: 0;}
+	.layerS .chose_file {margin: 40px 52px;overflow: hidden;}
+	.layerS .chose_file img {margin: 0 20px;float: left;}
+	.layerS .chose_file input[type=text] {width: 200px;margin-right: 10px;}
+	.layerS .buttonW {margin: 20px auto;clear: both;}
+	.layerS .buttonW button {outline: none;}
+	.layerS .warm_mes {line-height: 24px;}
+	.layerS .warm_mes .red {color: #ff4136;}
+	.recover .chose_file img {margin: 10px 20px 0 0;}
+	.recover .check {margin:  10px 0 0 68px;}
+	.recover span.check {display: none;}
+	.delete_dialog .warm_mes {margin: 10px 0 0 20px;}
+	.delete_dialog .chose_file {margin: 40px 119px;}
+	.t_pane_1 {height: auto;}
+	.t_pane_1 .tit_d3{margin-right:5px;float: none;}
+	.t_pane_1 .tit_d3 .btn-default2 {margin: 0}
+	.table-account-wrapper th,.table-account-wrapper tbody tr td {text-align: center;padding: 0 8px;}
+	.table-account-wrapper tr td:first-child {text-align: left;}
+	.table-account-wrapper tr td a {color: #3d8ae2;padding: 0 4px;}

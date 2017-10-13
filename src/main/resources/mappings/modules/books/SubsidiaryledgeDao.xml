@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.books.dao.SubsidiaryledgeDao">
+    
+	<sql id="subsidiaryledgeColumns">
+		a.id AS "id",
+		concat(a.voucher_title_name,'-') AS "voucherTitleName",
+		lpad(a.voucher_title_number,3,0) AS "voucherTitleNumber",
+		a.account_date AS "accountDate",
+		a.account_period AS "accountPeriod",
+		a.reciept_number AS "recieptNumber",
+		a.reciept_info AS "recieptInfo",
+		a.total_amount AS "totalAmount",
+		a.user_name AS "userName",
+		a.touching_date AS "touchingDate",
+		a.checker AS "checker",
+		a.check_date AS "checkDate",
+		a.is_check AS "isCheck",
+		a.t_v_id AS "tVId",
+		a.exp_row_number AS "expRowNumber",
+		a.exp AS "exp",
+		a.debit AS "debit",
+		a.credit AS "credit",
+		a.acc_id AS "accId",
+		a.fdbid AS "fdbid",
+		a.accunt_id AS "accuntId",
+		a.account_name AS "accountName",
+		a.acc_level AS "accLevel",
+		a.detail AS "detail",
+		a.parent_id AS "parent.id",
+		a.root_id AS "rootId",
+		a.group_id AS "groupId",
+		a.dc AS "dc",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="subsidiaryledgeJoins">
+	</sql>
+    
+	<select id="get" resultType="Subsidiaryledge">
+		SELECT 
+			<include refid="subsidiaryledgeColumns"/>
+		FROM subsidiaryledge a
+		<include refid="subsidiaryledgeJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Subsidiaryledge">
+		SELECT 
+			<include refid="subsidiaryledgeColumns"/>
+		FROM subsidiaryledge a
+		<include refid="subsidiaryledgeJoins"/>
+		<where>
+			<!--  a.del_flag = #{DEL_FLAG_NORMAL} -->
+			a.del_flag = 0
+			<if test="accId != null and accId != ''">
+				AND a.acc_id = #{accId}
+			</if>
+			<if test="fdbid != null and fdbid != ''">
+				AND a.fdbid = #{fdbid}
+			</if>
+			<if test="accuntId != null and accuntId != ''">
+				AND a.accunt_id = #{accuntId}
+			</if>
+			<if test="accountPeriod != null and accountPeriod != '' and periodEnd !=null and periodEnd !=''">
+				AND a.account_period BETWEEN #{accountPeriod} AND #{periodEnd}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Subsidiaryledge">
+		SELECT 
+			<include refid="subsidiaryledgeColumns"/>
+		FROM subsidiaryledge a
+		<include refid="subsidiaryledgeJoins"/>
+		<where>
+			<!-- a.del_flag = #{DEL_FLAG_NORMAL}  -->
+			a.del_flag = 0 
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO subsidiaryledge(
+			id,
+			voucher_title_name,
+			voucher_title_number,
+			account_date,
+			account_period,
+			reciept_number,
+			reciept_info,
+			total_amount,
+			user_name,
+			touching_date,
+			checker,
+			check_date,
+			is_check,
+			t_v_id,
+			exp_row_number,
+			exp,
+			debit,
+			credit,
+			acc_id,
+			fdbid,
+			accunt_id,
+			account_name,
+			acc_level,
+			detail,
+			parent_id,
+			root_id,
+			group_id,
+			dc,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{voucherTitleName},
+			#{voucherTitleNumber},
+			#{accountDate},
+			#{accountPeriod},
+			#{recieptNumber},
+			#{recieptInfo},
+			#{totalAmount},
+			#{userName},
+			#{touchingDate},
+			#{checker},
+			#{checkDate},
+			#{isCheck},
+			#{tVId},
+			#{expRowNumber},
+			#{exp},
+			#{debit},
+			#{credit},
+			#{accId},
+			#{fdbid},
+			#{accuntId},
+			#{accountName},
+			#{accLevel},
+			#{detail},
+			#{parent.id},
+			#{rootId},
+			#{groupId},
+			#{dc},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE subsidiaryledge SET 	
+			voucher_title_name = #{voucherTitleName},
+			voucher_title_number = #{voucherTitleNumber},
+			account_date = #{accountDate},
+			account_period = #{accountPeriod},
+			reciept_number = #{recieptNumber},
+			reciept_info = #{recieptInfo},
+			total_amount = #{totalAmount},
+			user_name = #{userName},
+			touching_date = #{touchingDate},
+			checker = #{checker},
+			check_date = #{checkDate},
+			is_check = #{isCheck},
+			t_v_id = #{tVId},
+			exp_row_number = #{expRowNumber},
+			exp = #{exp},
+			debit = #{debit},
+			credit = #{credit},
+			acc_id = #{accId},
+			fdbid = #{fdbid},
+			accunt_id = #{accuntId},
+			account_name = #{accountName},
+			acc_level = #{accLevel},
+			detail = #{detail},
+			parent_id = #{parent.id},
+			root_id = #{rootId},
+			group_id = #{groupId},
+			dc = #{dc},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE subsidiaryledge SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>	
+	<select id="findSubsidiaryledgeList" resultType="Subsidiaryledge">
+		SELECT 
+			<include refid="subsidiaryledgeColumns"/>
+		FROM subsidiaryledge a
+		<where>
+			 a.del_flag = 0 
+			<if test="accId != null and accId != ''">
+				AND a.acc_id = #{accId}
+			</if>
+			<if test="fdbid != null and fdbid != ''">
+				AND a.fdbid = #{fdbid}
+			</if>
+			<if test="accountPeriod != null and accountPeriod != '' and periodEnd !=null and periodEnd !=''">
+				AND a.account_period BETWEEN #{accountPeriod} AND #{periodEnd}
+			</if>
+			<if test="parentId != null and parentId != ''">
+				AND a.parent_id = #{parentId}
+			</if>
+			<if test="list != null and list != ''">
+			AND a.acc_id in
+				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">  
+	  				#{item}  
+	 			</foreach>
+			</if>
+		</where>
+		ORDER BY a.account_date asc, a.voucher_title_number asc
+	</select>
+</mapper>

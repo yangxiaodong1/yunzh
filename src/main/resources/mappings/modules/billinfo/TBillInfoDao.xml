@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.billinfo.dao.TBillInfoDao">
+    
+	<sql id="tBillInfoColumns">
+		a.id AS "id",
+		a.upload_period AS "uploadPeriod",
+		a.adjust_period AS "adjustPeriod",
+		a.t_b_id AS "tBId",
+		a.bill_kind AS "billKind",
+		a.image_url AS "imageUrl",
+		a.pay_name AS "payName",
+		a.recieve_name AS "recieveName",
+		a.sign_date AS "signDate",
+		a.abstract_msg AS "abstractMsg",
+		a.amount AS "amount",
+		a.tax AS "tax",
+		a.total_price AS "totalPrice",
+		a.invoice_code AS "invoiceCode",
+		a.invoice_number AS "invoiceNumber",
+		a.pay_bank AS "payBank",
+		a.pay_account AS "payAccount",
+		a.payer_tax_identification_number AS "payerTaxIdentificationNumber",
+		a.pay_account_name AS "payAccountName",
+		a.is_expire AS "isExpire",
+		a.relate_voucher AS "relateVoucher",
+		a.urgent_state AS "urgentState",
+		a.bill_status AS "billStatus",
+		a.error_reason AS "errorReason",
+		a.cancel_reason AS "cancelReason",
+		a.customer_id AS "customerId",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.check_person AS "checkPerson",
+		a.check_date AS "checkDate",
+		
+		a.bill_info AS "billInfo",
+		a.image_name AS "imageName",
+		a.uuid AS "uuid",
+		a.recieve_tax_identification_number AS "recieveTaxIdentificationNumber",
+		a.departure_place AS "departurePlace",
+		a.arriving_place AS "arrivingPlace",
+		a.dispatching_flag AS "dispatchingFlag",
+		a.feedback_flag AS "feedbackFlag",
+		a.d_value AS "dValue"
+	</sql>
+	
+	<sql id="tBillInfoJoins">
+	</sql>
+	
+	<sql id="filterSql">
+		<if test="billInfo.payName != null and billInfo.payName != '' " >
+			AND	billInfo.pay_name = #{billInfo.payName }
+		</if>
+		<if test="billInfo.billStatus != null and billInfo.billStatus != '' " >
+			AND	billInfo.bill_status = #{billInfo.billStatus }
+		</if>
+		<if test="billInfo.uploadPeriod != null and billInfo.uploadPeriod != '' " >
+			AND	billInfo.upload_period = #{billInfo.uploadPeriod}
+		</if>
+		<if test="billInfo.billKind != null and billInfo.billKind != '' " >
+			AND	billInfo.bill_kind = #{billInfo.billKind}
+		</if>
+		<if test="billInfo.isExpire != null and billInfo.isExpire != '' " >
+			AND	billInfo.is_expire = #{billInfo.isExpire}
+		</if>
+		<if test="billInfo != null and billInfo.customerId != null and billInfo.customerId != ''">
+			AND	billInfo.customer_id = #{billInfo.customerId}
+		</if>
+	</sql>
+	
+	<sql id="filter">
+		<if test="billInfo.payName != null and billInfo.payName != '' " >
+			AND	a.pay_name = #{billInfo.payName }
+		</if>
+		<if test="billInfo.billStatus != null and billInfo.billStatus != '' " >
+			AND	a.bill_status = #{billInfo.billStatus }
+		</if>
+		<if test="billInfo.uploadPeriod != null and billInfo.uploadPeriod != '' " >
+			AND	a.upload_period = #{billInfo.uploadPeriod}
+		</if>
+		<if test="billInfo.billKind != null and billInfo.billKind != '' " >
+			AND	a.bill_kind = #{billInfo.billKind}
+		</if>
+		<if test="billInfo.isExpire != null and billInfo.isExpire != '' " >
+			AND	a.is_expire = #{billInfo.isExpire}
+		</if>
+		<if test="billInfo != null and billInfo.customerId != null and billInfo.customerId != ''">
+			AND	a.customer_id = #{billInfo.customerId}
+		</if>
+	</sql>
+	    
+	<select id="get" resultType="TBillInfo">
+		SELECT 
+			<include refid="tBillInfoColumns"/>
+			,relate_voucher IS NOT NULL as 'hasSaveVoucer'
+		FROM t_bill_info a
+		<include refid="tBillInfoJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TBillInfo">
+		SELECT 
+			<include refid="tBillInfoColumns"/>
+		FROM t_bill_info a
+		<!-- <include refid="tBillInfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where> -->
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TBillInfo">
+		SELECT 
+			<include refid="tBillInfoColumns"/>
+		FROM t_bill_info a
+		<include refid="tBillInfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_bill_info(
+			id,
+			upload_period,
+			adjust_period,
+			t_b_id,
+			bill_kind,
+			image_url,
+			pay_name,
+			recieve_name,
+			sign_date,
+			abstract_msg,
+			amount,
+			tax,
+			total_price,
+			invoice_code,
+			invoice_number,
+			pay_bank,
+			pay_account,
+			payer_tax_identification_number,
+			pay_account_name,
+			is_expire,
+			relate_voucher,
+			urgent_state,
+			bill_status,
+			error_reason,
+			cancel_reason,
+			customer_id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			check_person,
+			check_date,
+			
+			bill_info,
+			image_name,
+			uuid,
+			recieve_tax_identification_number,
+			departure_place,
+			arriving_place,
+			dispatching_flag,
+			feedback_flag,
+			d_value
+		) VALUES (
+			#{id},
+			#{uploadPeriod},
+			#{adjustPeriod},
+			#{tBId},
+			#{billKind},
+			#{imageUrl},
+			#{payName},
+			#{recieveName},
+			#{signDate},
+			#{abstractMsg},
+			#{amount},
+			#{tax},
+			#{totalPrice},
+			#{invoiceCode},
+			#{invoiceNumber},
+			#{payBank},
+			#{payAccount},
+			#{payerTaxIdentificationNumber},
+			#{payAccountName},
+			#{isExpire},
+			#{relateVoucher},
+			#{urgentState},
+			#{billStatus},
+			#{errorReason},
+			#{cancelReason},
+			#{customerId},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{checkPerson},
+			#{checkDate},
+			
+			#{billInfo},
+		#{imageName},
+		#{uuid},
+		#{recieveTaxIdentificationNumber},
+		#{departurePlace},
+		#{arrivingPlace},
+		#{dispatchingFlag},
+		#{feedbackFlag},
+		#{dValue}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_bill_info SET 	
+			upload_period = #{uploadPeriod},
+			adjust_period = #{adjustPeriod},
+			t_b_id = #{tBId},
+			bill_kind = #{billKind},
+			image_url = #{imageUrl},
+			pay_name = #{payName},
+			recieve_name = #{recieveName},
+			sign_date = #{signDate},
+			abstract_msg = #{abstractMsg},
+			amount = #{amount},
+			tax = #{tax},
+			total_price = #{totalPrice},
+			invoice_code = #{invoiceCode},
+			invoice_number = #{invoiceNumber},
+			pay_bank = #{payBank},
+			pay_account = #{payAccount},
+			payer_tax_identification_number = #{payerTaxIdentificationNumber},
+			pay_account_name = #{payAccountName},
+			is_expire = #{isExpire},
+			relate_voucher = #{relateVoucher},
+			urgent_state = #{urgentState},
+			bill_status = #{billStatus},
+			error_reason = #{errorReason},
+			cancel_reason = #{cancelReason},
+			customer_id = #{customerId},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			
+			bill_info = #{billInfo},
+			image_name = #{imageName},
+			uuid = #{uuid},
+			recieve_tax_identification_number = #{recieveTaxIdentificationNumber},
+			departure_place = #{departurePlace},
+			arriving_place = #{arrivingPlace},
+			dispatching_flag = #{dispatchingFlag},
+			feedback_flag  = #{feedbackFlag},
+			d_value = #{dValue}
+			
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE t_bill_info SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+		<select id="findListWithOrderBy" resultType="TBillInfo">
+		SELECT 
+			(select bill_type_name from t_bill_type where id = a.t_b_id ) as "tBIdName",
+			<include refid="tBillInfoColumns"/>
+			<!-- ,if(isNull(relate_voucher) , true,false)  as 'hasSaveVoucer' -->
+			,relate_voucher IS NOT NULL as 'hasSaveVoucer'
+		FROM t_bill_info a
+		<where>
+			1 = 1
+			<if test="billInfo != null and billInfo.billStatus != null and billInfo.billStatus != ''">
+				AND	a.bill_status = #{billInfo.billStatus}
+			</if>
+			<if test="billInfo != null and billInfo.uploadPeriod != null and billInfo.uploadPeriod != ''">
+				AND	a.upload_period = #{billInfo.uploadPeriod}
+			</if>
+			<if test="billInfo != null and billInfo.customerId != null and billInfo.customerId != ''">
+				AND	a.customer_id = #{billInfo.customerId}
+			</if>
+		</where> 
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy} DESC
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+		<select id="countBillInfo" resultType="int">
+			SELECT 
+				count(1)
+			FROM 
+				t_bill_info billInfo
+			<where>
+				1 = 1
+				<include refid="filterSql"/>
+				<if test="billInfoStatus != null and billInfoStatus != '' " >
+					AND billInfo.bill_status in ${billInfoStatus}
+				</if>
+			</where>
+		</select>
+
+	<select id="queryUploadBillInfo" resultType="TBillInfo">
+		SELECT 
+			<include refid="tBillInfoColumns"/>
+			,relate_voucher IS NOT NULL as 'hasSaveVoucer'
+		FROM t_bill_info a
+		<where>
+			1 = 1
+			<include refid="filter"/>
+		</where> 
+		<!-- <choose>
+			<when test="orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy} DESC
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose> -->
+	</select>
+	
+	<select id="queryDealBillInfo" resultType="TBillInfo">
+		SELECT 
+			<include refid="tBillInfoColumns"/>
+			,relate_voucher IS NOT NULL as 'hasSaveVoucer'
+		FROM t_bill_info a
+		<where>
+			1 = 1
+			<if test="billInfo.payName != null and billInfo.payName != '' " >
+				AND	a.pay_name = #{billInfo.payName }
+			</if>
+			<if test="billInfo.billStatus != null and billInfo.billStatus != '' and billInfo.billStatus" >
+				AND	a.bill_status ${billInfo.billStatus }
+			</if>
+			<if test="billInfo.uploadPeriod != null and billInfo.uploadPeriod != '' " >
+				AND	a.upload_period = #{billInfo.uploadPeriod}
+			</if>
+			<if test="billInfo.billKind != null and billInfo.billKind != '' " >
+				AND	a.bill_kind = #{billInfo.billKind}
+			</if>
+			<if test="billInfo.isExpire != null and billInfo.isExpire != '' " >
+				AND	a.is_expire = #{billInfo.isExpire}
+			</if>
+			<if test="billInfo != null and billInfo.customerId != null and billInfo.customerId != ''">
+				AND	a.customer_id = #{billInfo.customerId}
+			</if>
+			<if test="billInfo != null and billInfo.billInfo != null and billInfo.billInfo != ''">
+				AND	a.bill_info = #{billInfo.billInfo}
+			</if>
+			<choose>
+				<when test="cancelFlag">
+					AND	a.feedback_flag != 0
+				</when>
+				<otherwise>
+					AND	a.feedback_flag = 0
+				</otherwise>
+			</choose>
+			<choose>
+				<when test="defaultFlag == 1">
+					AND	a.bill_info not in ('2','3','4')
+				</when>
+			</choose>
+		</where> 
+	</select>
+	
+	
+	<update id="updateBill">
+		UPDATE t_bill_info SET 	
+			${field} = #{value}
+		WHERE id = #{id}
+	</update>
+	
+	
+</mapper>

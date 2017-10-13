@@ -1,0 +1,40 @@
+.items {
+	margin: 0 20px;
+	border: 1px solid #4f9de8;
+	font-size: 16px;
+}
+.items span {
+	line-height: 3;
+}
+input.rate {
+	width: 80px;
+	margin-right: 5px;
+	text-align: center;
+}
+input.cardinal {
+	width: 130px;
+}
+select.option {
+	width: 40px;
+}
+.add {
+	display: inline-block;
+}
+.delete {
+	display: none;
+}
+.add span {
+	font-weight: bold;
+}
+a:visited {
+	text-decoration: none;
+}
+.t_pane_1 {
+	width: 100px;
+	height: auto;
+	float: right;
+	margin: 6px 10px 0 0;
+}
+.tit_d3 button {
+	display: none;
+}

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.backupandrecover.dao.TbackupRecoverDao">
+    
+	<sql id="tbackupRecoverColumns">
+		a.id AS "id",
+		a.fdbid AS "fdbid",
+		a.backup_name AS "backupName",
+		a.backup_number AS "backupNumber",
+		a.backup_date AS "backupDate",
+		a.file_size AS "fileSize",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="tbackupRecoverJoins">
+	</sql>
+    
+	<select id="get" resultType="TbackupRecover">
+		SELECT 
+			<include refid="tbackupRecoverColumns"/>
+		FROM t_backup_recover a
+		<include refid="tbackupRecoverJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	<select id="findListbyfdbid" resultType="TbackupRecover">
+		SELECT 
+			<include refid="tbackupRecoverColumns"/>
+		FROM t_backup_recover a
+		<include refid="tbackupRecoverJoins"/>
+		WHERE a.fdbid = #{fdbid} ORDER BY a.backup_date desc
+	</select>
+	<select id="findList" resultType="TbackupRecover">
+		SELECT 
+			<include refid="tbackupRecoverColumns"/>
+		FROM t_backup_recover a
+		<include refid="tbackupRecoverJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TbackupRecover">
+		SELECT 
+			<include refid="tbackupRecoverColumns"/>
+		FROM t_backup_recover a
+		<include refid="tbackupRecoverJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_backup_recover(
+			fdbid,
+			backup_name,
+			backup_number,
+			backup_date,
+			file_size,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{fdbid},
+			#{backupName},
+			#{backupNumber},
+			#{backupDate},
+			#{fileSize},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_backup_recover SET 	
+			fdbid = #{fdbid},
+			backup_name = #{backupName},
+			backup_number = #{backupNumber},
+			backup_date = #{backupDate},
+			file_size = #{fileSize}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		Delete from  t_backup_recover
+		WHERE backup_number = #{backupNumber}
+	</update>
+	<select id="tbackuprecover" parameterType="java.util.Map" statementType="CALLABLE" resultType="java.util.Map" >  
+       {call tbackuprecover(
+       		#{ffdbid,jdbcType=VARCHAR,mode=IN},
+       		#{backupNumber,jdbcType=VARCHAR,mode=IN}, 
+       		#{rtn,jdbcType=VARCHAR,mode=OUT})
+         }
+     </select> 
+</mapper>

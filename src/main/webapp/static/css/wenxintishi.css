@@ -1,0 +1,80 @@
+.kindlyReminder{width: 840px;height: 532px;margin: 0 auto;position: fixed;top: 50%;margin-top: -266px;left: 50%;margin-left: -420px;font-family: "MicroSoft YaHei";background: #ffffff;overflow: hidden;}
+/* 标题 */
+.h6-kr{height: 30px;line-height: 30px;background: #4f9de8;text-align: left;color: #fff;font-size: 14px;text-indent: 11px;}
+.h6-kr i{background: url(../images/icon.png) no-repeat;}
+.h6-kr i{position: absolute;width: 30px;height: 30px;background:url(../images/icon.png) #4f9de8 11px -452px;top: 0;right: 0;}
+.h6-kr i:hover{ background:url(../images/icon.png) #63aee8 -13px -452px; }
+.h6-kr i:active{ background:url(../images/icon.png) #3d91e9 -37px -452px; }
+
+.imgbill{padding: 17px 22px;}
+.imgbill img{border: 1px solid #e2e2e2;}
+.bottom{width: 100%;height: 26px;padding: 9px 0;padding-left: 9px;position: absolute;bottom: 0;left: 0;}
+.bottom .bg{width: 100%;height: 100%;background: #000;opacity: 0.5;filter:alpha(opacity=50);position: absolute;bottom: 0;left: 0;z-index: -1;}
+.bottom a{width: 86px;height: 27px;float: left;margin-right: 8px;line-height: 27px;color: #fff;border-radius: 4px;z-index: 5;}
+.bottom a:hover{text-decoration: none;}
+.bottom .a a:nth-child(1){background: #fba22c;}
+.bottom .a a:nth-child(2){background: #e42324;}
+.bottom .a a:nth-child(3){background: #3d8ae2;}
+.bottom .a a:nth-child(1):hover{background: #fdb24d;}
+.bottom .a a:nth-child(2):hover{background: #fb605e;}
+.bottom .a a:nth-child(3):hover{background: #59a6ff;}
+.bottom .a a:nth-child(1):active{background: #ee8f11;}
+.bottom .a a:nth-child(2):active{background: #f41516;}
+.bottom .a a:nth-child(3):active{background: #216ec8;}
+
+.rightSlide{position: absolute;width: 390px;height: 490px;top:35px;right:-392px;background: #fff;border: 1px solid #3d8ae2;border-right: none;z-index:111;}
+.spanbut{width: 30px;height: 177px;border-top-left-radius:4px;border-bottom-left-radius:4px;position: absolute;left: -30px;cursor: pointer;}
+.spanbut i{width: 30px;position:absolute;top:50%;margin-top: -37px;left: 0;font-size: 16px;line-height: 20px;}
+.contdetail{display: none;}
+.spInte{top: 63px;border: 1px solid #27bc9e;border-right: 1px solid #fff;border-top-right-radius:4px;background: #27bc9e;color: #fff;}
+.spInteOn{top: 63px;border: 1px solid #27bc9e;border-right: 1px solid #fff;border-top-right-radius:4px;background: #fff;color: #27bc9e;}
+.spInte:hover{background: #3dddd5;border: 1px solid #3dddd5;border-right: 1px solid #3d8ae2;}
+.spDeta{top: 242px;border: 1px solid #3d8ae2;border-right: 1px solid #fff;border-bottom-right-radius:4px;background:#3d8ae2;color: #fff;}
+.spDetaOn{top: 242px;border: 1px solid #3d8ae2;border-right: 1px solid #fff;border-bottom-right-radius:4px;background:#fff;color: #3d8ae2;}
+.spDeta:hover{background: #509ffb;border: 1px solid #509ffb;border-right: 1px solid #27bc9e;}
+.bor27bc9e{border: 1px solid #27bc9e;}
+
+/* 智能做账 */
+.cont-IntelligentAccount{margin: 4px 20px 0 14px;}
+.pamain,.pbmain,.pcmain{width: 351px;height: 88px;border: 1px solid #e5e5e5;background: #eef5fc;}
+.h6tit{font-size: 12px;color: #848484;text-align: left;line-height: 30px;font-weight: normal;}
+.h6tit i{font-size: 18px;color: #5f9be6;padding: 0 3px;}
+.pamain{text-indent: 32px;}
+.pamain p,.pbmain p,.pcmain p{float: left;width: 100%;text-align: left;line-height: 24px;}
+.pbmain,.pcmain{text-indent: 77px;}
+.pborrow{margin-top: 16px;}
+.pborrow i{color: #5f9be6;margin-right: 16px;}
+.plend i{color: #ea9633;margin-right: 16px;}
+.pbmain,.pcmain{position: relative;margin-bottom: 10px;}
+.partb h6{margin-top: 10px;}
+.pcmain{margin-top: 4px;}
+.pbmain:hover{background: #bbcdde;}
+.spnum{width: 52px;height: 30px;border-radius: 4px;border:1px solid #bbcdde;position: absolute;top: 50%;left: 7px;margin-top: -15px;font-size: 18px;color:#5f9be6;text-indent: 0;line-height: 30px;}
+.spnum i{font-size: 12px;}
+
+.tabdetail{width: 347px;margin:14px auto 0;}
+.tabdetail td{height: 26px;line-height: 26px;border-top: 1px solid #fff;}
+.tabdetail tr td:nth-child(1){background: #5b9bd5;color: #fff;border-right: 2px solid #fff;}
+.tabdetail tr:nth-child(2n+1) td:nth-child(2){background: #eaeff7;}
+.tabdetail tr:nth-child(2n) td:nth-child(2){background: #d2deef;}
+
+.mydialog{width: 100%;height: 26px;padding: 9px 0 0 20px;}
+.mydialog a{width: 86px;height: 27px;float: left;margin-right: 8px;line-height: 27px;color: #fff;border-radius: 4px;z-index: 5;}
+.mydialog a:hover{text-decoration: none;}
+.mydialog .a a:nth-child(1){background: #fba22c;}
+.mydialog .a a:nth-child(2){background: #e42324;}
+.mydialog .a a:nth-child(3){background: #3d8ae2;}
+.mydialog .a a:nth-child(1):hover{background: #fdb24d;}
+.mydialog .a a:nth-child(2):hover{background: #fb605e;}
+.mydialog .a a:nth-child(3):hover{background: #59a6ff;}
+.mydialog .a a:nth-child(1):active{background: #ee8f11;}
+.mydialog .a a:nth-child(2):active{background: #f41516;}
+.mydialog .a a:nth-child(3):active{background: #216ec8;}
+
+.contdetail .tabdetail td{padding-left: 3px;padding-right: 3px;text-align: left;}
+.contdetail .tabdetail td .sta_ipta{border:1px solid;border-color:transparent;background: none;width:100%;}
+.contdetail .tabdetail td .ipta1{border:1px #999 solid;}
+.contdetail .tabdetail td .ipt_bj{position: relative;}
+.contdetail .tabdetail td .ipt_bj .glyphicon{visibility:hidden;position: absolute;top:3px;cursor: pointer;}
+.contdetail .tabdetail td .ipt_bj .glyphicon-pencil{right: 20px;}
+.contdetail .tabdetail td .ipt_bj .glyphicon-paperclip{right: 3px;}

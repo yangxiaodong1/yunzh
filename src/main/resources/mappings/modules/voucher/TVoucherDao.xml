@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.voucher.dao.TVoucherDao">
+   
+    <!-- 添加了几个字段 -->
+	<sql id="tVoucherColumns">
+		a.id AS "id",
+		a.voucher_title_name AS "voucherTitleName",
+		LPAD(a.voucher_title_number,3,0) AS "voucherTitleNumber",
+		a.account_date AS "accountDate",
+		a.account_period AS "accountPeriod",
+		a.reciept_number AS "recieptNumber",
+		a.reciept_info AS "recieptInfo",
+		a.total_amount AS "totalAmount",
+		a.fdbid AS "fdbid",
+		a.user_name AS "userName",
+		a.touching_date AS "touchingDate",
+		a.checker AS "checker",
+		a.check_date AS "checkDate",
+		a.is_check AS "isCheck",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.if_auto AS "ifAuto",
+		a.exp_comment AS "expComment",
+		a.comment_result AS "commenResult"
+	</sql>
+	
+	<sql id="tVoucherJoins">
+	</sql>
+    
+	<select id="get" resultType="TVoucher">
+		SELECT 
+			<include refid="tVoucherColumns"/>
+		FROM t_voucher a
+		<include refid="tVoucherJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TVoucher">
+		SELECT 
+			<include refid="tVoucherColumns"/>
+		FROM t_voucher a
+		<include refid="tVoucherJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TVoucher">
+		SELECT 
+			<include refid="tVoucherColumns"/>
+		FROM t_voucher a
+		<include refid="tVoucherJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.thinkgem.jeesite.modules.account.entity.TAccount">
+		INSERT INTO t_voucher(
+			<!-- id, -->
+			voucher_title_name,
+			voucher_title_number,
+			account_date,
+			account_period,
+			reciept_number,
+			reciept_info,
+			total_amount,
+			user_name,
+			touching_date,
+			checker,
+			check_date,
+			is_check,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			fdbid,
+			if_auto
+		) VALUES (
+			<!-- #{id}, -->
+			#{voucherTitleName},
+			#{voucherTitleNumber},
+			#{accountDate},
+			#{accountPeriod},
+			#{recieptNumber},
+			#{recieptInfo},
+			#{totalAmount},
+			#{userName},
+			#{touchingDate},
+			#{checker},
+			#{checkDate},
+			#{isCheck},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{fdbid},
+			#{ifAuto}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_voucher SET 	
+			voucher_title_name = #{voucherTitleName},
+			voucher_title_number = #{voucherTitleNumber},
+			account_date = #{accountDate},
+			account_period = #{accountPeriod},
+			reciept_number = #{recieptNumber},
+			reciept_info = #{recieptInfo},
+			total_amount = #{totalAmount},
+			user_name = #{userName},
+			touching_date = #{touchingDate},
+			checker = #{checker},
+			check_date = #{checkDate},
+			is_check = #{isCheck},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE t_voucher SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	<select id="getCurrentVoucherCount" resultType="int">
+		SELECT 
+			count(1)
+		FROM t_voucher a
+		WHERE accountPeriod = #{accountPeriod}
+	</select>
+	
+	<select id="getByBean" resultType="int">
+		SELECT 
+			count(1)
+		FROM t_voucher a
+		<where>
+			a.voucher_title_number  = #{voucherTitleNumber}
+			AND
+			a.account_period  = #{accountPeriod}
+		</where>
+	</select>
+	
+	<select id="getMaxByAccountPeriod" resultType="int">
+		SELECT 
+			 ifnull( max(CAST(a.voucher_title_number as SIGNED)),0)
+		FROM t_voucher a
+		<where>
+			 1 = 1
+			 <if test="accountPeriod != null and accountPeriod != ''">
+				AND a.account_period   = #{accountPeriod}
+			</if>
+			 <if test="company != null and company != ''">
+				AND a.fdbid   = #{company}
+			</if>
+		</where>
+	</select>
+
+	
+
+	
+	
+	<!-- 根据客户ID、当前的账期字段来获取凭证信息（多条件） 自己加的方法 -->
+	<select id="findShowList" resultType="TVoucher">
+		select 
+			<include refid="tVoucherColumns"/>
+		from t_voucher a 
+		<include refid="tVoucherJoins"/>
+		<where>
+			<if test="accountPeriod !=null and accountPeriod!= '' ">
+				and a.account_period=#{accountPeriod}
+			</if>
+			<if test="fdbid != null and fdbid != '' ">
+				and a.fdbid=#{fdbid}
+			</if>
+			<if test="voucherTitleNumber != null and voucherTitleNumber!=''">
+				and a.voucher_title_number>CONVERT(#{voucherTitleNumber},SIGNED)
+			</if>
+				and a.del_flag="0"
+		</where>
+			ORDER BY CONVERT(a.voucher_title_number,SIGNED)
+	</select>
+	
+	<select id="findShowThree" resultType="TVoucher">
+		select 
+			<include refid="tVoucherColumns"/>
+		from t_voucher a 
+		<include refid="tVoucherJoins"/>
+		<where>
+			<if test="accountPeriod !=null and accountPeriod!= '' ">
+				and a.account_period=#{accountPeriod}
+			</if>
+			<if test="fdbid != null and fdbid != '' ">
+				and a.fdbid=#{fdbid}
+			</if>
+			<if test="id != null and id!=''">
+				and a.id=#{id}
+			</if>
+		</where>
+	</select>
+	<!-- 根据客户id查询所有的账期（不重复）自己加的方法 -->
+	<select id="finperiods" resultType="TVoucher">
+		select * 
+		from t_voucher a 
+		WHERE a.fdbid=#{fdbid} GROUP BY a.account_period
+	</select>
+	
+	<!-- 自己加的方法 -->
+	<update id="updateanddelete">
+		UPDATE t_voucher SET 
+			voucher_title_number = #{voucherTitleNumber} 
+		WHERE id =#{id}
+	</update>
+	
+	<!-- 自己的方法 -->
+	<delete id="deletebyid">
+		delete from t_voucher where id = #{id}
+	</delete>
+	
+	<select id="selectPeriod" resultType="TVoucher">
+		select * from t_voucher 
+		where account_period = 
+		(select account_period from t_voucher where account_period &lt; CONVERT(#{accountPeriod},SIGNED) order by account_period desc limit 1) 
+		AND fdbid=#{fdbid};
+	</select>
+
+	<select id="firstLoad" resultType="int">
+	select 
+		count(1) 
+	from
+	 	t_voucher 
+	where 
+		fdbid = #{fdbid}
+		 AND
+		 account_period = (select init_period  from t_customer where id = #{fdbid})
+	</select>
+	
+	<update id="updatevoucher">
+		update t_voucher set exp_comment=#{expComment},comment_result=#{commenResult} where id=#{id}
+	</update>
+	
+	<update id="insertVoucher">
+		update t_voucher set voucher_title_number = voucher_title_number + 1
+		<where>
+			 1 = 1
+			 <if test="accountPeriod != null and accountPeriod != ''">
+				AND account_period   = #{accountPeriod}
+			</if>
+			 <if test="fdbid != null and fdbid != ''">
+				AND fdbid   = #{fdbid}
+			</if>
+			 <if test="voucherTitleNumber != null and voucherTitleNumber != ''">
+				AND voucher_title_number   >= #{voucherTitleNumber}
+			</if>
+		</where>
+	</update>
+	
+</mapper>

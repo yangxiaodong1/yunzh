@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.balance.dao.TBalanceDao">
+    
+	<sql id="tBalanceColumns">
+		a.id AS "id",
+		a.fdbid AS "fdbid",
+		a.account_id AS "accountId",
+		a.account_period AS "accountPeriod",
+		a.beginbalance AS "beginbalance",
+		a.debittotalamount AS "debittotalamount",
+		a.credittotalamount AS "credittotalamount",
+		a.ytddebittotalamount AS "ytddebittotalamount",
+		a.ytdcredittotalamount AS "ytdcredittotalamount",
+		a.endbalance AS "endbalance",
+		a.fcur AS "fcur",
+		a.amountfor AS "amountfor",
+		a.ytdamountfor AS "ytdamountfor",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="tBalanceJoins">
+	</sql>
+    
+	<select id="get" resultType="TBalance">
+		SELECT 
+			<include refid="tBalanceColumns"/>
+		FROM t_balance a
+		<include refid="tBalanceJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TBalance">
+		SELECT 
+			<include refid="tBalanceColumns"/>
+		FROM t_balance a
+		<include refid="tBalanceJoins"/>
+		<where>
+			<!-- a.del_flag = #{DEL_FLAG_NORMAL} -->
+			<if test="fdbid != null and fdbid != ''">
+				AND a.fdbid = #{fdbid}
+			</if>
+			<if test="accountId != null and accountId != ''">
+				AND a.account_id = #{accountId}
+			</if>
+			<if test="accountPeriod != null and accountPeriod != '' and periodEnd !=null and periodEnd !=''">
+				AND a.account_period BETWEEN #{accountPeriod} AND #{periodEnd}
+			</if>
+			<if test="accountPeriod != null and accountPeriod != '' and periodEnd ==null and periodEnd ==''">
+				 a.account_period = #{accountPeriod} 
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TBalance">
+		SELECT 
+			<include refid="tBalanceColumns"/>
+		FROM t_balance a
+		<include refid="tBalanceJoins"/>
+		<where>
+			<!-- a.del_flag = #{DEL_FLAG_NORMAL} -->
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_balance(
+			<!-- id, -->
+			fdbid,
+			account_id,
+			account_period,
+			beginbalance,
+			debittotalamount,
+			credittotalamount,
+			ytddebittotalamount,
+			ytdcredittotalamount,
+			endbalance,
+			fcur,
+			amountfor,
+			ytdamountfor,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			<!--#{id},-->
+			#{fdbid},
+			#{accountId},
+			#{accountPeriod},
+			#{beginbalance},
+			#{debittotalamount},
+			#{credittotalamount},
+			#{ytddebittotalamount},
+			#{ytdcredittotalamount},
+			#{endbalance},
+			#{fcur},
+			#{amountfor},
+			#{ytdamountfor},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_balance SET 	
+			fdbid = #{fdbid},
+			account_id = #{accountId},
+			account_period = #{accountPeriod},
+			beginbalance = #{beginbalance},
+			debittotalamount = #{debittotalamount},
+			credittotalamount = #{credittotalamount},
+			ytddebittotalamount = #{ytddebittotalamount},
+			ytdcredittotalamount = #{ytdcredittotalamount},
+			endbalance = #{endbalance},
+			fcur=#{fcur},
+			amountfor=#{amountfor},
+			ytdamountfor=#{ytdamountfor},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE t_balance SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	<select id="findListByAccountId" resultType="TBalance">
+		select * from t_balance a
+		<where>  1 = 1
+			<if test="accountP != null and accountP != ''">
+				AND a.account_period = #{accountP}
+			</if>
+			 <if test="fdbid != null and fdbid != ''">
+				AND a.fdbid = #{fdbid}
+			</if> 	
+			<if test="list != null and list.size()>0">
+			AND account_id in 
+				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">  
+  					#{item}  
+ 				</foreach>
+ 			</if>
+ 		</where>
+	</select>
+	<select id="listHappenYear" resultType="TBalance">
+		select * from t_balance a
+		<where> 1 = 1
+			<if test="accId != null and accId != ''">
+				AND a.account_id = #{accId}
+			</if> 
+			<if test="fdbid != null and fdbid != ''">
+				AND a.fdbid = #{fdbid}
+			</if> 			
+ 		</where>
+	</select>
+	<select id="infoByAccountId" resultType="TBalance" parameterType="String">
+		SELECT 
+			<include refid="tBalanceColumns"/>
+		FROM t_balance a
+		<include refid="tBalanceJoins"/>
+		WHERE a.account_id = #{accountId} and a.account_period = #{accountPeriod} and a.fdbid = #{fdbid}
+	</select>
+	<select id="infoBy" resultType="TBalance" parameterType="String">
+		SELECT 
+			<include refid="tBalanceColumns"/>
+		FROM t_balance a
+		<include refid="tBalanceJoins"/>
+		WHERE a.account_id = #{accountId}
+	</select>
+	<select id="cjsdxxBy" resultType="TBalance" parameterType="String">
+		SELECT 
+			<include refid="tBalanceColumns"/>
+		FROM t_balance a
+		<include refid="tBalanceJoins"/>
+		WHERE a.fdbid=#{fdbid} and a.account_id=#{accountId} and a.account_period=#{accountPeriod}
+	</select>
+
+	
+	<select id="settleAccounts" resultType="TSettleAccounts">
+		SELECT 
+			sum(beginBalance) as 'beginBalance'
+			,sum(debittotalamount) as 'debittotalamount'
+			,sum(credittotalamount)  as 'credittotalamount'
+			,sum(endbalance) as 'balance'
+		FROM t_balance a
+		<where>
+			<if test="fdbid != null and fdbid != ''">
+				AND a.fdbid = #{fdbid}
+			</if>
+			<if test="accountId != null and accountId != ''">
+				AND a.account_id = #{accountId}
+			</if>
+			<if test="accountPeriod != null and accountPeriod != ''">
+				AND a.account_period = #{accountPeriod}
+			</if>
+		</where>
+	</select>
+	
+
+	<select id="findAllperiod" resultType="String" parameterType="String">
+		select distinct account_period from t_balance a where a.fdbid=#{fdbid}  ORDER BY account_period
+	</select>
+	<select id="isAllUse" resultType="int" parameterType="String">
+		select count(*)  from t_balance a where a.fdbid=#{fdbid}
+	</select>
+	<select id="getLastAccountEndBalance" resultType="TBalance">
+		SELECT 
+			<include refid="tBalanceColumns"/>
+		FROM t_balance a
+		<where>
+			<if test="fdbid != null and fdbid != ''">
+				AND a.fdbid = #{fdbid}
+			</if>
+			<if test="accountId != null and accountId != ''">
+				AND a.account_id = #{accountId}
+			</if>
+			<if test="accountPeriod != null and accountPeriod != ''">
+				AND a.account_period = #{accountPeriod}
+			</if>
+		</where>
+	</select>
+	
+	<select id="findListTBalanceByInfo" resultType="TBalance">
+		SELECT 
+			<include refid="tBalanceColumns"/>
+		FROM t_balance a
+		<where>
+			<if test="fdbid != null and fdbid != ''">
+				AND a.fdbid = #{fdbid}
+			</if>
+			<if test="accId != null and accId != ''">
+				AND a.account_id = #{accId}
+			</if>
+			<if test="accountPeriod != null and accountPeriod != '' and periodEnd !=null and periodEnd !=''">
+				AND a.account_period BETWEEN #{accountPeriod} AND #{periodEnd}
+			</if>
+			<if test="list != null and list != ''">
+			AND a.account_id in
+				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">  
+	  				#{item}  
+	 			</foreach>
+			</if>
+		</where>
+	</select>
+	
+	<select id="findListByFdbidAndAccountPeriod" resultType="TBalance">
+		SELECT 
+			<include refid="tBalanceColumns"/>
+		FROM t_balance a
+		<where>
+			1 = 1
+			<if test="fdbid != null and fdbid != ''">
+				AND a.fdbid = #{fdbid}
+			</if>
+			<if test="accountPeriod != null and accountPeriod != ''">
+				AND  a.account_period = #{accountPeriod} 
+			</if>
+		</where>
+	</select>
+	
+	
+	<select id="infoSByAccountId" resultType="TBalance" parameterType="String">
+		SELECT 
+			<include refid="tBalanceColumns"/>
+		FROM t_balance a
+		<include refid="tBalanceJoins"/>
+		WHERE a.account_id = #{accountId} and a.account_period >= #{accountPeriod} and a.fdbid = #{fdbid} ORDER BY account_period
+	</select>
+	
+	<select id="lastHas" resultType="int">
+	select count(1) from t_balance a
+	<where>
+			1 = 1
+			<if test="fdbid != null and fdbid != ''">
+				AND a.fdbid = #{fdbid}
+			</if>
+			<if test="accId != null and accId != ''">
+				AND a.account_id = #{accId}
+			</if>
+			<if test="accountPeriod != null and accountPeriod != ''">
+				AND  a.account_period > #{accountPeriod} 
+			</if>
+		</where>
+	</select>
+	
+	<select id="currentHas" resultType="int">
+	select count(1) from t_balance a
+	<where>
+			1 = 1
+			<if test="fdbid != null and fdbid != ''">
+				AND a.fdbid = #{fdbid}
+			</if>
+			<if test="accId != null and accId != ''">
+				AND a.account_id = #{accId}
+			</if>
+			<if test="accountPeriod != null and accountPeriod != ''">
+				AND  a.account_period = #{accountPeriod} 
+			</if>
+		</where>
+	</select>
+	<!--  判断是否有下一期 -->
+	<select id="selectPeriod" resultType="String">
+		select account_period from t_balance where account_period &lt; CONVERT(#{accountPeriod},SIGNED) and fdbid=#{fdbid} order by account_period desc limit 1
+	</select>
+	<!--  判断是否有下一期（有可能没用） -->
+	<select id="latelynextperiod" resultType="TBalance">
+	select * from t_balance 
+		where account_period = 
+		(select account_period from t_balance where account_period  &gt; CONVERT(#{accountPeriod},SIGNED) order by account_period limit 1) 
+		AND fdbid=#{fdbid};
+	</select>
+	<!--获取所有张期和上面的不一样-->
+	<select id="getAllAccountperiod" resultType="String">
+		select distinct account_period from t_balance WHERE LENGTH(account_period) &gt; 4 AND fdbid=#{fdbid} ORDER BY account_period
+	</select>
+</mapper>

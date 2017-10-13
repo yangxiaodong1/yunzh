@@ -1,0 +1,484 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.newcharge.dao.TChargecompanyDao">
+    
+	<sql id="tChargecompanyColumns">
+		a.id AS "id",
+		a.officeid AS "officeid",
+		a.chargecomname AS "chargecomname",
+		
+		a.city AS "city",
+		a.contectperson AS "contectperson",
+		a.mobilenumber AS "mobilenumber",
+		a.companynumber AS "companynumber",
+		a.companyrunrange AS "companyrunrange",
+		a.servicestatus AS "servicestatus",
+		a.usestatus AS "usestatus",
+		a.legalname AS "legalname",
+		a.contectphone AS "contectphone",
+		a.appendixtype AS "appendixtype",
+		a.cardnumber AS "cardnumber",
+		a.runnumber AS "runnumber",
+		a.runappendix AS "runappendix",
+		a.taxrenum AS "taxrenum",
+		a.taxappendx AS "taxappendx",
+		a.organcode AS "organcode",
+		a.codeappendx AS "codeappendx",
+		a.abutment AS "abutment",
+		a.auditbill AS "auditbill",
+		a.rapauditnum AS "rapauditnum",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	<sql id="officeColumnsnew">
+		a.id ,
+		a.parent_id AS "parent.id",
+		a.parent_ids AS "parentIds",
+		a.area_id AS "area.id",
+		a.code,
+		a.name AS "name",
+		a.sort,
+		a.type AS "type",
+		a.grade AS "grade",
+		a.address, 
+		a.zip_code, 
+		a.master, 
+		a.phone, 
+		a.fax, 
+		a.email, 
+		a.remarks,
+		a.create_by AS "createBy.id",
+		a.create_date,
+		a.update_by AS "updateBy.id",
+		a.update_date,
+		a.del_flag,
+		a.useable AS useable,
+		a.primary_person AS "primaryPerson.id",
+		a.deputy_person AS "deputyPerson.id",
+		a.chargecomname AS "chargecomname.chargecomname",
+		a.city AS "city.city",
+		a.contectperson AS "contectperson.contectperson",
+		a.mobilenumber AS "mobilenumber.mobilenumber",
+		a.companynumber AS "companynumber.companynumber",
+		a.companyrunrange AS "companyrunrange.companyrunrange",
+		a.servicestatus AS "servicestatus.servicestatus",
+		a.usestatus AS "usestatus.usestatus",
+		a.legalname AS "legalname.legalname",
+		a.contectphone AS "contectphone.contectphone",
+		a.appendixtype AS "appendixtype.appendixtype",
+		a.cardnumber AS "cardnumber.cardnumber",
+		a.runnumber AS "runnumber.runnumber",
+		a.runappendix AS "runappendix.runappendix",
+		a.taxrenum AS "taxrenum.taxrenum",
+		a.taxappendx AS "taxappendx.taxappendx",
+		a.organcode AS "organcode.organcode",
+		a.codeappendx AS "codeappendx.codeappendx",
+		a.abutment AS "abutment.abutment",
+		a.auditbill AS "auditbill.auditbill",
+		a.rapauditnum AS "rapauditnum.rapauditnum",
+		a.province  AS  "province",
+		a.municipality  AS "municipality",
+		a.district AS "district"
+		
+	</sql>
+	 <sql id="userColumnsnew">
+    	a.id AS "id",
+    	a.company_id AS "company.id",
+    	a.office_id AS "office.id",
+    	a.useStatus AS "useStatus",
+    	a.login_name,
+    	a.password,
+    	a.no,
+		a.name,
+		a.sex AS "sex",
+		a.qq AS "qq",
+		a.address AS "address",
+		a.urgent_man AS "urgentMan",
+		a.birth AS "birth",
+		a.remark AS "remark",
+		a.email,
+		a.phone,
+		a.mobile,
+		a.user_type,
+		a.login_ip,
+		a.login_date,
+		a.remarks,
+		a.login_flag,
+		a.photo,
+		a.create_by AS "createBy.id",
+		a.create_date,
+		a.update_by AS "updateBy.id",
+		a.update_date,
+		a.del_flag AS "delFlag",
+		a.master_account AS 'masteraccount'
+    	
+    </sql>
+	<sql id="tChargecompanyJoins">
+	</sql>
+    <select id="dataGeneralSituation" resultType="java.util.HashMap" parameterType="java.util.Map">
+   		select DATE_FORMAT(temp.create_date, "%Y-%m-%d" ) as create_date,count(temp.name) as company,sum(temp.customer) as customer,sum(temp.user) as users 
+   		from (SELECT c.create_date as create_date,c.chargeComName as name, 
+   			(select count(cus.id) from t_customer cus,sys_user su where cus.supervisor=su.id and su.company_id=c.id) as customer,
+
+			(SELECT COUNT(u.id) FROM sys_user u,sys_role r,sys_user_role ur where u.company_id = c.id and u.id=ur.user_id and ur.role_id=r.id and u.del_flag='0' )as user
+			from sys_office c where  c.parent_id='0' and c.parent_ids='0,' AND c.useStatus in('0','1')
+			<if test="begindate != null and begindate != ''">
+		and ( c.create_date between #{begindate} and #{enddate} )
+		</if> 
+		) as temp
+		GROUP BY DATE_FORMAT(temp.create_date, "%Y-%m-%d" ) ORDER BY temp.create_date desc
+    </select>
+    
+    <!-- 数据统计yang -->
+    <select id="dataGeneralSituationNew" resultType="com.thinkgem.jeesite.modules.newcharge.entity.TCountCompanynew" parameterType="java.util.Map">                                                                                                                       
+   		SELECT DATE_FORMAT(creatdate(a.create_date1,a.create_date2,a.create_date3),"%Y-%m-%d") as dateStringDate,sum(a.acount) acount,sum(a.company) company,sum(a.cucount) cucount FROM  chargecount a
+   		 where 1=1
+   		<if test="begindate != null and begindate != ''">
+		 and  DATE_FORMAT(creatdate(a.create_date1,a.create_date2,a.create_date3),"%Y-%m-%d") between #{begindate} and #{enddate}
+		</if> 
+   		GROUP BY dateStringDate ORDER BY dateStringDate DESC
+    </select>
+    
+    
+    <select id="cityGeneralSituation" resultType="java.util.HashMap" parameterType="String">
+   		select city,create_date,count(temp.name) as company,sum(temp.customer) as customer,sum(temp.user) as users 
+   		from (SELECT c.municipality as city, c.create_date as create_date,c.chargeComName as name, 
+   			(select count(cus.id) from t_customer cus,sys_user su where cus.supervisor=su.id and su.company_id=c.id) as customer,
+			(SELECT COUNT(u.id) FROM sys_user u,sys_role r,sys_user_role ur where u.company_id = c.id and u.id=ur.user_id and ur.role_id=r.id ) as user
+			from sys_office c where  c.parent_id='0' and c.parent_ids='0,' AND c.useStatus in('0','1')
+		<if test="city != null and city != ''">
+		and c.municipality like '${city}%' 
+		</if>
+		) as temp
+		GROUP BY city ORDER BY temp.create_date desc
+    </select>
+	<select id="get" resultType="TChargecompany">
+		SELECT 
+			<include refid="tChargecompanyColumns"/>
+		FROM t_chargecompany a
+		<include refid="tChargecompanyJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<!-- yang根据状态查询 
+	<select id="selectByStatus" resultType="TChargecompany">
+		SELECT 
+			<include refid="tChargecompanyColumns"/>
+		FROM t_chargecompany a
+		<include refid="tChargecompanyJoins"/>
+		WHERE a.servicestatus = "1" ORDER BY a.update_date desc
+	</select>-->
+	<!-- 整合好数据库的yang -->
+	<select id="selectByStatus" resultType="Office">
+		SELECT 
+			<include refid="officeColumnsnew"/>
+		FROM sys_office a 
+		
+		WHERE a.servicestatus = "1" ORDER BY a.update_date desc
+	</select>
+	
+	<select id="selectByStatus2" resultType="Office">
+		SELECT 
+			<include refid="officeColumnsnew"/>
+		FROM sys_office a 
+		
+		WHERE a.servicestatus = "1" and a.create_by =#{createBy.id}  ORDER BY a.update_date desc
+	</select>
+	
+	
+	<!-- 通过id得到记账公司 -->
+	<select id="getbyid" resultType="Office" >
+		SELECT 
+			<include refid="officeColumnsnew"/>
+		FROM sys_office a WHERE a.id = #{id}
+	</select>
+	<!-- yang根据停止状态查询 
+	<select id="selectByStatusN" resultType="TChargecompany">
+		SELECT 
+			<include refid="tChargecompanyColumns"/>
+		FROM t_chargecompany a
+		<include refid="tChargecompanyJoins"/>
+		WHERE a.servicestatus = "0" ORDER BY a.update_date desc
+	</select>-->
+	<!-- yang根据停止状态查询 -->
+	<select id="selectByStatusN" resultType="Office">
+		SELECT 
+			<include refid="officeColumnsnew"/>
+		FROM sys_office a 
+	
+		WHERE a.servicestatus = "0" ORDER BY a.update_date desc
+	</select>
+	
+	<select id="selectByStatusN2" resultType="Office">
+		SELECT 
+			<include refid="officeColumnsnew"/>
+		FROM sys_office a 
+	
+		WHERE a.servicestatus = "0" and a.create_by =#{createBy.id} ORDER BY a.update_date desc
+	</select>
+	
+	<!-- yang根据试用状态查询 -->
+	<select id="selByStatus" resultType="Office">
+		SELECT 
+			<include refid="officeColumnsnew"/>
+		FROM sys_office a 
+		WHERE a.usestatus = #{usestatus.usestatus} AND a.servicestatus = "1" ORDER BY a.update_date desc
+	</select>
+	<!-- yang根据试用状态查询 -->
+	<select id="selByStatus2" resultType="Office">
+		SELECT 
+			<include refid="officeColumnsnew"/>
+		FROM sys_office a 
+		WHERE a.usestatus = #{usestatus.usestatus} AND a.servicestatus = "1" and a.create_by =#{createBy.id} ORDER BY a.update_date desc
+	</select>
+	<!-- yang根据所有城市查询 -->
+	<select id="allCity" resultType="Office">
+		SELECT 
+			<include refid="officeColumnsnew"/>
+		FROM sys_office a 
+		
+		WHERE       
+		<choose>
+			<when test="province !=null and province !=''">
+				a.province like '%${province}%' 
+			</when>
+			<otherwise>
+				a.municipality  like '%${municipality}%' 
+			</otherwise>
+		</choose>
+		AND a.servicestatus =#{servicestatus.servicestatus} ORDER BY a.update_date desc
+	</select>
+	<!-- yang根据时间查询 -->
+	<select id="findByTime" resultType="TChargecompany">
+		SELECT 
+			<include refid="tChargecompanyColumns"/>
+		FROM t_chargecompany a
+		<include refid="tChargecompanyJoins"/>
+		WHERE a.create_date= #{createDate}
+	</select>
+	
+    
+     <!-- 新增记账公司数 -->
+     <select id="indexDatanew" resultType="java.util.HashMap" parameterType="java.util.Map">
+	 select COUNT(su.id) as company ,DATE_FORMAT(su.create_date, "%Y-%m-%d" ) as create_date FROM sys_office su where su.parent_id ='0' and su.id !=1 
+	 <if test="begindate != null and begindate != ''">
+		and ( su.create_date between #{begindate} and #{enddate} )
+		</if>
+	  GROUP BY DATE_FORMAT(su.create_date, "%Y-%m-%d" )
+ORDER BY su.create_date desc
+    </select>
+    <!-- 新增会计数量 -->
+    <select id="indexDatanewaccount" resultType="java.util.HashMap" parameterType="java.util.Map">
+      select COUNT(u.id) as users,DATE_FORMAT(u.create_date, "%Y-%m-%d" ) as create_date FROM sys_user u where u.company_id not in('1')  <if test="begindate != null and begindate != ''">
+		and ( u.create_date between #{begindate} and #{enddate} )
+		</if> GROUP BY DATE_FORMAT(u.create_date, "%Y-%m-%d" )
+ORDER BY u.create_date desc
+    </select>
+    <!-- 新增客户数量 -->
+    <select id="indexDatanewcustomer" resultType="java.util.HashMap" parameterType="java.util.Map">
+		select COUNT(tc.id) as customer,DATE_FORMAT(tc.create_date, "%Y-%m-%d" ) as create_date FROM t_customer tc where 1=1
+		<if test="begindate != null and begindate != ''">
+				and ( tc.create_date between #{begindate} and #{enddate} )
+				</if> GROUP BY DATE_FORMAT(tc.create_date, "%Y-%m-%d" )
+		ORDER BY tc.create_date desc
+    </select>
+    <!-- 新增记账公司总数 yang
+    <select id="conutcharge" resultType="String" >sys_office
+   		 select COUNT(su.id) as company  FROM sys_user su where su.master_account ='1' and su.del_flag='0'
+    </select>-->
+    <select id="conutcharge" resultType="String" >
+   		 select COUNT(su.id) as company  FROM sys_office su where su.parent_id ='0' and su.id !=1
+    </select>
+    <!-- 新增会计总数 yang
+    <select id="conutaccount" resultType="String" >
+   		  select COUNT(u.id) as users FROM sys_user u where u.del_flag='0' and u.master_account in('0','1')  
+    </select>-->
+    <!-- 新增会计总数 yang-->
+    <select id="conutaccount" resultType="String" >
+   		  select COUNT(u.id) as users FROM sys_user u where  u.company_id not in('1')  
+    </select>
+    
+    <!-- 新增客户总数 yang
+    <select id="conutcustomer" resultType="String" >
+   		select COUNT(tc.id) as customer FROM t_customer tc where tc.out_of_service= '0'
+    </select>-->
+     <!-- 新增客户总数 yang-->
+    <select id="conutcustomer" resultType="String" >
+   		select COUNT(tc.id) as customer FROM t_customer tc 
+    </select>
+    
+    <!-- 首页显示记账公司城市分布 yang-->
+    <select id="companySituation" resultType="java.util.HashMap" parameterType="String">
+   		select  city,create_date,count(temp.name) as company,sum(temp.customer) as customer,sum(temp.user) as users 
+   		from (SELECT c.municipality as city, c.create_date as create_date,c.chargeComName as name, 
+   			(select count(cus.id) from t_customer cus,sys_user su where cus.supervisor=su.id and su.company_id=c.id) as customer,
+			(SELECT COUNT(u.id) FROM sys_user u,sys_role r,sys_user_role ur where u.company_id = c.id and u.id=ur.user_id and ur.role_id=r.id ) as user
+			from sys_office c where  c.parent_id='0' and c.parent_ids='0,' AND c.useStatus in('0','1')
+		) as temp
+		GROUP BY city ORDER BY company desc LIMIT 0,5
+   		
+    </select>
+    <!-- 首页服务企业城市分布 -->
+    <select id="customerSituation" resultType="java.util.HashMap" parameterType="String">
+   		select  city,create_date,count(temp.name) as company,sum(temp.customer) as customer,sum(temp.user) as users 
+   		from (SELECT c.municipality as city, c.create_date as create_date,c.chargeComName as name, 
+   			(select count(cus.id) from t_customer cus,sys_user su where cus.supervisor=su.id and su.company_id=c.id) as customer,
+			(SELECT COUNT(u.id) FROM sys_user u,sys_role r,sys_user_role ur where u.company_id = c.id and u.id=ur.user_id and ur.role_id=r.id ) as user
+			from sys_office c where c.parent_id='0' and c.parent_ids='0,' AND c.useStatus in('0','1')
+		) as temp
+		GROUP BY city ORDER BY customer desc LIMIT 0,5
+    </select>
+    <!-- 首页财务人员城市分布 -->
+    <select id="userSituation" resultType="java.util.HashMap" parameterType="String">
+   		select  city,create_date,count(temp.name) as company,sum(temp.customer) as customer,sum(temp.user) as users 
+   		from (SELECT c.municipality as city, c.create_date as create_date,c.chargeComName as name, 
+   			(select count(cus.id) from t_customer cus,sys_user su where cus.supervisor=su.id and su.company_id=c.id) as customer,
+			(SELECT COUNT(u.id) FROM sys_user u,sys_role r,sys_user_role ur where u.company_id = c.id and u.id=ur.user_id and ur.role_id=r.id ) as user
+			from sys_office c where  c.parent_id='0' and c.parent_ids='0,' AND c.useStatus in('0','1')
+		) as temp
+		GROUP BY city ORDER BY users desc LIMIT 0,5
+   		
+    </select>
+	<select id="findList" resultType="TChargecompany">
+		SELECT 
+			<include refid="tChargecompanyColumns"/>
+		FROM t_chargecompany a
+		<include refid="tChargecompanyJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TChargecompany">
+		SELECT 
+			<include refid="tChargecompanyColumns"/>
+		FROM t_chargecompany a
+		<include refid="tChargecompanyJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_chargecompany(
+			id,
+			officeid,
+			chargecomname,
+			
+			city,
+			contectperson,
+			mobilenumber,
+			companynumber,
+			companyrunrange,
+			servicestatus,
+			usestatus,
+			legalname,
+			contectphone,
+			appendixtype,
+			cardnumber,
+			runnumber,
+			runappendix,
+			taxrenum,
+			taxappendx,
+			organcode,
+			codeappendx,
+			abutment,
+			auditbill,
+			rapauditnum,
+			create_by,
+			create_date,
+			update_date,
+			update_by,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{officeid},
+			#{chargecomname},
+			
+			#{city},
+			#{contectperson},
+			#{mobilenumber},
+			#{companynumber},
+			#{companyrunrange},
+			#{servicestatus},
+			#{usestatus},
+			#{legalname},
+			#{contectphone},
+			#{appendixtype},
+			#{cardnumber},
+			#{runnumber},
+			#{runappendix},
+			#{taxrenum},
+			#{taxappendx},
+			#{organcode},
+			#{codeappendx},
+			#{abutment},
+			#{auditbill},
+			#{rapauditnum},
+			#{createBy.id},
+			#{createDate},
+			#{updateDate},
+			#{updateBy.id},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_chargecompany SET 	
+			officeid = #{officeid},
+			chargecomname = #{chargecomname},
+			city = #{city},
+			contectperson = #{contectperson},
+			mobilenumber = #{mobilenumber},
+			companynumber = #{companynumber},
+			companyrunrange = #{companyrunrange},
+			servicestatus = #{servicestatus},
+			usestatus = #{usestatus},
+			legalname = #{legalname},
+			contectphone = #{contectphone},
+			appendixtype = #{appendixtype},
+			cardnumber = #{cardnumber},
+			runnumber = #{runnumber},
+			runappendix = #{runappendix},
+			taxrenum = #{taxrenum},
+			taxappendx = #{taxappendx},
+			organcode = #{organcode},
+			codeappendx = #{codeappendx},
+			abutment = #{abutment},
+			auditbill = #{auditbill},
+			rapauditnum = #{rapauditnum},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE t_chargecompany SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.rpt.dao.ReportformulaDao">
+    
+	<sql id="reportformulaColumns">
+		a.id AS "id",
+		a.fdesc AS "fdesc",
+		a.reportitem AS "reportitem",
+		a.datasource AS "datasource",
+		a.formula AS "formula",
+		a.dc AS "dc",
+		a.reportitems AS "reportitems",
+		a.ftype AS "ftype",
+		a.op AS "op",
+		a.acc_id AS "accId",
+		a.accunt_id AS "accuntId",
+		a.account_name AS "accountName",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.acctYearPeriod as "acctYearPeriod",
+		a.acc_dc as "accDc",
+		a.report_accountId as "reportAccountId",
+		a.acctReportItemId as "acctReportItemId",
+		a.report_Id as "reportId",
+		a.fdbid as "fdbid"
+	</sql>
+	
+	<sql id="reportformulaJoins">
+	</sql>
+    
+	<select id="get" resultType="Reportformula">
+		SELECT 
+			<include refid="reportformulaColumns"/>
+		FROM reportformula a
+		<include refid="reportformulaJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Reportformula">
+		SELECT 
+			<include refid="reportformulaColumns"/>
+		FROM reportformula a
+		<include refid="reportformulaJoins"/>
+		<where>
+			and acctYearPeriod=1
+			<!-- a.del_flag = #{DEL_FLAG_NORMAL} -->
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="reportitem != null and reportitem != ''">
+				AND a.reportitem = #{reportitem}
+			</if>
+			<if test="accId != null and accId != ''">
+				AND a.acc_id = #{accId}
+			</if>
+			<if test="accuntId != null and accuntId != ''">
+				AND a.accunt_id = #{accuntId}
+			</if>
+			<if test="fdbid != null and fdbid != ''">
+				AND a.fdbid = #{fdbid}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Reportformula">
+		SELECT 
+			<include refid="reportformulaColumns"/>
+		FROM reportformula a
+		<include refid="reportformulaJoins"/>
+		<where>
+			<!-- a.del_flag = #{DEL_FLAG_NORMAL} -->
+			a.acctYearPeriod= 1
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO reportformula(
+			id,
+			fdesc,
+			reportitem,
+			datasource,
+			formula,
+			dc,
+			reportitems,
+			ftype,
+			op,
+			acc_id,
+			accunt_id,
+			account_name,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{fdesc},
+			#{reportitem},
+			#{datasource},
+			#{formula},
+			#{dc},
+			#{reportitems},
+			#{ftype},
+			#{op},
+			#{accId},
+			#{accuntId},
+			#{accountName},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE reportformula SET 	
+			fdesc = #{fdesc},
+			reportitem = #{reportitem},
+			datasource = #{datasource},
+			formula = #{formula},
+			dc = #{dc},
+			reportitems = #{reportitems},
+			ftype = #{ftype},
+			op = #{op},
+			acc_id = #{accId},
+			accunt_id = #{accuntId},
+			account_name = #{accountName},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE reportformula SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

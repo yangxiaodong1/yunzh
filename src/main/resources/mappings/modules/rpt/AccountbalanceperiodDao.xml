@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.rpt.dao.AccountbalanceperiodDao">
+    
+	<sql id="accountbalanceperiodColumns">
+		a.id AS "id",
+		a.accunt_id AS "accuntId",
+		a.account_name AS "accountName",
+		a.parent_id AS "parent.id",
+		a.account_group AS "accountGroup",
+		a.acc_dc AS "accDc",
+		a.is_enable AS "isEnable",
+		a.balanceid AS "balanceid",
+		a.balancefdbid AS "balancefdbid",
+		a.account_period AS "accountPeriod",
+		a.beginbalance AS "beginbalance",
+		a.debittotalamount AS "debittotalamount",
+		a.credittotalamount AS "credittotalamount",
+		a.ytddebittotalamount AS "ytddebittotalamount",
+		a.ytdcredittotalamount AS "ytdcredittotalamount",
+		a.endbalance AS "endbalance",
+		a.amountfor as "amountfor", 
+		a.ytdamountfor as "ytdamountfor",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="accountbalanceperiodJoins">
+	</sql>
+    
+	<select id="get" resultType="Accountbalanceperiod">
+		SELECT 
+			<include refid="accountbalanceperiodColumns"/>
+		FROM accountbalanceperiod a
+		<include refid="accountbalanceperiodJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Accountbalanceperiod">
+		SELECT 
+			<include refid="accountbalanceperiodColumns"/>
+		FROM accountbalanceperiod a
+		<include refid="accountbalanceperiodJoins"/>
+		<where>
+			<!-- a.del_flag = #{DEL_FLAG_NORMAL} -->
+			<if test="id != null and id != ''">
+				AND a.id=#{id}
+			</if>
+			<if test="accountPeriod != null and accountPeriod != ''">
+				AND a.account_period=#{accountPeriod}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Accountbalanceperiod">
+		SELECT 
+			<include refid="accountbalanceperiodColumns"/>
+		FROM accountbalanceperiod a
+		<include refid="accountbalanceperiodJoins"/>
+		<where>
+			<!-- a.del_flag = #{DEL_FLAG_NORMAL} -->
+			<if test="id != null and id != ''">
+				AND a.id=#{id}
+			</if>
+			<if test="accountPeriod != null and accountPeriod != ''">
+				AND a.account_period=#{accountPeriod}
+			</if>
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO accountbalanceperiod(
+			id,
+			accunt_id,
+			account_name,
+			parent_id,
+			account_group,
+			account_group_sub,
+			acc_dc,
+			is_enable,
+			balanceid,
+			balancefdbid,
+			account_period,
+			beginbalance,
+			debittotalamount,
+			credittotalamount,
+			ytddebittotalamount,
+			ytdcredittotalamount,
+			endbalance,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{accuntId},
+			#{accountName},
+			#{parent.id},
+			#{accountGroup},
+			#{accountGroupSub},
+			#{accDc},
+			#{isEnable},
+			#{balanceid},
+			#{balancefdbid},
+			#{accountPeriod},
+			#{beginbalance},
+			#{debittotalamount},
+			#{credittotalamount},
+			#{ytddebittotalamount},
+			#{ytdcredittotalamount},
+			#{endbalance},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE accountbalanceperiod SET 	
+			accunt_id = #{accuntId},
+			account_name = #{accountName},
+			parent_id = #{parent.id},
+			account_group = #{accountGroup},
+			account_group_sub = #{accountGroupSub},
+			acc_dc = #{accDc},
+			is_enable = #{isEnable},
+			balanceid = #{balanceid},
+			balancefdbid = #{balancefdbid},
+			account_period = #{accountPeriod},
+			beginbalance = #{beginbalance},
+			debittotalamount = #{debittotalamount},
+			credittotalamount = #{credittotalamount},
+			ytddebittotalamount = #{ytddebittotalamount},
+			ytdcredittotalamount = #{ytdcredittotalamount},
+			endbalance = #{endbalance},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE accountbalanceperiod SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	<!-- 根据科目编号和账期查询金额及科目信息 -->
+	<select id="findAccBlanceByPeriod" resultType="Accountbalanceperiod">
+		SELECT 
+			*
+		FROM accountbalanceperiod a
+		<include refid="accountbalanceperiodJoins"/>
+		<where>
+			<!-- a.del_flag = #{DEL_FLAG_NORMAL} -->
+			<if test="accId != null and accId != ''">
+				AND a.id=#{accId}
+			</if>
+			<if test="accPeriod != null and accPeriod != ''">
+				AND a.account_period=#{accPeriod}
+			</if>
+			<if test="fdbid != null and fdbid != ''">
+				AND a.balancefdbid=#{fdbid}
+			</if>
+		</where>
+	</select>
+	<!--  根据科目编号和账期前后查询金额及科目信息 -->
+	<select id="findAccBlanceByPeriodEnd" resultType="Accountbalanceperiod">
+		SELECT 
+			*
+		FROM accountbalanceperiod a
+		<include refid="accountbalanceperiodJoins"/>
+		<where>
+			<!-- a.del_flag = #{DEL_FLAG_NORMAL} -->
+			<if test="accId != null and accId != ''">
+				AND a.id=#{accId}
+			</if>
+			<if test="fdbid != null and fdbid != ''">
+				AND a.balancefdbid=#{fdbid}
+			</if>
+			<if test="accPeriod != null and accPeriod != '' and periodEnd != null and periodEnd != ''">
+			AND a.account_period between #{accPeriod} and #{periodEnd}
+			</if>
+		</where>
+	</select>
+</mapper>

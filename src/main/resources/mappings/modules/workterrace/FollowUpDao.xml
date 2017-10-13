@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.workterrace.dao.FollowUpDao">
+    
+	<sql id="followUpColumns">
+		a.id AS "id",
+		a.customer_id AS "customerId",
+		a.up_content AS "upContent",
+		a.up_time AS "upTime",
+		a.linkman AS "linkman",
+		a.phone AS "phone",
+		a.remarks1 AS "remarks1",
+		a.up_man AS "upMan",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		b.name AS "userName"
+	</sql>
+	
+	<sql id="followUpJoins">
+		left join sys_user b on a.up_man=b.id
+	</sql>
+    
+	<select id="get" resultType="FollowUp">
+		SELECT 
+			<include refid="followUpColumns"/>
+		FROM t_follow_up a
+		<include refid="followUpJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="FollowUp">
+		SELECT 
+			<include refid="followUpColumns"/>
+		FROM t_follow_up a
+		<include refid="followUpJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="customerId != null and customerId != ''">
+				AND a.customer_id = #{customerId}
+			</if>
+			
+		</where>
+				ORDER BY a.create_date DESC
+	</select>
+	
+	
+	<select id="findUpContent" resultType="String">
+		<![CDATA[	
+SELECT GROUP_CONCAT(b.up_content)  AS 'upContent'
+FROM  t_follow_up b 
+where
+b.del_flag = #{DEL_FLAG_NORMAL} and
+b.customer_id=#{customerId} and
+ YEAR(b.up_time)=#{byYear}
+]]>
+	</select>
+	
+	
+	
+	
+	<select id="findAllList" resultType="FollowUp">
+		SELECT 
+			<include refid="followUpColumns"/>
+		FROM t_follow_up a
+		<include refid="followUpJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_follow_up(
+			customer_id,
+			up_content,
+			up_time,
+			linkman,
+			phone,
+			remarks1,
+			up_man,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+			
+		) VALUES (
+			#{customerId},
+			#{upContent},
+			#{upTime},
+			#{linkman},
+			#{phone},
+			#{remarks1},
+			#{upMan},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_follow_up SET 	
+			customer_id = #{customerId},
+			up_content = #{upContent},
+			up_time = #{upTime},
+			linkman = #{linkman},
+			phone = #{phone},
+			remarks1 = #{remarks1},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE t_follow_up SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

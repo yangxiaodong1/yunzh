@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.rpt.dao.ReportbalanceDao">
+    
+	<sql id="reportbalanceColumns">
+		a.id AS "id",
+		a.reportitem AS "reportitem",
+		a.fdesc AS "fdesc",
+		a.accunt_id AS "accuntId",
+		a.account_name AS "accountName",
+		a.reportitems AS "reportitems",
+		a.ftype AS "ftype",
+		a.beginbalance AS "beginbalance",
+		a.datasource AS "datasource",
+		a.endbalance AS "endbalance",
+		a.op AS "op",
+		a.formula AS "formula",
+		a.dc AS "dc",
+		a.account_period AS "accountPeriod",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.acc_id AS "accId",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.debittotalamount AS "debittotalamount",
+		a.credittotalamount AS "credittotalamount",
+		a.ytddebittotalamount AS "ytddebittotalamount",
+		a.ytdcredittotalamount AS "ytdcredittotalamount",
+		a.amountfor as "amountfor", 
+		a.ytdamountfor as "ytdamountfor",
+		a.acctYearPeriod as "acctYearPeriod",
+		a.acc_dc as "accDc",
+		a.report_accountId as "reportAccountId",
+		a.acctReportItemId as "acctReportItemId",
+		a.report_Id AS "reportId",
+		a.fdbid as "fdbid"
+	</sql>
+	
+	<sql id="reportbalanceJoins">
+	</sql>
+    
+	<select id="get" resultType="Reportbalance">
+		SELECT 
+			<include refid="reportbalanceColumns"/>
+		FROM reportbalance a
+		<include refid="reportbalanceJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Reportbalance">
+		SELECT 
+			<include refid="reportbalanceColumns"/>
+		FROM reportbalance a
+		<include refid="reportbalanceJoins"/>
+		<where>
+			a.acctYearPeriod= 1
+			<!-- a.del_flag = #{DEL_FLAG_NORMAL} -->
+			<if test="id != null and id != ''">
+				AND a.id=#{id}
+			</if>
+			<if test="reportitem != null and reportitem != ''">
+				AND a.reportitem = #{reportitem}
+			</if>
+			<if test="accuntId != null and accuntId != ''">
+				AND a.accunt_id = #{accuntId}
+			</if>
+			<if test="reportitems != null and reportitems != ''">
+				AND a.reportitems = #{reportitems}
+			</if>
+			<if test="accountPeriod != null and accountPeriod != ''">
+					AND a.account_period = #{accountPeriod}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Reportbalance">
+		SELECT 
+			<include refid="reportbalanceColumns"/>
+		FROM reportbalance a
+		<include refid="reportbalanceJoins"/>
+		<where>
+		a.acctYearPeriod= 1
+			<!-- a.del_flag = #{DEL_FLAG_NORMAL} -->
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO reportbalance(
+			id,
+			reportitem,
+			fdesc,
+			accunt_id,
+			account_name,
+			reportitems,
+			ftype,
+			beginbalance,
+			datasource,
+			endbalance,
+			op,
+			formula,
+			dc,
+			account_period,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			acc_id,
+			remarks,
+			del_flag,
+			debittotalamount,
+			credittotalamount,
+			ytddebittotalamount,
+			ytdcredittotalamount
+		) VALUES (
+			#{id},
+			#{reportitem},
+			#{fdesc},
+			#{accuntId},
+			#{accountName},
+			#{reportitems},
+			#{ftype},
+			#{beginbalance},
+			#{datasource},
+			#{endbalance},
+			#{op},
+			#{formula},
+			#{dc},
+			#{accountPeriod},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{accId},
+			#{remarks},
+			#{delFlag},
+			#{debittotalamount},
+			#{credittotalamount},
+			#{ytddebittotalamount},
+			#{ytdcredittotalamount}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE reportbalance SET 	
+			reportitem = #{reportitem},
+			fdesc = #{fdesc},
+			accunt_id = #{accuntId},
+			account_name = #{accountName},
+			reportitems = #{reportitems},
+			ftype = #{ftype},
+			beginbalance = #{beginbalance},
+			datasource = #{datasource},
+			endbalance = #{endbalance},
+			op = #{op},
+			formula = #{formula},
+			dc = #{dc},
+			account_period = #{accountPeriod},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			acc_id = #{accId},
+			remarks = #{remarks},
+			debittotalamount = #{debittotalamount},
+			credittotalamount = #{credittotalamount},
+			ytddebittotalamount = #{ytddebittotalamount},
+			ytdcredittotalamount = #{ytdcredittotalamount}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE reportbalance SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	<select id="findListByReportItem" resultType="Reportbalance">
+		select * from reportBalance a
+		<where>  and acctYearPeriod=1
+		<if test="accountP != null and accountP != ''">
+			AND a.account_period = #{accountP}
+		</if>
+		AND reportitem in 
+			<foreach item="item" index="index" collection="list" open="(" separator="," close=")">  
+	  			#{item}  
+	 		</foreach>
+ 		</where>
+	</select>
+	<!-- 根据账期前后以及公司客户id 查询 	 资产负债表使用 -->
+	<select id="findListByReItem" resultType="Reportbalance">
+		select * from reportBalance a
+		<where>
+			<if test="reportitem != null and reportitem != ''">
+			AND a.reportitems = #{reportitem}
+			</if>
+			<if test="fdbid != null and fdbid != ''">
+			AND a.fdbid = #{fdbid}
+			</if>
+			<if test="accId != null and accId != ''">
+			AND a.accunt_id = #{accId}
+			</if>
+			<if test="accountPeriod != null and accountPeriod != '' and periodEnd != null and periodEnd != ''">
+			AND a.account_period between #{accountPeriod} and #{periodEnd}
+			</if>
+			and acctYearPeriod=1
+		</where>
+	</select>
+	<!-- 根据账期前后以及公司客户id 查询 	 资产负债表使用 -->
+	<select id="findListByReportId" resultType="Reportbalance">
+		select * from reportBalance a
+		<where>
+			<if test="reportId != null and reportId != ''">
+			AND a.report_Id = #{reportId}
+			</if>
+			<if test="fdbid != null and fdbid != ''">
+			AND a.fdbid = #{fdbid}
+			</if>
+			<if test="accountPeriod != null and accountPeriod != '' and periodEnd != null and periodEnd != ''">
+			AND a.account_period between #{accountPeriod} and #{periodEnd}
+			</if>
+			and acctYearPeriod=1
+		</where>
+	</select>
+	<select id="findModeByReItem" resultType="Reportbalance">
+		select * from reportBalance a
+		<where>
+			a.account_period = #{accountPeriod}
+			and acc_id  =#{accId}
+			and reportitem= #{reportitem}
+			and acctYearPeriod=1 <!-- 因为年报表字段不知道干嘛  先这样过滤一下 -->
+		</where>
+	</select>
+	
+	<select id="findListByListReItemS" resultType="Reportbalance">
+		SELECT 
+			<include refid="reportbalanceColumns"/>
+		FROM reportbalance a
+		<where>
+		AND 1 = 1
+			<if test="fdbid != null and fdbid != ''">
+				AND a.fdbid = #{fdbid}
+			</if>
+			<if test="accountPeriod != null and accountPeriod != ''">
+				AND a.account_period = #{accountPeriod}
+			</if>
+			<if test="list != null and list.size() >0">
+				AND a.reportitem in 
+				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">  
+	  				#{item}  
+	 			</foreach>
+			</if>
+			AND a.acctYearPeriod=1 <!-- 因为年报表字段不知道干嘛  先这样过滤一下 -->
+		</where>
+	</select>
+</mapper>

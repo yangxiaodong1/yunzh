@@ -1,0 +1,50 @@
+/*璐︾翱閮ㄥ垎鍏叡鏍峰紡*/
+.account-wrapper{min-width: 1055px;background: #eff1f3;font-family: "Microsoft Yahei";padding: 0 13px 10px;}
+.account-wrapper .h2-tit{width: 100%;text-align: center;font: 24px/50px "Microsoft Yahei";color: #1b1b1b;}
+.account-wrapper .th-left span{position: relative;float: left;width: 98px;height: 25px;line-height: 25px;text-align: left;border: 1px solid #bfbfbf;background: #fff;text-indent: 5px;}
+.account-wrapper .th-left{float: left;}
+.mr8{margin-right: 8px;}
+
+.account-wrapper .th{position: relative;width: 960px;margin: 0 auto;}
+.account-wrapper .th-right{height: 27px;}
+.account-wrapper .th-right span{float: right;width: 90px;height: 27px;border:1px solid #4e9ee7;color: #757575;margin-left: 6px;font:12px/27px "Microsoft Yahei";cursor: pointer;border-radius: 4px;}
+.account-wrapper .th-right span:hover{border:1px solid #4e9ee7;color: #6ea7ec;}
+.account-wrapper .th-right span:active{border:1px solid #317dc8;color: #3a7bcb;}
+
+.account-wrapper .tb{margin: 0 auto;width:960px;}
+.table-account-wrapper{width: 100%;border-collapse: inherit;}
+.table-account-wrapper thead tr th{background: #3498db;height: 30px;line-height: 30px;color: #fff;border-right: 1px solid #dadada;}
+.table-account-wrapper thead tr th:last-child{border-right: none;}
+.table-account-wrapper tbody tr td{height: 38px;line-height: 38px;border-right: 1px solid #dadada;border-bottom: 1px solid #dadada;text-align: left;text-indent:0;padding-left:8px;}
+.table-account-wrapper tbody tr:nth-child(2n+1){background: #ffffff;}
+.table-account-wrapper tbody tr:nth-child(2n){background: #f4f7fa;}
+.table-account-wrapper tbody tr td:first-child{border-left: 1px solid #dadada;}
+
+
+
+/* 鍒╂鼎琛�*/
+.profit .th-left{margin-top: -10px;}
+.profit .th-left span i.icon{background: url(../images/icon.png) no-repeat;}
+.profit .th-left .ptxt{height: 30px;line-height: 30px;margin-top: 3px;text-align: left;}
+.profit .th-left .ptxt i{float: left;width: 15px;height: 30px;background: url(../images/dian.png) 4px 15px no-repeat;}
+
+.profit .th-left em{float: left;width: 30px;height: 25px;line-height: 25px;}
+.profit .th-left span i.icon{position: absolute;width: 8px;height: 5px;background-position: -32px -376px;top: 10px;right: 6px;}
+
+
+.table-profit thead tr th.borb{border-bottom: 1px solid #dadada;}
+.table-profit tbody tr td:nth-child(1){text-align: left;}
+.table-profit tbody tr td:nth-child(2){text-align: center;text-indent: 0px;padding-right: 0;}
+.table-profit tbody tr td:nth-child(3){text-align: right;text-indent: 0px;padding-right: 8px;}
+.table-profit tbody tr td:nth-child(4){text-align: right;text-indent: 0px;padding-right: 16px;}
+.table-profit tbody tr td:nth-child(7),.table-profit tbody tr td:nth-child(8) {text-align: right;padding-right: 30px;}
+
+.table-profit tfoot tr td{height: 38px;line-height: 38px;border-right: 1px solid #dadada;border-left: 1px solid #dadada;border-bottom: 1px solid #dadada;text-indent: 10em;text-align: left;background: #ffffff;}
+
+.table-profit tbody tr td.td-tit{color: #000;font-weight: bold;text-indent: 0;}
+.table-profit tbody tr td.td-tip{text-indent: 0;position: relative;}
+.table-profit tbody tr td.td-tip i{position: absolute;width: 6px;height: 11px;top: 14px;left: 36px;background: url(../images/youjt.png) top center no-repeat;}
+.table-profit tbody tr td.td-tip i.ix{width: 11px;height: 6px;top: 17px;left: 36px;background: url(../images/xiajt.png) top center no-repeat;}
+.table-profit tbody tr td.td-child{text-indent: 60px;}
+
+.td_col2 {width: auto;}

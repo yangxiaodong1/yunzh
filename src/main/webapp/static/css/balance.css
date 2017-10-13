@@ -1,0 +1,12 @@
+
+.balance .th-left span i.icon{background: url(../images/icon.png) no-repeat;}
+
+.balance .th-left em{float: left;width: 30px;height: 25px;line-height: 25px;margin: 0 5px;}
+.balance .th-left span i.icon{position: absolute;width: 8px;height: 5px;background-position: -32px -376px;top: 10px;right: 6px;}
+
+
+.table-balance thead tr th.borb{border-bottom: 1px solid #dadada;}
+.table-balance tbody tr td:nth-child(1),.table-balance tbody tr td:nth-child(2){text-align: left;text-indent: 8px;}
+
+
+.table-balance tfoot tr td{height: 38px;line-height: 38px;border-right: 1px solid #dadada;border-left: 1px solid #dadada;border-bottom: 1px solid #dadada;text-indent: 10em;text-align: left;background: #ffffff;}

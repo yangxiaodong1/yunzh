@@ -1,0 +1,214 @@
+.html-voucher{background: #d8e0e9;}
+.c-right{float: left;padding: 10px 0 10px 10px;}
+.edit .th .th-left .scrollleft,.edit .th .th-left .scrollright,.a-left,.a-right,.ul-pj em{background: url(../images/icon.png) no-repeat;}
+.edit{width: 1072px;float: left;background: #fff;padding: 0 14px 70px;}
+.edit a:hover{text-decoration: none;}
+.h2-tit{width: 100%;text-align: center;font: 18px/38px "Microsoft Yahei";}
+.edit-show{position: relative;font: 18px/38px "Microsoft Yahei";padding: 10px 0 7px;}
+.edit-show p{text-align: right;font:12px/27px "MicroSoft YaHei";color: #fff;float: right;padding-right: 25px;}
+.a-edit{position: absolute;width: 80px;height: 20px;color: #1e4d83;font:12px/20px "MicroSoft YaHei";margin:0 auto;top: 3px;left: 50%;margin-left: -10px;background: url(../images/icon_jt.png) #fff 10px 3px no-repeat;text-indent: 23px;text-align: left;}
+.sp-each{margin-right: 20px;float: left;}
+.sp-each i{float: left;width: 21px;height: 15px;cursor: pointer;}
+.edit .th{height: 27px;mar.html-voucher{background: #d8e0e9;}
+.c-right{float: left;padding: 10px 0 10px 10px;}
+.edit .th .th-left .scrollleft,.edit .th .th-left .scrollright,.a-left,.a-right,.ul-pj em,.a-add,.a-delete{background: url(../images/icon.png) no-repeat;}
+
+.edit{width: 1072px;float: left;background: #fff;padding: 0 14px 70px;}
+.edit a:hover{text-decoration: none;}
+.h2-tit{width: 100%;text-align: center;font: 18px/38px "Microsoft Yahei";}
+.edit-show{position: relative;font: 18px/38px "Microsoft Yahei";padding: 10px 0 7px;}
+.edit-show p{text-align: right;font:12px/27px "MicroSoft YaHei";color: #fff;float: right;padding-right: 25px;}
+.a-edit{position: absolute;width: 80px;height: 20px;color: #1e4d83;font:12px/20px "MicroSoft YaHei";margin:0 auto;top: 3px;left: 50%;margin-left: -10px;background: url(../images/icon_jt.png) #fff 10px 3px no-repeat;text-indent: 23px;text-align: left;}
+.sp-each{margin-right: 20px;float: left;}
+.sp-each i{float: left;width: 21px;height: 15px;cursor: pointer;}
+.edit .th{height: 27px;margin-bottom: 12px;}
+.edit .th  .th-left{float: left;}
+.edit .th  .th-left span{width: 28px;height: 27px;float: left;cursor: pointer;}
+.edit .th .th-left .scrollleft{margin-right: 6px;background-position: 0 0;}
+.edit .th .th-left .scrollright{background-position: -34px 0;}
+.edit .th .th-left .scrollleft:hover{background-position: -63px 0;}
+.edit .th .th-left .scrollright:hover{background-position: -94px 0;}
+.edit .th .th-left .scrollleft:active{background-position: -123px 0;}
+.edit .th .th-left .scrollright:active{background-position: -152px 0;}
+.edit .th .th-right span{float: right;width: 90px;height: 27px;background: #4f9de8;margin-left: 11px;font:12px/27px "Microsoft Yahei";color: #fff;cursor: pointer;border-radius: 4px;}
+.edit .th .th-right span:hover{background: #58a6ff}
+.edit .th .th-right span:active{background: #3789db;}
+
+.i-left{background: url(../images/icon_zjt.png) top center no-repeat;margin-right: 20px;}
+.i-right{background: url(../images/icon_yjt.png) top center no-repeat;}
+.edit .th a{float: left;width: 65px;height: 18px;background: #fff;border-right: 1px solid #e1e1e1;border-bottom: 1px solid #e1e1e1;color: #0f3663;margin-right: 7px;font:12px/18px "MicroSoft YaHei";}
+.edit .th a.a-save{float: right;margin-right: 46px;color: #4c5b6b;}
+.edit .tb{margin:0 auto;border: 1px solid #dcdcdc;}
+.edit .tb .head span{float: left;font-size: 14px;font-family: "MicroSoft YaHei";color: #5a5a5a;line-height: 25px;vertical-align: bottom;}
+.i-big{font-size: 24px;vertical-align: bottom;margin-right: 11px;}
+.sp-b{margin-left:9.8%;margin-right: 10%;}
+.sp-data{margin-left: 8px;}
+.sp-fir select{width: 60px;height: 17px;border: 1px solid #dcdcdc;}
+.sp-data em{float: right;width: 93px;height: 17px;border: 1px solid #dcdcdc;}
+.edit .tb .head span.sp-num{float: right;}
+.edit .body{position: relative;padding-bottom: 10px}
+.tab-voucher{margin-top: 5px;}
+.tab-voucher td,.tab-voucher th{border-top: 1px solid #aaaaaa;border-left: 1px solid #aaaaaa;font-size: 12px;font-family: "MicroSoft YaHei";color: #5a5a5a;}
+.tab-voucher th.col-summary,.tab-voucher th.col-subject{font-size: 14px;}
+.tab-voucher td.col-total{font-size: 16px;}
+.tab-voucher tbody td{height: 64px;}
+.make-person{text-align: left;font: 14px/30px "MicroSoft YaHei";text-indent: 26px;}
+.tr-consult td{text-align: left;text-indent: 2em;font-size: 14px;}
+.a-add{width: 18px;height: 18px;position: absolute;top: 50%;margin-top:-9px;left: 5px;background-position: -29px -48px;}
+.a-delete{width: 18px;height: 18px;position: absolute;top: 50%;margin-top:-9px;left: 2px;background-position: -28px -28px;}
+.a-add:hover{background-position: -50px -48px;}
+.a-add:active{background-position: -69px -48px;}
+.a-delete:hover{background-position: -49px -28px;}
+.a-delete:active{background-position: -68px -28px;}
+
+.bor-right{border-right:1px solid #aaa;}
+.voucher-top{margin-top: 30px;margin-bottom: 10px;padding:0 0 0 30px}
+.vou-left{float: left;width: 165px;font: 12px/25px "Microsoft Yahei";color: #a5a4a4;text-align: left;}
+.date-wrap{float: left;color: #a5a4a4;}
+.vou-right{float: right;width: 160px;font: 12px/25px "Microsoft Yahei";color: #a5a4a4;text-align: right;}
+.voucher-top input{width: 94px;height: 25px;border: 1px solid #e5e5e5;}
+.tab-voucher .money-unit { height: 22px; line-height: 22px; font-weight: normal; border-top: 1px solid #dadada; text-align: center; background: url(../images/line.png);}
+.tab-voucher .money-unit span { float: left; display: inline; width: 19px; height: 100%;}
+.tab-voucher .money-unit .last{border: none;}
+.tab-voucher td{ height: 60px; }
+.tab-voucher td.col-debite, .tab-voucher td.col-credit, .tab-voucher td.col-money, .money-unit{background-image: url('../images/line.png');/*background-position: -1px 0;*/background-repeat:  repeat-y;position: relative;}
+.tab-voucher .col-operate,.tab-voucher .col-delete{  text-align: center;width: 30px;border: none;}
+.tab-voucher .col-delete{border-left:1px solid #aaa;}
+.col-summary{position: relative;width: 274px;}
+.col-summary .cell-val{width: 274px;height: 64px; line-height: 64px;word-break: break-all;word-wrap: break-word;}
+.col-summary .cell-val,.col-subject .cell-val{padding: 0;font-size: 14px;}
+.tab-voucher .col-option{width: 30px;text-align: center;}
+.tab-voucher .col-option{border-left:0;}
+.col-option .option{visibility: hidden;position: relative;width: 30px;}
+.col-option .option .selSub{display: block;width: 24px;height: 26px;cursor: pointer;color: #aaa;text-align: center;line-height: 26px;margin: 0 auto;}
+.col-subject{width: 308px;}
+.col-subject .cell-val{width: 308px;height: 54px;line-height: 54px;word-break: break-all;word-wrap: break-word;position: relative;padding: 5px 0;}
+.col-subject .cell-val p{width: 230px;height: 27px;line-height: 27px;text-align: left;text-indent: 27px;}
+.col-subject input{width: 100%;height: 64px;word-break: break-all;word-wrap: break-word;position: absolute;top:0;left: 0;border: 0;}
+.col-option .option .selSub, .col-option .option .selSummary, .col-option .option .balance{display: block;width: 24px;height: 26px;cursor: pointer;color: #aaa;text-align: center;line-height: 26px;margin: 0 auto;}
+.tab-voucher .col-debite .cell-val, .tab-voucher .col-credit .cell-val{font-family: 'tahoma'; font-weight: bold; font-size: 14px; letter-spacing: 10px; overflow: hidden; position: relative;right: -2px; /* *right: 4px;*/text-align: right;width: 213px;overflow: hidden;}
+.tab-voucher .col-debite input,.tab-voucher .col-credit input{width: 100%;height: 64px;border: none;text-align: right;position: absolute;top: 0;left: 0;}
+.col-summary input{width: 100%;height: 64px;border: none;position: absolute;top: 0;left: 0;}
+.col-total,.col-debite1,.col-credit1{border-bottom: 1px solid #aaaaaa;}
+.col-total{text-align: left;text-indent: 2em;}
+.col-subject{position: relative;}
+.col-operate,.col-delete{position: relative;}
+.add-delete{display: none;}
+.entry-item  td.on .add-delete{display: block;}
+.ul-select{position: absolute;background: #fff;z-index: 10;width: 308px;height: 200px;overflow-y:auto;}
+.ul-select li{width: 100%;height: 28px;line-height: 28px;text-align: left;float: left;text-indent: 2px;cursor: pointer;}
+.ul-select li:hover{background: #ddd}
+.ul-word{position: absolute;left: -1px;display: none;}
+.ul-word li{width: 59px;height: 18px;line-height: 18px;font-size: 12px;font-family: "Microsoft Yahei";border: 1px solid #aaa;border-top:none;background: #d2d2d2;cursor: default;}
+.col-debite,.col-credit{width: 213px;overflow: hidden;}
+
+
+.pics{width: 100%;background: #f6f6f6;padding: 8px 0;border: 1px solid #eeeeee;margin-bottom: 14px;position: relative;}
+.pic-pj{width: 1007px;margin:0 auto;overflow: hidden;}
+.ul-pj{margin-right: -13px;width: 10000px;}
+.ul-pj li{position: relative;float: left;padding: 3px 6px;border:1px solid #dcdcdc;margin-right: 13px;display: inline;}
+.ul-pj li:hover{border: 3px solid #56a4f2;padding: 1px 4px}
+.ul-pj li:hover em{display: block;}
+.ul-pj li img{border: 1px solid #a8a8a8;margin-bottom: 4px;}
+.ul-pj li p{text-align: left;line-height: 18px;}
+.ul-pj li p.p-price{color: #999a9b;}
+.a-left{position: absolute;width: 13px;height: 21px;background-position: 0 -28px;left: 14px;top:50%;margin-top: -10px;}
+.a-right{position: absolute;width: 13px;height: 21px;background-position: -14px -28px;right: 14px;top:50%;margin-top: -10px;}
+.ul-pj em{position: absolute;width: 16px;height: 15px;top: 0px;right: 0px;background-position: 0 -63px;cursor: pointer;display: none;}
+.balance-pop{position: absolute;z-index: 1001;width: 130px;padding: 5px 10px;background-color: #fff;color: #555;border: 1px solid #4bb7f3;box-shadow: 0 0 3px rgba(0,162,255,0.4);} 
+.balance-pop b{position: absolute;top: -7px;left: 50%;margin-left: -3px;display: block;height: 7px;width: 13px;overflow: hidden;background: url('../images/page_spr_icons.png') no-repeat -144px -96px;}
+.balance-pop .close{position: absolute;right: 0;top: 0;display: block;width: 16px;height: 16px;overflow: hidden;text-indent: -9999px;background: url('../images/page_spr_icons.png') no-repeat -160px -96px;}
+.check-balance{color: #3ab2f4;text-align: center;}
+.check-balance strong {float: left; }
+.check-balance a {float: right; display: inline; margin-right: 5px; color: #aaa; }
+.check-balance a:hover{ color: #555; }
+.bx-prev{ width:12px; height:26px; background:#f00;text-indent: -999999px;z-index: 999;  position: absolute; float:left; left:455px; top:110px;}
+.bx-next{ width:12px; height:26px;  background:#f00; text-indent: -999999px;z-index: 999;  position: absolute; top:110px;left:-15px;}gin-bottom: 12px;}
+.edit .th  .th-left{float: left;}
+.edit .th  .th-left span{width: 28px;height: 27px;float: left;cursor: pointer;}
+.edit .th .th-left .scrollleft{margin-right: 6px;background-position: 0 0;}
+.edit .th .th-left .scrollright{background-position: -34px 0;}
+.edit .th .th-right span{float: right;width: 90px;height: 27px;background: #3091f2;margin-left: 11px;font:12px/27px "Microsoft Yahei";color: #fff;cursor: pointer;border-radius: 4px;}
+.i-left{background: url(../images/icon_zjt.png) top center no-repeat;margin-right: 20px;}
+.i-right{background: url(../images/icon_yjt.png) top center no-repeat;}
+.edit .th a{float: left;width: 65px;height: 18px;background: #fff;border-right: 1px solid #e1e1e1;border-bottom: 1px solid #e1e1e1;color: #0f3663;margin-right: 7px;font:12px/18px "MicroSoft YaHei";}
+.edit .th a.a-save{float: right;margin-right: 46px;color: #4c5b6b;}
+.edit .tb{margin:0 auto;border: 1px solid #dcdcdc;}
+.edit .tb .head span{float: left;font-size: 14px;font-family: "MicroSoft YaHei";color: #5a5a5a;line-height: 25px;vertical-align: bottom;}
+.i-big{font-size: 24px;vertical-align: bottom;margin-right: 11px;}
+.sp-b{margin-left:9.8%;margin-right: 10%;}
+.sp-data{margin-left: 8px;}
+.sp-fir select{width: 60px;height: 17px;border: 1px solid #dcdcdc;}
+.sp-data em{float: right;width: 93px;height: 17px;border: 1px solid #dcdcdc;}
+.edit .tb .head span.sp-num{float: right;}
+.edit .body{position: relative;padding-bottom: 10px}
+.tab-voucher{margin-top: 5px;}
+.tab-voucher td,.tab-voucher th{border-top: 1px solid #aaaaaa;border-left: 1px solid #aaaaaa;font-size: 12px;font-family: "MicroSoft YaHei";color: #5a5a5a;}
+.tab-voucher th.col-summary,.tab-voucher th.col-subject{font-size: 14px;}
+.tab-voucher td.col-total{font-size: 16px;}
+.tab-voucher tbody td{height: 64px;}
+.make-person{text-align: left;font: 14px/30px "MicroSoft YaHei";text-indent: 26px;}
+.tr-consult td{text-align: left;text-indent: 2em;font-size: 14px;}
+.a-add{width: 18px;height: 18px;position: absolute;top: 50%;margin-top:-9px;left: 2px;background: url(../images/icon_add.png) top center no-repeat;}
+.a-delete{width: 18px;height: 18px;position: absolute;top: 50%;margin-top:-9px;left: 2px;background: url(../images/icon_delete.png) top center no-repeat;}
+.bor-right{border-right:1px solid #aaa;}
+.voucher-top{margin-top: 30px;margin-bottom: 10px;padding:0 0 0 30px}
+.vou-left{float: left;width: 165px;font: 12px/25px "Microsoft Yahei";color: #a5a4a4;text-align: left;}
+.date-wrap{float: left;color: #a5a4a4;}
+.vou-right{float: right;width: 160px;font: 12px/25px "Microsoft Yahei";color: #a5a4a4;text-align: right;}
+.voucher-top input{width: 94px;height: 25px;border: 1px solid #e5e5e5;}
+.tab-voucher .money-unit { height: 22px; line-height: 22px; font-weight: normal; border-top: 1px solid #dadada; text-align: center; background: url(../images/line.png);}
+.tab-voucher .money-unit span { float: left; display: inline; width: 19px; height: 100%;}
+.tab-voucher .money-unit .last{border: none;}
+.tab-voucher td{ height: 60px; }
+.tab-voucher td.col-debite, .tab-voucher td.col-credit, .tab-voucher td.col-money, .money-unit{background-image: url('../images/line.png');/*background-position: -1px 0;*/background-repeat:  repeat-y;position: relative;}
+.tab-voucher .col-operate,.tab-voucher .col-delete{  text-align: center;width: 30px;border: none;}
+.tab-voucher .col-delete{border-left:1px solid #aaa;}
+.col-summary{position: relative;width: 274px;}
+.col-summary .cell-val{width: 274px;height: 64px; line-height: 64px;word-break: break-all;word-wrap: break-word;}
+.col-summary .cell-val,.col-subject .cell-val{padding: 0;font-size: 14px;}
+.tab-voucher .col-option{width: 30px;text-align: center;}
+.tab-voucher .col-option{border-left:0;}
+.col-option .option{visibility: hidden;position: relative;width: 30px;}
+.col-option .option .selSub{display: block;width: 24px;height: 26px;cursor: pointer;color: #aaa;text-align: center;line-height: 26px;margin: 0 auto;}
+.col-subject{width: 308px;}
+.col-subject .cell-val{width: 308px;height: 54px;line-height: 54px;word-break: break-all;word-wrap: break-word;position: relative;padding: 5px 0;}
+.col-subject .cell-val p{width: 230px;height: 27px;line-height: 27px;text-align: left;text-indent: 27px;}
+.col-subject input{width: 100%;height: 64px;word-break: break-all;word-wrap: break-word;position: absolute;top:0;left: 0;border: 0;}
+.col-option .option .selSub, .col-option .option .selSummary, .col-option .option .balance{display: block;width: 24px;height: 26px;cursor: pointer;color: #aaa;text-align: center;line-height: 26px;margin: 0 auto;}
+.tab-voucher .col-debite .cell-val, .tab-voucher .col-credit .cell-val{font-family: 'tahoma'; font-weight: bold; font-size: 14px; letter-spacing: 10px; overflow: hidden; position: relative;right: -2px; /* *right: 4px;*/text-align: right;width: 213px;overflow: hidden;}
+.tab-voucher .col-debite input,.tab-voucher .col-credit input{width: 100%;height: 64px;border: none;text-align: right;position: absolute;top: 0;left: 0;}
+.col-summary input{width: 100%;height: 64px;border: none;position: absolute;top: 0;left: 0;}
+.col-total,.col-debite1,.col-credit1{border-bottom: 1px solid #aaaaaa;}
+.col-total{text-align: left;text-indent: 2em;}
+.col-subject{position: relative;}
+.col-operate,.col-delete{position: relative;}
+.add-delete{display: none;}
+.entry-item  td.on .add-delete{display: block;}
+.ul-select{position: absolute;background: #fff;z-index: 10;width: 308px;height: 200px;overflow-y:auto;}
+.ul-select li{width: 100%;height: 28px;line-height: 28px;text-align: left;float: left;text-indent: 2px;cursor: pointer;}
+.ul-select li:hover{background: #ddd}
+.ul-word{position: absolute;left: -1px;display: none;}
+.ul-word li{width: 59px;height: 18px;line-height: 18px;font-size: 12px;font-family: "Microsoft Yahei";border: 1px solid #aaa;border-top:none;background: #d2d2d2;cursor: default;}
+.col-debite,.col-credit{width: 213px;overflow: hidden;}
+.pics{width: 100%;background: #f6f6f6;padding: 8px 0;border: 1px solid #eeeeee;margin-bottom: 14px;position: relative;}
+.pic-pj{width: 1007px;margin:0 auto;overflow: hidden;}
+.ul-pj{margin-right: -13px;width: 10000px;}
+.ul-pj li{position: relative;float: left;padding: 3px 6px;border:1px solid #dcdcdc;margin-right: 13px;display: inline;}
+.ul-pj li:hover{border: 3px solid #56a4f2;padding: 1px 4px}
+.ul-pj li:hover em{display: block;}
+.ul-pj li img{border: 1px solid #a8a8a8;margin-bottom: 4px;}
+.ul-pj li p{text-align: left;line-height: 22px;}
+.ul-pj li p.p-price{color: #999a9b;}
+.a-left{position: absolute;width: 13px;height: 21px;background-position: 0 -28px;left: 14px;top:50%;margin-top: -10px;}
+.a-right{position: absolute;width: 13px;height: 21px;background-position: -14px -28px;right: 14px;top:50%;margin-top: -10px;}
+.ul-pj em{position: absolute;width: 16px;height: 15px;top: 0px;right: 0px;background-position: 0 -63px;cursor: pointer;display: none;}
+.balance-pop{position: absolute;z-index: 1001;width: 130px;padding: 5px 10px;background-color: #fff;color: #555;border: 1px solid #4bb7f3;box-shadow: 0 0 3px rgba(0,162,255,0.4);} 
+.balance-pop b{position: absolute;top: -7px;left: 50%;margin-left: -3px;display: block;height: 7px;width: 13px;overflow: hidden;background: url('../images/page_spr_icons.png') no-repeat -144px -96px;}
+.balance-pop .close{position: absolute;right: 0;top: 0;display: block;width: 16px;height: 16px;overflow: hidden;text-indent: -9999px;background: url('../images/page_spr_icons.png') no-repeat -160px -96px;}
+.check-balance{color: #3ab2f4;text-align: center;}
+.check-balance strong { float: left; }
+.check-balance a { float: right; display: inline; margin-right: 5px; color: #aaa; }
+.check-balance a:hover{ color: #555; }
+.bx-prev{ width:12px; height:26px; background:#f00;text-indent: -999999px;z-index: 999;  position: absolute; float:left; left:455px; top:110px;}
+.bx-next{ width:12px; height:26px;  background:#f00; text-indent: -999999px;z-index: 999;  position: absolute; top:110px;left:-15px;}

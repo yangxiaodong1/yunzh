@@ -1,0 +1,15 @@
+.sidebar .leftnav{position:relative;z-index:100;}
+.sidebar .side-subcon .submenu{display:none;min-width:130px;position:absolute;left:80px;top:0;z-index:99;}
+.sidebar .side-subcon .submenu ul{margin:0;list-style:none;padding:10px 0;background:#f7f7f9;border:1px solid #c7c7c7;border-left:0;border-top-right-radius:5px;border-bottom-right-radius:5px;
+box-shadow:inset 1px 1px 4px #c7c7c7;
+   -webkit-box-shadow: inset 1px 1px 4px #c7c7c7;
+   -moz-box-shadow: inset 1px 1px 4px #c7c7c7;}
+.sidebar .side-subcon .submenu ul li{line-height:24px;padding:0 0 0 10px;color:#999;}
+.sidebar .side-subcon .submenu ul li a{color:#999;}
+.sidebar .side-subcon .submenu ul li:hover{color:#333;}
+.sidebar .side-subcon .submenu ul li a:hover{color:#333;}
+.sidebar .side-subcon .submenu ul li .glyphicon{font-weight:normal;margin-right:3px;}
+.sidebar .side-subcon .submenu2{top:108px;}
+.sidebar .side-subcon .submenu4{top:244px;}
+.sidebar .side-subcon .submenu5{top:313px;}
+.sidebar .side-subcon .submenu6{top:210px;}

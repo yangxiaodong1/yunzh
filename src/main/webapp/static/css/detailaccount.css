@@ -1,0 +1,14 @@
+
+.detailAccount .th-left span i.icon,.detailAccount .th-left span i.i-icon{background: url(../images/icon.png) no-repeat;}
+
+.detailAccount .th-left em{float: left;width: 30px;height: 25px;line-height: 25px;margin: 0 5px;}
+.detailAccount .th-left span i.icon{position: absolute;width: 8px;height: 5px;background-position: -32px -376px;top: 10px;right: 6px;}
+.detailAccount .th-left span.s-money i.i-money{float: left;width: 76px;overflow: hidden;white-space:nowrap;text-overflow:ellipsis;}
+.detailAccount .th-left span i.i-icon{position: absolute;width: 8px;height: 5px;background-position: -32px -376px;top: 10px;right: 6px;}
+.detailAccount .th-left span i.i-icon:after{content: "";position: absolute;width: 1px;height: 26px;top: -10px;left: -8px;background: #cccccc;}
+
+
+.table-detailAccount tbody tr td:nth-child(1),.table-detailAccount tbody tr td:nth-child(2),.table-detailAccount tbody tr td:nth-child(3){text-align: left;text-indent: 8px;}
+.table-detailAccount tbody tr td:nth-child(6) {text-align: center;text-indent: 0;padding-right:0;}
+.table-detailAccount tbody tr td:nth-child(4),.table-detailAccount tbody tr td:nth-child(5){text-align: right;}
+

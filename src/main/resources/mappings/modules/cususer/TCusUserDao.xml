@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.cususer.dao.TCusUserDao">
+    
+	<sql id="tCusUserColumns">
+		a.id AS "id",
+		a.customer_name AS "customerName",
+		a.sysuer_name_be AS "sysuerNameBe",
+		a.sysuer_name AS "sysuerName",
+		a.accept_state AS "acceptState",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.customer_id AS "customerid",
+		a.user_id AS "userids",
+		a.user_be_id AS "userbeid"
+	</sql>
+	
+	<sql id="tCusUserJoins">
+		<!--  
+		JOIN sys_user b ON b.id = a.sysuer_id
+		JOIN t_customer c ON c.id = a.company_id
+		-->
+	</sql>
+    
+	<select id="get" resultType="TCusUser">
+		SELECT 
+			<include refid="tCusUserColumns"/>
+		FROM t_cus_user a
+		<include refid="tCusUserJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TCusUser">
+		SELECT 
+			<include refid="tCusUserColumns"/>
+		FROM t_cus_user a
+		<include refid="tCusUserJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TCusUser">
+		SELECT 
+			<include refid="tCusUserColumns"/>
+		FROM t_cus_user a
+		<include refid="tCusUserJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="accpetSate" resultType="TCusUser">
+		SELECT 
+			<include refid="tCusUserColumns"/>
+		FROM t_cus_user a  
+		<where>
+			<if test="acceptState !=null and acceptState !='' ">
+				and a.accept_state=#{acceptState}
+			</if>
+			<if test="userid != null and userid != '' ">
+				<!-- 转交用户 -->
+				and a.user_id=#{userid}
+			</if>
+			<if test="userbeid != null and userbeid!=''">
+				and a.user_be_id=#{userbeid}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 接受信息显示 -->
+	<select id="Noaccept" resultType="TCusUser">
+		select
+			COUNT(*) as count,sysuer_name_be,accept_state,user_be_id
+		from t_cus_user a
+		<where>
+			<if test="userid != null and userid != '' ">
+					<!-- 转交用户 -->
+			and a.user_id=#{userid}
+			</if>
+			<if test="acceptState !=null and acceptState !='' ">
+				and a.accept_state=#{acceptState}
+			</if>
+		</where>
+		GROUP BY a.user_be_id
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_cus_user(
+			<!-- id, -->
+			customer_name,
+			sysuer_name_be,
+			sysuer_name,
+			accept_state,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			customer_id,
+			user_id,
+			user_be_id
+		) VALUES (
+			<!--#{id},-->
+			#{customerName},
+			#{sysuerNameBe},
+			#{sysuerName},
+			#{acceptState},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{customerid},
+			#{userid},
+			#{userbeid}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_cus_user SET 	
+			customer_name = #{customerName},
+			sysuer_name_be = #{sysuerNameBe},
+			sysuer_name = #{sysuerName},
+			accept_state = #{acceptState},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			customer_id=#{customerid},
+			user_id=#{userid}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE t_cus_user SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateState">
+		update t_cus_user set accept_state=#{acceptState} where user_be_id=#{userbeid} and user_id=#{userid}
+	</update>
+</mapper>

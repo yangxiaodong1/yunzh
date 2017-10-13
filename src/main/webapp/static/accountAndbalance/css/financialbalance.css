@@ -1,0 +1,76 @@
+
+/*财务初始余额样式*/
+.financialbalance .th-left a{position: relative;float: left;width: 117px;height: 25px;line-height: 25px;background: #fff;font-size: 14px;color: #828181;border-top-left-radius: 4px;border-top-right-radius: 4px;border: 1px solid #e4e4e4;border-bottom:none;margin-right: -1px;}
+.financialbalance .th-left a i{position: absolute;width: 117px;height: 2px;background: #3d8ae2;top: 0px;left: 1px;border-top-left-radius: 4px;border-top-right-radius: 4px;display: none;}
+.financialbalance .th-left a:hover{text-decoration: none;}
+.financialbalance .th-left a.on{height: 33px;font-size: 16px;color: #4f9de8;line-height: 33px;margin-top: -8px;/* border-bottom: 1px solid #fff; */}
+.financialbalance .th-left a.on i{display: block;}
+
+.table-financialbalance tbody tr td:last-child{position: relative;}
+.table-financialbalance tbody tr td:last-child input{width: 95%;height: 20px;line-height: 20px;position: absolute;top: 3px;left: 0;right: 0;margin: 0 auto;border: 1px solid #dcdcdc;text-align: center;}
+
+#tab .th-left{position: absolute;top: 22px;left: 0;}
+.financialbalance .tb{padding: 8px;border: 1px solid #c4c4c4;background:#fff;}
+.star{position: relative;}
+.star:before{content: "";width: 17px;height: 15px;background: url(../images/star.png) top center no-repeat;position: absolute;top: 0;left: -20px;}
+
+.table-financialbalance tbody tr.tr-on td{background:#cff6fb;}
+.table-financialbalance tbody tr.tr-indent td:first-child{text-indent: 3em;}
+.td-new{position: relative;}
+.i-new{background: url(../images/add1.png) top center no-repeat;position: absolute;width: 20px;height: 20px;top: 4px;right: 6px;}
+.i-new:hover{background: url(../images/add2.png) top center no-repeat;}
+.i-new:active{background: url(../images/add3.png) top center no-repeat;}
+
+/* 导入数据弹窗 */
+.inportData{width: 758px;height: 400px;font-size: 14px;display: none;}
+.inportData .cont{width: 691px;margin: 0 auto;}
+.inportData .lay{border-bottom: 1px solid #c1c1c1;}
+.inportData .laya{width: 255px;float: left;border-right:1px solid #c1c1c1;padding: 30px 45px 80px;}
+.inportData .layb{width: 265px;float: right;padding: 30px 0px 80px 80px;}
+
+.inportData .lay h4{font-weight: normal;line-height: 50px;}
+.inportData .lay p{line-height: 36px;text-align: left;}
+.btn{width: 90px;height: 27px;line-height: 27px;color: #fff;background: #3d8ae2;border-radius: 4px;display: block;margin: 50px auto 0;}
+.btn:hover{text-decoration: none;background: #59a6ff;}
+.btn:active{background: #216ec8;}
+.progress{width: 576px;height: 7px;background: #4f9de8;margin: 18px auto 0;position: relative;}
+.progress:before{content: "导入进度";position: absolute;top: -8px;left: -58px;}
+.progress:after{content: "完成";position: absolute;top: -8px;right: -48px;}
+.rate{position: absolute;width: 60%;height: 100%;top: 0;left: 0;background: #93d8f8;}
+.inportData .layb p input{float: left;margin-top: 9px;}
+.inportData .layb p input.ipt-file{width:217px;height: 25px;border: 1px solid #bfbfbf;}
+.inportData .layb p input.ipt-btn{width: 45px;height: 25px;border: 1px solid #bfbfbf;border-left:none;text-align: center;color: #848484;}
+/*.inportData .layb .btn{margin-top: 55px;}*/
+
+/*试算平衡弹窗*/
+.em-line{border-right: 1px solid #fff;padding-right: 10px;}
+.em-ri{padding-left: 10px;}
+
+.trialBalance{display: none;}
+.trialBalance .cont{width: 690px;height: 264px;margin: 20px auto 0px;padding-bottom: 30px;position: relative;border-bottom:1px solid #c1c1c1;}
+.trialBalance .picture{width: 264px;height: 220px;margin: 0 auto;position: relative;margin-top: 25px;}
+.trialBalance .p-tit{text-align: center;font-size: 14px;}
+
+.trialBalance .btpart{width: 264px;height: 105px;background: url(../images/bal01.png) top center no-repeat;position: absolute;bottom: 0;left:0;}
+.trialBalance .jie{width: 76px;height: 141px;background: url(../images/jie01.png) top center no-repeat;position: absolute;top: 0px;left: 22px;}
+.trialBalance .dai{width: 54px;height: 102px;background: url(../images/dai2.png) top center no-repeat;position: absolute;top: 13px;left: 183px;}
+
+.a-bal{color: #1072cf;text-decoration: underline;margin-left: 5px;line-height: 50px;}
+
+
+/*新增科目弹层*/
+
+.NewSubject{display:none;}
+.NewSubject-ptxt{border: 1px solid #dadbdd;background: #f4f9ff;width: 310px;height: 55px;margin: 16px auto 0;padding-top: 7px;}
+.NewSubject-ptxt p{height: 24px;line-height: 24px;text-align: left;text-indent: 10px;}
+.ul-NewSubject{width: 270px;margin: 3px auto 16px;}
+.ul-NewSubject li{height: 26px;line-height: 26px;margin-bottom: 16px;}
+.ul-NewSubject li label{width: 58px;height: 26px;line-height: 26px;text-align: right;margin-right: 10px;float: left;font-size: 14px;}
+.ul-NewSubject li.lifir{margin-bottom: 0;height: 32px;}
+.ul-NewSubject li em{float: left;height: 32px;line-height: 32px;font-size: 12px;}
+.ul-NewSubject li input{float: left;height: 26px;line-height: 26px;font-size: 14px;text-align: left;text-indent: 5px;color: #555;}
+.ul-NewSubject li input.inp-length{width: 197px;}
+.ul-NewSubject li input.inp-name{width: 118px;}
+
+.inp-col{color: #4f9de8;}
+.sp-time{float: right;width: 30px;height: 100%;}

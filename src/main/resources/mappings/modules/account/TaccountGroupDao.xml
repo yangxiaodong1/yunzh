@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.account.dao.TaccountGroupDao">
+    
+	<sql id="taccountGroupColumns">
+		a.id AS "id",
+		a.fdbid AS "fdbid",
+		a.group_id AS "groupId",
+		a.class_id AS "classId",
+		a.name AS "name",
+		a.fdc AS "fdc",
+		a.create_by AS "createBy.id",
+		a.cash AS "cash",
+		a.create_date AS "createDate",
+		a.is_enable AS "isEnable",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="taccountGroupJoins">
+	</sql>
+    
+    <select id="findListByGroupId" resultType="TAccountGroup" parameterType="String">
+		SELECT 
+			<include refid="taccountGroupColumns"/>
+		FROM t_account_group a where a.class_id=#{classId} and a.group_id!=0
+	</select>
+    
+	<select id="get" resultType="TaccountGroup">
+		SELECT 
+			<include refid="taccountGroupColumns"/>
+		FROM t_account_group a
+		<include refid="taccountGroupJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TaccountGroup">
+		SELECT 
+			<include refid="taccountGroupColumns"/>
+		FROM t_account_group a
+		<include refid="taccountGroupJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TaccountGroup">
+		SELECT 
+			<include refid="taccountGroupColumns"/>
+		FROM t_account_group a
+		<include refid="taccountGroupJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_account_group(
+			id,
+			fdbid,
+			group_id,
+			class_id,
+			name,
+			fdc,
+			create_by,
+			cash,
+			create_date,
+			is_enable,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{fdbid},
+			#{groupId},
+			#{classId},
+			#{name},
+			#{fdc},
+			#{createBy.id},
+			#{cash},
+			#{createDate},
+			#{isEnable},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_account_group SET 	
+			fdbid = #{fdbid},
+			group_id = #{groupId},
+			class_id = #{classId},
+			name = #{name},
+			fdc = #{fdc},
+			cash = #{cash},
+			is_enable = #{isEnable},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE t_account_group SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

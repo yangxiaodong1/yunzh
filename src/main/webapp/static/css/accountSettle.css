@@ -1,0 +1,43 @@
+/*账簿部分公共样式*/
+.settle-wrapper{height: 480px;background: #eff1f3;font-family: "Microsoft Yahei";z-index: 11;}
+.settle-wrapper .h2-tit{width: 100%;text-align: center;font: 24px/50px "Microsoft Yahei";color: #1b1b1b;}
+.settle-wrapper .th-left span{position: relative;float: left;width: 98px;height: 25px;line-height: 25px;text-align: left;border: 1px solid #bfbfbf;background: #fff;text-indent: 5px;}
+.settle-wrapper .th-left{float: left;}
+.h6-kr{height: 30px;line-height: 30px;background: #4f9de8;text-align: left;color: #fff;font-size: 14px;text-indent: 11px;position: relative;}
+.h6-kr i{background: url(../images/icon.png) no-repeat;}
+.h6-kr i{position: absolute;width: 30px;height: 30px;background:url(../images/icon.png) #4f9de8 11px -452px;top: 0;right: 0;}
+.h6-kr i:hover{ background:url(../images/icon.png) #63aee8 -13px -452px; }
+.h6-kr i:active{ background:url(../images/icon.png) #3d91e9 -37px -452px; }
+
+.settle-wrapper .th{height: 27px;position: relative;}
+
+.settle-wrapper .th-left span i.i-icon{background: url(../images/icon.png) no-repeat;}
+.settle-wrapper .th-left span.s-money i.i-money{float: left;width: 76px;overflow: hidden;white-space:nowrap;text-overflow:ellipsis;}
+.settle-wrapper .th-left span i.i-icon{position: absolute;width: 8px;height: 5px;background-position: -32px -376px;top: 10px;right: 6px;}
+.settle-wrapper .th-left span i.i-icon:after{content: "";position: absolute;width: 1px;height: 26px;top: -10px;left: -8px;background: #cccccc;}
+
+.settle-wrapper .tb{background: #fff;padding: 15px 20px 15px;width:960px;margin: 0 auto;}
+.settle-wrapper .tb .cont{border: 1px solid #dcdcdc;margin-top: 10px;}
+.txtbanner{width: 100%;height: 74px;background: #90b3cf;line-height: 74px;vertical-align: middle;}
+.txtbanner p{float: left;text-indent: 70px;line-height: 74px;color: #fff;width: 50%;font-size: 14px;text-align: left;}
+.txtbanner button{color: #fff;width: 95px;height: 40px;line-height:40px;background: #fba22c;border: none;border-radius: 5px;cursor: pointer;font-size: 14px;float: right;margin-top: 17px;margin-right: 30px;}
+.txtbanner button:hover{background: #fdb24d;}
+.txtbanner button:active{background: #ee8f11;}
+.settle-wrapper .model{padding: 14px 13px;}
+.settle-wrapper .model ul{margin-right: -23px;}
+.settle-wrapper .model ul li h6{height: 24px;line-height: 24px;border-bottom: 1px solid #e5e5e5;color: #4b95ec;text-align: left;text-indent: 8px;position: relative;}
+.settle-wrapper .model ul li{float: left;width: 156px;border: 1px solid #e5e5e5;border-radius: 4px;margin:0 20px 21px 0;}
+.settle-wrapper .model ul li .p-num{text-align: right;padding-right: 7px;font-size: 20px;line-height: 45px;margin-top:10px;}
+.settle-wrapper .model ul li .p-txt{position: relative;text-align: right;padding-right: 7px;color: #949494;line-height: 24px;position: relative;cursor: pointer;}
+.settle-wrapper .model ul li .p-txt i{position: absolute;width: 16px;height: 16px;background: url(../images/icon_jz.png) 0 0 no-repeat;top: 3px;left: 10px;}
+
+.settle-wrapper .model ul li .p-txt .tc{display: none;padding-top: 13px;position: absolute;width: 230px;height: 107px;border: 1px solid #c4c4c4;top: 25px;left:-33px;background: #fff;z-index: 10;}
+.settle-wrapper .model ul li .p-txt .tc input{width: 32px;height: 15px;}
+.settle-wrapper .model ul li .p-txt .tc p{font-size: 13px;text-align: left;text-indent: 14px;line-height: 24px;height: 24px;color: #292929;}
+.settle-wrapper .model ul li .p-txt i:hover .tc{display: block;}
+.settle-wrapper .model ul li .p-txt i:hover .tc em{position: absolute;width: 13px;height: 10px;background: url(../images/icon_jzjt.png) no-repeat;top: -10px;left: 33px;}
+
+
+.settle-wrapper .model ul li h6 .btn-bill{position: absolute;width: ;height: 16px;background: #80b2d3;color: #fff;text-align: center;line-height: 16px;top:4px;right: 5px;border-radius: 4px;text-indent: 0;}
+.sure-settle-account {background: none;width: 60px;height: 30px;float: right;line-height: 24px;cursor: pointer;}
+.sure-settle-account a {width: 60px;height: 24px;margin: 0;padding: 0;background: #90b3cf;display: block;color: #fff;border-radius: 4px;font-size: 12px;cursor: pointer;position:relative;z-index:2;}

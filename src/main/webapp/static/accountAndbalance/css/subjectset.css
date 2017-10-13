@@ -1,0 +1,29 @@
+/* 科目设置 */
+.table-subjectset .addData td{background: #fff;position: relative;}
+.table-subjectset .addData td:nth-child(1) i,.table-subjectset .addData td:nth-child(2) i{width: 20px;height: 20px;background: url(../images/add1.png) top center no-repeat;
+position: absolute;top:4px;right:6px;}
+.table-subjectset tbody .addData td:nth-child(1){text-indent: 3em;}
+.table-subjectset tbody .addData td:nth-child(1) i:hover{background: url(../images/add2.png) top center no-repeat;}
+.table-subjectset tbody .addData td:nth-child(1) i:active{background: url(../images/add3.png) top center no-repeat;}
+.table-subjectset tbody .addData td:nth-child(2) i:hover{background: url(../images/add2.png) top center no-repeat;}
+.table-subjectset tbody .addData td:nth-child(2) i:active{background: url(../images/add3.png) top center no-repeat;}
+
+
+.table-subjectset tr td:last-child{color: #4f9de8;}
+
+.table-subjectset .addData td:nth-child(3) i{width: 15px;height: 18px;background: url(../images/delet.png) top center no-repeat;
+position: absolute;top:4px;right:10px;}
+.table-subjectset .addData td:nth-child(3) i:hover{background: url(../images/delet1.png) top center no-repeat;}
+.table-subjectset .addData td:nth-child(3) i:active{background: url(../images/delet2.png) top center no-repeat;}
+
+.table-subjectset .addNew td:nth-child(2){position: relative;}
+.table-subjectset .addNew td:nth-child(2) input{width: 98%;height: 20px;text-align: left;border: 1px solid #e0e0e0;position: absolute;top: 3px;left: 0;right: 0;margin: 0 auto;}
+/* 引入科目 */
+.IntroduceSubject{display: none;}
+.ul-IntroduceSubject{width: 357px;margin: 30px auto 46px;}
+.ul-IntroduceSubject li:first-child{width: 288px;margin: 0 auto;}
+.ul-IntroduceSubject li{width: 100%;font-size: 14px;line-height: 30px;text-align: center;}
+.ul-IntroduceSubject li:nth-child(2){width: 100%;margin-top: 20px;}
+.ul-IntroduceSubject li:nth-child(2) label{float: left;}
+.ul-IntroduceSubject li:nth-child(2) select{float: right;width: 286px;height: 25px;color: #767677;}
+.txt-col{color: #d82020;}

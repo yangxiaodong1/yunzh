@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.workterrace.dao.TCustomerSalaryDao">
+    
+	<sql id="tCustomerSalaryColumns">
+		a.id AS "id",
+		a.customer_id AS "customerId",
+		a.salary_period AS "salaryPeriod",
+		a.salary_date AS "salaryDate",
+		a.employee_name AS "employeeName",
+	<!--  a.identity_type AS "identityType",-->	
+	 a.identity_type AS "identityTypeId",
+		a.id_number AS "idNumber",
+		a.income_project AS "incomeProject",
+		a.income_period AS "incomePeriod",
+		a.income_money AS "incomeMoney",
+		a.tax_free_income AS "taxFreeIncome",
+		a.endowment_insurance AS "endowmentInsurance",
+		a.medical_insurance AS "medicalInsurance",
+		a.unemployment_insurance AS "unemploymentInsurance",
+		a.house_fund AS "houseFund",
+		a.original_value AS "originalValue",
+		a.allowable_deductions AS "allowableDeductions",
+		a.other_deduction AS "otherDeduction",
+		a.total_deduction AS "totalDeduction",
+		a.deduction_expenses AS "deductionExpenses",
+		a.deductible_donation_amount AS "deductibleDonationAmount",
+		a.tax_rate AS "taxRate",
+		a.quick_deduction AS "quickDeduction",
+		a.tax_relief AS "taxRelief",
+		a.has_been_withholding_tax AS "hasBeenWithholdingTax",
+		a.unit_endowment_insurance AS "unitEndowmentInsurance",
+		a.unit_medical_insurance AS "unitMedicalInsurance",
+		a.unit_unemployment_insurance AS "unitUnemploymentInsurance",
+		a.unit_injury_insurance AS "unitInjuryInsurance",
+		a.unit_birth_insurance AS "unitBirthInsurance",
+		a.unit_house_fund AS "unitHouseFund",
+		a.remarks1 AS "remarks1",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		ifnull(a.income_money,0)-ifnull(a.tax_free_income,0)-ifnull(a.total_deduction,0)-ifnull(a.deduction_expenses,0)-ifnull(a.deductible_donation_amount,0) AS 'shouldPayIncome',
+		FORMAT((ifnull(a.income_money,0)-ifnull(a.tax_free_income,0)-ifnull(a.total_deduction,0)-ifnull(a.deduction_expenses,0)-ifnull(a.deductible_donation_amount,0))*a.tax_rate/100-ifnull(a.quick_deduction,0),2) AS 'shouldPay',
+		ifnull(a.income_money,0)-ifnull(a.tax_free_income,0)-ifnull(a.total_deduction,0)-ifnull(a.deduction_expenses,0)-ifnull(a.deductible_donation_amount,0)-ifnull(a.tax_relief,0) AS 'shouldBucklePay',
+		ifnull(a.income_money,0)-ifnull(a.tax_free_income,0)-ifnull(a.total_deduction,0)-ifnull(a.deduction_expenses,0)-ifnull(a.deductible_donation_amount,0)-ifnull(a.tax_relief,0)-ifnull(has_been_withholding_tax,0) AS 'shouldRepairPay'
+	</sql>
+	
+	<sql id="tCustomerSalaryJoins">
+	</sql>
+    
+	<select id="get" resultType="TCustomerSalary">
+		SELECT 
+			<include refid="tCustomerSalaryColumns"/>
+		FROM t_customer_salary a
+		<include refid="tCustomerSalaryJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	<select id="findListBymax" resultType="TCustomerSalary">
+		SELECT 
+			max(a.salary_period) AS "salaryPeriod"
+		FROM t_customer_salary a
+		<include refid="tCustomerSalaryJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="customerId != null and customerId != ''">
+				AND a.customer_id =#{customerId}
+			</if>
+		</where>
+	</select>
+	 <select id="copyCustomerSalary" parameterType="java.util.Map" statementType="CALLABLE" resultType="String" >  
+       {call copyCustomerSalary(
+       		#{cid,jdbcType=VARCHAR,mode=IN},
+       		#{oldspd,jdbcType=VARCHAR,mode=IN}, 
+       		#{newspd,jdbcType=VARCHAR,mode=IN},
+       		#{rtn,jdbcType=VARCHAR,mode=OUT})
+         }
+     </select>  
+	<select id="findList" resultType="TCustomerSalary">
+		SELECT 
+			<include refid="tCustomerSalaryColumns"/>
+		FROM t_customer_salary a
+		<include refid="tCustomerSalaryJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="customerId != null and customerId != ''">
+				AND a.customer_id =#{customerId}
+			</if>
+				<if test="salaryPeriod != null and salaryPeriod != ''">
+				AND a.salary_period = #{salaryPeriod}
+			</if>
+				
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY (a.id+0)
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TCustomerSalary">
+		SELECT 
+			<include refid="tCustomerSalaryColumns"/>
+		FROM t_customer_salary a
+		<include refid="tCustomerSalaryJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_customer_salary(
+			customer_id,
+			salary_period,
+			salary_date,
+			employee_name,
+			identity_type,
+			id_number,
+			income_project,
+			income_period,
+			income_money,
+			tax_free_income,
+			endowment_insurance,
+			medical_insurance,
+			unemployment_insurance,
+			house_fund,
+			original_value,
+			allowable_deductions,
+			other_deduction,
+			total_deduction,
+			deduction_expenses,
+			deductible_donation_amount,
+			
+			
+			tax_rate,
+		quick_deduction,
+		tax_relief,
+		has_been_withholding_tax,
+			unit_endowment_insurance,
+			unit_medical_insurance,
+			unit_unemployment_insurance,
+			unit_injury_insurance,
+			unit_birth_insurance,
+			unit_house_fund,
+			remarks1,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{customerId},
+			#{salaryPeriod},
+			#{salaryDate},
+			#{employeeName},
+			#{identityTypeId},
+			#{idNumber},
+			#{incomeProject},
+			#{incomePeriod},
+			#{incomeMoney},
+			#{taxFreeIncome},
+			#{endowmentInsurance},
+			#{medicalInsurance},
+			#{unemploymentInsurance},
+			#{houseFund},
+			#{originalValue},
+			#{allowableDeductions},
+			#{otherDeduction},
+			#{totalDeduction},
+			#{deductionExpenses},
+			#{deductibleDonationAmount},
+			#{taxRate},
+			#{quickDeduction},
+			#{taxRelief},
+			#{hasBeenWithholdingTax},
+			#{unitEndowmentInsurance},
+			#{unitMedicalInsurance},
+			#{unitUnemploymentInsurance},
+			#{unitInjuryInsurance},
+			#{unitBirthInsurance},
+			#{unitHouseFund},
+			#{remarks1},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_customer_salary SET 	
+			customer_id = #{customerId},
+			salary_period = #{salaryPeriod},
+			salary_date = #{salaryDate},
+			employee_name = #{employeeName},
+			identity_type = #{identityTypeId},
+			id_number = #{idNumber},
+			income_project = #{incomeProject},
+			income_period = #{incomePeriod},
+			income_money = #{incomeMoney},
+			tax_free_income = #{taxFreeIncome},
+			endowment_insurance = #{endowmentInsurance},
+			medical_insurance = #{medicalInsurance},
+			unemployment_insurance = #{unemploymentInsurance},
+			house_fund = #{houseFund},
+			original_value = #{originalValue},
+			allowable_deductions = #{allowableDeductions},
+			other_deduction = #{otherDeduction},
+			total_deduction = #{totalDeduction},
+			deduction_expenses = #{deductionExpenses},
+			deductible_donation_amount = #{deductibleDonationAmount},
+			tax_rate = #{taxRate},
+			quick_deduction = #{quickDeduction},
+			tax_relief = #{taxRelief},
+			has_been_withholding_tax = #{hasBeenWithholdingTax},
+			unit_endowment_insurance = #{unitEndowmentInsurance},
+			unit_medical_insurance = #{unitMedicalInsurance},
+			unit_unemployment_insurance = #{unitUnemploymentInsurance},
+			unit_injury_insurance = #{unitInjuryInsurance},
+			unit_birth_insurance = #{unitBirthInsurance},
+			unit_house_fund = #{unitHouseFund},
+			remarks1 = #{remarks1},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		delete FROM t_customer_salary WHERE id = #{id}
+	</update>
+	
+	<select id="sumSalary" resultType="TCustomerSalary">
+		SELECT 
+			sum(a.income_money) AS "incomeMoney",
+			sum(a.endowment_insurance) AS "endowmentInsurance",
+			sum(a.medical_insurance) AS "medicalInsurance",
+			sum(a.unemployment_insurance) AS "unemploymentInsurance",
+			sum(a.house_fund) AS "houseFund",
+			sum(a.total_deduction) AS "totalDeduction",
+			sum(a.unit_endowment_insurance) AS "unitEndowmentInsurance",
+			sum(a.unit_medical_insurance) AS "unitMedicalInsurance",
+			sum(a.unit_unemployment_insurance) AS "unitUnemploymentInsurance",
+			sum(a.unit_injury_insurance) AS "unitInjuryInsurance",
+			sum(a.unit_birth_insurance) AS "unitBirthInsurance",
+			sum(a.unit_house_fund) AS "unitHouseFund",
+			sum(FORMAT((ifnull(a.income_money,0)-ifnull(a.tax_free_income,0)-ifnull(a.total_deduction,0)-ifnull(a.deduction_expenses,0)-ifnull(a.deductible_donation_amount,0))*a.tax_rate/100-ifnull(a.quick_deduction,0),2) )AS 'shouldPay',
+			sum(a.unit_endowment_insurance) AS "unitEndowmentInsurance",
+			sum(a.unit_medical_insurance) AS "unitMedicalInsurance",
+			sum(a.unit_unemployment_insurance) AS "unitUnemploymentInsurance",
+			sum(a.unit_injury_insurance) AS "unitInjuryInsurance",
+			sum(a.unit_birth_insurance) AS "unitBirthInsurance",
+			sum(a.unit_house_fund) AS "unitHouseFund"
+		FROM 
+			t_customer_salary a
+		<where>
+			1 = 1
+			<if test="fdbid != null and fdbid != ''">
+				AND	a.customer_id = #{fdbid}
+			</if>
+			<if test="period != null and period != ''">
+				AND a.salary_period = #{period}
+			</if>
+		</where>
+	</select>
+	
+	<select id="findSalaryOperation" resultType="TCustomerSalary">
+		SELECT  sum(a.income_money) AS "incomeMoney", <!-- 月计工资总额 -->
+		
+				sum(a.income_money		
+					-a.tax_free_income	
+					-a.total_deduction
+					-a.deduction_expenses
+					-a.deductible_donation_amount
+					-a.tax_relief) AS 'shouldBucklePay',	<!-- 工资税金 -->
+					
+				(sum(a.income_money) 
+				- sum(a.income_money		
+					-a.tax_free_income	
+					-a.total_deduction
+					-a.deduction_expenses
+					-a.deductible_donation_amount
+					-a.tax_relief)
+				)/count(*)	as 'hasBeenWithholdingTax',	<!-- 未含税平均工资 -->
+				
+				sum(a.income_money) /count(*)	as 'shouldPayIncome'	<!-- 含税平均工资 -->
+						
+			FROM 
+				t_customer_salary a
+			<where>
+				1 = 1
+				<if test="fdbid != null and fdbid != ''">
+					AND	a.customer_id = #{fdbid}
+				</if>
+				<if test="period != null and period != ''">
+					AND a.salary_period = #{period}
+				</if>
+			</where>
+	</select>
+</mapper>

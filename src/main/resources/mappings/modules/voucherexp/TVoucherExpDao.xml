@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.voucherexp.dao.TVoucherExpDao">
+
+	<sql id="tVoucherExpColumns">
+		a.id AS "id",
+		a.t_v_id AS "tVId",
+		a.exp_row_number AS "expRowNumber",
+		a.exp AS "exp",
+		a.account_id AS "accountId",
+		a.account_name AS "accountName",
+		a.debit AS "debit",
+		a.credit AS "credit",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+		,a.fdbid AS "fdbid"
+	</sql>
+
+	<sql id="tVoucherExpJoins">
+	</sql>
+
+	<select id="get" resultType="TVoucherExp">
+		SELECT
+		<include refid="tVoucherExpColumns" />
+		FROM t_voucher_exp a
+		<include refid="tVoucherExpJoins" />
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="TVoucherExp">
+		SELECT
+		<include refid="tVoucherExpColumns" />
+		FROM t_voucher_exp a
+		<include refid="tVoucherExpJoins" />
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="TVoucherExp">
+		SELECT
+		<include refid="tVoucherExpColumns" />
+		FROM t_voucher_exp a
+		<include refid="tVoucherExpJoins" />
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.thinkgem.jeesite.modules.voucherexp.entity.TVoucherExp">
+		INSERT INTO t_voucher_exp(
+		<!-- id, -->
+		t_v_id,
+		exp_row_number,
+		exp,
+		account_id,
+		account_name,
+		debit,
+		credit,
+		create_by,
+		create_date,
+		update_by,
+		update_date,
+		remarks,
+		del_flag
+		,fdbid
+		) VALUES (
+		<!-- #{id}, -->
+		#{tVId},
+		#{expRowNumber},
+		#{exp},
+		#{accountId},
+		#{accountName},
+		#{debit},
+		#{credit},
+		#{createBy.id},
+		#{createDate},
+		#{updateBy.id},
+		#{updateDate},
+		#{remarks},
+		#{delFlag}
+		,#{fdbid}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE t_voucher_exp SET
+		t_v_id = #{tVId},
+		exp_row_number = #{expRowNumber},
+		exp = #{exp},
+		account_id = #{accountId},
+		account_name = #{accountName},
+		debit = #{debit},
+		credit = #{credit},
+		update_by = #{updateBy.id},
+		update_date = #{updateDate},
+		remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE t_voucher_exp SET
+		del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+
+	<!-- 获得第一个科目 -->
+	<select id="findMixAccountId" resultType="String">
+		select min(account_id) from t_voucher_exp
+	</select>
+
+	<delete id="deletebytvid">
+		delete from t_voucher_exp where t_v_id = #{tVId}
+	</delete>
+
+	<!-- 自己加的方法，通过（客户外键）查询 -->
+	<select id="findbytvid" resultType="TVoucherExp">
+		select
+		<include refid="tVoucherExpColumns" />
+		,(select dc from t_account ta where ta.id = a.account_id ) AS 'dc'
+		from t_voucher_exp a
+		<include refid="tVoucherExpJoins" />
+		where a.t_v_id=#{tVId}
+		ORDER BY a.exp_row_number
+	</select>
+
+	<select id="deleteTvourcher" parameterType="java.util.Map" statementType="CALLABLE" resultType="java.util.Map">
+		{call deletevoucher(
+		#{tvbid,jdbcType=VARCHAR,mode=IN},
+		#{result,jdbcType=VARCHAR,mode=OUT})
+		}
+	</select>
+	<select id="backCheckout" parameterType="java.util.Map" statementType="CALLABLE" resultType="java.util.Map">
+		{call backCheckout(
+		#{fcustomerid,jdbcType=VARCHAR,mode=IN},
+		#{currentperiod,jdbcType=VARCHAR,mode=IN},
+		#{beforeperiod,jdbcType=VARCHAR,mode=IN},
+		#{latelyperiod,jdbcType=VARCHAR,mode=IN},
+		#{result,jdbcType=VARCHAR,mode=OUT})
+		}
+	</select>
+	<!-- 通过科目的id获取凭证表的信息 -->
+	<select id="getbyaccountId" resultType="TVoucherExp">
+		SELECT
+		<include refid="tVoucherExpColumns" />
+		FROM t_voucher_exp a
+		<include refid="tVoucherExpJoins" />
+		WHERE a.account_id = #{accountId} limit 1
+	</select>
+	<!-- 修改科目id和科目的名字 -->
+	<update id="updatebyaccountid">
+		UPDATE t_voucher_exp SET
+		account_id = #{accountId},
+		account_name = #{accountName}
+		WHERE account_id = #{faccountId}
+	</update>
+
+	<select id="getCountByAccIDAndAccID" resultType="java.lang.Integer">
+		SELECT
+		count(*)
+		FROM
+		t_voucher_exp a,
+		t_voucher c
+		WHERE
+		a.t_v_id = c.id
+		AND c.account_period = #{accountPeriod}
+		AND a.fdbid = #{fdbid}
+		AND a.account_id = #{accIdDebit}
+		AND (
+		SELECT
+		account_id
+		FROM
+		t_voucher_exp b
+		WHERE
+		a.id != b.id
+		AND b.t_v_id = a.t_v_id
+		AND b.fdbid = #{fdbid}
+		) = #{accIdCredit};
+	</select>
+</mapper>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.billinfofeedback.dao.TBillInfoFeedBackDao">
+    
+	<sql id="tBillInfoColumns">
+		a.id AS "id",
+		a.bill_id AS "billId",
+		a.feed_reason AS "feedReason",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag
+	</sql>
+	
+	
+	<insert id="insert">
+		INSERT INTO t_bill_info_feedback(
+			bill_id,
+			feed_reason,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{billId},
+			#{feedReason},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+</mapper>

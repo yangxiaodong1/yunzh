@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.inspection.dao.workstatistics.TWorkGatherDao">
+    
+	<sql id="tWorkGatherColumns">
+		a.id AS "id",
+		a.by_year AS "byYear",
+		a.customer_sum AS "customerSum",
+		a.bill_sum AS "billSum",
+		a.voucher_sum AS "voucherSum",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="tWorkGatherJoins">
+	</sql>
+    
+	<select id="get" resultType="TWorkGather">
+		SELECT 
+			<include refid="tWorkGatherColumns"/>
+		FROM t_work_gather a
+		<include refid="tWorkGatherJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TWorkGather">
+		SELECT 
+			<include refid="tWorkGatherColumns"/>
+		FROM t_work_gather a
+		<include refid="tWorkGatherJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="byYear != null and byYear != ''">
+				AND a.by_year = #{byYear}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TWorkGather">
+		SELECT 
+			<include refid="tWorkGatherColumns"/>
+		FROM t_work_gather a
+		<include refid="tWorkGatherJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="tWorkGather1" resultType="TWorkGather">
+		select a.company_id AS 'companyId',a.by_year AS 'byYear',a.ymonths AS 'ymonths',a.ymcount AS 'customerSum'
+		
+		 from t_v_work_gather_company a
+ where 
+a.company_id=#{companyId} and
+a.by_year=#{byYear} 
+
+	</select>
+	<select id="tWorkGather2" resultType="TWorkGather">
+		select a.company_id AS 'companyId',a.by_year AS 'byYear',a.ymonths AS 'ymonths',a.ymcount AS 'billSum'
+		 from t_v_work_gather_bill_2 a
+ where 
+a.company_id=#{companyId} and
+a.by_year=#{byYear} 
+
+	</select>
+	<select id="tWorkGather3" resultType="TWorkGather">
+		select a.company_id AS 'companyId',a.by_year AS 'byYear',a.ymonths AS 'ymonths',a.ymcount AS 'voucherSum'
+		 from t_v_work_gather_voucher_2 a
+ where 
+a.company_id=#{companyId} and
+a.by_year=#{byYear} 
+	</select>
+	
+	
+	
+	<insert id="insert">
+		INSERT INTO t_work_gather(
+			id,
+			by_year,
+			customer_sum,
+			bill_sum,
+			voucher_sum,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{byYear},
+			#{customerSum},
+			#{billSum},
+			#{voucherSum},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_work_gather SET 	
+			by_year = #{byYear},
+			customer_sum = #{customerSum},
+			bill_sum = #{billSum},
+			voucher_sum = #{voucherSum},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE t_work_gather SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

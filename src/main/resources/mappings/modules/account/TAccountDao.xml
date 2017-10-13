@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.account.dao.TAccountDao">
+    
+	<sql id="tAccountColumns">
+		a.id AS "id",
+		a.accunt_id AS "accuntId",
+		a.fdbid AS "fdbid",
+		a.account_name AS "accountName",
+		a.level AS "level",
+		a.detail AS "detail",
+		a.parent_id AS "parentId.id",
+		a.dc AS "dc",
+		a.rate AS "rate",
+		a.root_id AS "rootId",
+		a.create_by AS "createBy.id",
+		a.group_id AS "groupId",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.is_enable AS "isEnable",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.if_amortize as "ifAmortize",
+		a.is_rate_enable AS "israteenable"
+		,a.init_name AS "initName"
+	</sql>
+	
+	<sql id="tAccountJoins">
+		LEFT JOIN t_account p ON p.id = a.parent_id
+	</sql>
+    
+	<select id="get" resultType="TAccount">
+		SELECT 
+			<include refid="tAccountColumns"/>
+		FROM t_account a
+		<include refid="tAccountJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	<select id="findListByGroup" resultType="TAccount" parameterType="String">
+		SELECT 
+			<include refid="tAccountColumns"/>
+		FROM t_account a
+		<include refid="tAccountJoins"/>
+		where a.fdbid=#{fdbid} order by a.accunt_id
+	</select>	
+	<select id="findListByName" resultType="int" parameterType="String">
+		SELECT 
+			count(*)
+		FROM t_account a
+		where a.account_name=#{0} and a.fdbid=#{1}
+	</select>
+	<select id="parentCount" resultType="int" parameterType="String">
+		SELECT 
+			count(*)
+		FROM t_account a
+		where a.parent_id=#{0} and a.fdbid=#{1}
+	</select>
+	<select id="countNumber" resultType="String" parameterType="String">
+		SELECT 
+			a.accunt_id
+		FROM t_account a
+		where a.parent_id=#{0} and a.fdbid=#{1}
+	</select>
+	<select id="findListByParent" resultType="TAccount" parameterType="String">
+		SELECT 
+			<include refid="tAccountColumns"/>
+		FROM t_account a
+		where a.accunt_id = #{0} and a.fdbid=#{1}
+	</select>
+	<select id="findListByAccuntId" resultType="TAccount" parameterType="String">
+		SELECT 
+			<include refid="tAccountColumns"/>
+		FROM t_account a
+		where a.id = #{0} and a.fdbid=#{1}
+	</select>
+	
+	<select id="findList" resultType="TAccount">
+		SELECT 
+			<include refid="tAccountColumns"/>
+		FROM t_account a
+		<include refid="tAccountJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	<select id="sumInfo" resultType="BalanceSum" parameterType="String">
+		select 	SUM(beginbalance) AS "fben",SUM(endbalance) AS "fen",SUM(ytddebittotalamount) AS "bnj",SUM(ytdcredittotalamount) AS "bnd",SUM(ytdamountfor) AS "bnsy"
+		,SUM(debittotalamount) AS "bqj",SUM(credittotalamount) AS bqd,SUM(amountfor) AS "bqsy"
+		from t_account a  LEFT JOIN t_balance b on a.id=b.account_id 
+		where a.parent_id=#{parentid} and b.account_period=#{accountPeriod}
+	</select>
+	<select id="parindIdById" resultType="String" parameterType="String">
+		select 	a.parent_id 	
+		from t_account a  
+		where a.id =#{id}
+	</select>
+	<select id="findAllList" resultType="TAccount">
+		SELECT 
+			<include refid="tAccountColumns"/>
+		FROM t_account a
+		<include refid="tAccountJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	<select id="balanceInfo" resultType="TaccountNext">
+		select 
+		a.id,
+		a.account_name,
+		a.accunt_id,
+		a.dc,
+		a.group_id,
+		a.detail,
+		a.parent_id AS "parentId.id",
+		a.level,
+		a.if_amortize,
+		b.id AS "id1",b.account_id AS accountId,
+		b.beginbalance,
+		b.endbalance, 
+		b.ytddebittotalamount,
+		b.ytdcredittotalamount,
+		b.ytdamountfor
+		from t_account a LEFT JOIN t_account c on c.id=a.parent_id LEFT JOIN (select * from t_balance where account_period=#{accountPeriod}) b on a.id=b.account_id
+		Where a.fdbid=#{fdbid} order by a.accunt_id
+	</select>
+	
+	<select id="balanceInfoBydyq" resultType="TaccountNext">
+		select 
+		a.id,
+		a.account_name,
+		a.accunt_id,
+		a.dc,
+		a.group_id,
+		a.detail,
+		a.parent_id AS "parentId.id",
+		b.id AS "id1",b.account_id,
+		b.beginbalance,
+		b.endbalance, 
+		b.ytddebittotalamount,
+		b.ytdcredittotalamount,
+		b.ytdamountfor
+		from t_account a LEFT JOIN t_account c on c.id=a.parent_id LEFT JOIN t_balance b on a.id=b.account_id
+		Where a.fdbid=#{fdbid} and b.account_period=#{accountPeriod} order by a.accunt_id
+	</select>
+	
+	<insert id="insert" keyProperty="id" useGeneratedKeys="true">
+		INSERT INTO t_account(
+			accunt_id,
+			fdbid,
+			account_name,
+			level,
+			detail,
+			parent_id,
+			dc,
+			rate,
+			root_id,
+			create_by,
+			group_id,
+			create_date,
+			update_by,
+			if_amortize,
+			is_enable,
+			is_rate_enable,
+			update_date,
+			remarks,
+			del_flag,
+			init_name
+		) VALUES(
+			#{accuntId},
+			#{fdbid},
+			#{accountName},
+			#{level},
+			#{detail},
+			#{parentId.id},
+			#{dc},
+			#{rate},
+			#{rootId},
+			#{createBy.id},
+			#{groupId},
+			#{createDate},
+			#{updateBy.id},
+			#{ifAmortize},			
+			#{isEnable},
+			#{israteenable},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+			,#{initName}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_account SET 	
+			accunt_id = #{accuntId},
+			fdbid = #{fdbid},
+			account_name = #{accountName},
+			level = #{level},
+			detail = #{detail},
+			parent_id = #{parentId.id},
+			dc = #{dc},
+			rate= #{rate},
+			root_id = #{rootId},
+			group_id = #{groupId},
+			if_amortize = #{ifAmortize},			
+			is_enable = #{isEnable}
+			,init_name = #{initName}
+		WHERE id = #{id}
+	</update>
+	<!-- 修改税率 -->
+	<update id="updateByfdbidAndAccountid">
+		UPDATE t_account SET 	
+			rate= #{rate},
+			is_rate_enable = #{israteenable}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		delete from  t_account 
+		WHERE id = #{id}
+	</update>
+	
+	<select id="findAllListByAccountIdOrName" resultType="TAccount">
+		SELECT 
+			*
+		FROM
+		(SELECT 
+			<include refid="tAccountColumns"/>
+			,(select count(1) from t_account ta where ta.parent_id = a.id) as childCount
+			<!-- ,(select ta.account_name from  t_account ta where ta.id = a.parent_id) as "parentName" -->
+		FROM t_account a
+		<where>
+			1 = 1
+			<if test="paramStr != null and paramStr != ''">
+				<!-- AND ( a.accunt_id like CONCAT(#{paramStr},'%') OR a.account_name like CONCAT('%',#{paramStr},'%')  ) -->
+				<!-- AND a.accunt_id like CONCAT(#{paramStr},'%') -->
+				AND ( a.accunt_id like CONCAT(#{paramStr},'%') OR a.init_name like CONCAT('%',#{paramStr},'%')  ) 
+			</if>
+			<if test="fdbid != null and fdbid != ''">
+				AND a.fdbid = #{fdbid}
+			</if>
+		</where> ) tab
+		where tab.childCount = 0	ORDER BY accuntId 
+	</select>
+
+	<select id="accountidxl" resultType="String">
+		select  NEXTVAL('AccoutXl');
+	</select>
+
+	<!-- 根据公司客户id 查询所有的公司的信息 -->
+	<select id="findAllAccountByFdbid" resultType="TAccount">
+	SELECT 
+		<include refid="tAccountColumns"/>
+		FROM t_account a
+		<where>
+			1 = 1
+			<if test="fdbid != null and fdbid != ''">
+			and fdbid = #{fdbid}
+			</if>
+		</where>	
+	</select>
+	 <select id="draccount" parameterType="java.util.Map" statementType="CALLABLE" resultType="String" >  
+       {call draccount(
+       		#{cid,jdbcType=VARCHAR,mode=IN},
+       		#{did,jdbcType=VARCHAR,mode=IN}, 
+       		#{rtn,jdbcType=VARCHAR,mode=OUT})
+         }
+     </select>  
+     <select id="updateOtherTableAaccountid" parameterType="java.util.Map" statementType="CALLABLE">  
+       {call update_other_table_accountid(
+       		#{faccountid,jdbcType=VARCHAR,mode=IN},
+       		#{otherid,jdbcType=VARCHAR,mode=IN})
+         }
+     </select> 
+       
+	<select id="findByAccuntId" resultType="TAccount" parameterType="String">
+		SELECT 
+			<include refid="tAccountColumns"/>
+		FROM t_account a
+		where a.id = #{0} and a.fdbid=#{1}
+	</select>
+	
+	<!-- 根据科目id 获取信息 -->
+	<select id="getAccountsInfo" resultType="TAccount">
+		SELECT 
+			<include refid="tAccountColumns"/>
+		FROM t_account a
+		<where>
+			1= 1
+			<if test="id != null and id != ''">
+			and a.id = #{id}
+			</if>
+			<if test="fdbid != null and fdbid != ''">
+			and a.fdbid = #{fdbid}
+			</if>
+		</where>
+	</select>
+	<!-- 根据或许科目的子级科目 -->
+	<select id="getSubAccountsInfo" resultType="TAccount">
+		SELECT 
+			<include refid="tAccountColumns"/>
+		FROM t_account a
+		<where>
+			1= 1
+			<if test="parentId != null and parentId != ''">
+			and a.parent_id = #{parentId}
+			</if>
+			<if test="fdbid != null and fdbid != ''">
+			and a.fdbid = #{fdbid}
+			</if>
+		</where>
+	</select>
+	
+		
+	<!-- 根据科目名称获取信息 -->
+	<select id="getAccountsInfoByName" resultType="TAccount">
+		SELECT 
+			<include refid="tAccountColumns"/>
+		FROM t_account a
+		<where>
+			1= 1
+			<if test="accountname != null and accountname != ''">
+			and a.account_name = #{accountname}
+			</if>
+			<if test="fdbid != null and fdbid != ''">
+			and a.fdbid = #{fdbid}
+			</if>
+			<if test="accId != null and accId != ''">
+			and a.accunt_id = #{accId}
+			</if>
+		</where>
+	</select>
+	
+	<select id="findAllListByAccountIdBeginWith" resultType="TAccount">
+		SELECT 
+			<include refid="tAccountColumns"/>
+		FROM t_account a
+		<where>
+			1 = 1
+			<if test="paramStr != null and paramStr != ''">	<!-- update zt -->
+				<!-- AND a.accunt_id like CONCAT(#{paramStr},'%') -->
+				AND a.group_id like CONCAT(#{paramStr},'%')
+			</if>
+			<if test="fdbid != null and fdbid != ''">
+				AND a.fdbid = #{fdbid}
+			</if>
+			<if test="dc != null and dc != ''">
+				AND a.dc = #{dc}
+			</if>
+			AND a.detail = '1'
+		</where>
+	</select>
+	
+	<select id="findAllListByfdbidLevelTwo" resultType="TAccount">
+		SELECT 
+			<include refid="tAccountColumns"/>
+		FROM t_account a
+		<where>
+			1 = 1
+			<if test="fdbid != null and fdbid != ''">
+				AND a.fdbid = #{fdbid}
+			</if>
+			AND a.level = '2'
+			AND a.accunt_id like '2221%'
+		</where>
+	</select>
+	
+	<select id="findAllListByfdbidLevel" resultType="TAccount">
+		SELECT 
+			<include refid="tAccountColumns"/>
+		FROM t_account a
+		<where>
+			1 = 1
+			<if test="fdbid != null and fdbid != ''">
+				AND a.fdbid = #{fdbid}
+			</if>
+			<choose>
+				<when test="system==1">
+					AND a.accunt_id in ('222102','222103','222104','222105','222112','222113','222114')
+				</when>
+				<otherwise>
+					AND a.accunt_id in ('222102','222104','222105','222106','222114','222116','222107')
+				</otherwise>
+			</choose>			
+		</where>
+	</select>
+	
+	<select id="selectAccountAndBalanceByPeriodAndFdbid" resultType = "TAccount">
+		select b.beginBalance AS level,a.accunt_id AS "accuntId"
+		from t_account a  LEFT JOIN t_balance b on a.id=b.account_id 
+		<where> 1 = 1
+			<if test="fdbid != null and fdbid != ''">
+				AND a.fdbid = #{fdbid}
+			</if>
+			<if test="accountPeriod != null and accountPeriod != ''">
+				AND b.account_period = #{accountPeriod}
+			</if>
+			<if test="list != null and list.size>0">
+				AND a.accunt_id in
+				<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            		#{item}
+      		 	</foreach>
+			</if>
+		</where>
+	</select>
+	
+	
+	<select id="selectAccountByAccountIdAndFdbid" resultType = "java.lang.String">
+		select a.id from t_account a
+		<where>
+			<if test="fdbid != null and fdbid != ''">
+				AND a.fdbid = #{fdbid}
+			</if>
+			<if test="accountId != null and accountId != ''">
+				AND a.accunt_id = #{accountId}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 根据客户fdbid判断是否自己新建了科目 -->
+	<select id="isHaveOwnAccount" resultType="int">  
+      	select count(*) from t_account a where a.fdbid=#{fdbid} and a.is_enable='0'
+     </select> 
+     
+     <select id="findListByGroupWithLevel" resultType="TAccount" parameterType="String">
+		SELECT 
+			<include refid="tAccountColumns"/>
+		FROM t_account a
+		<include refid="tAccountJoins"/>
+		where a.fdbid=#{fdbid} 
+		<if test="level != null and level != ''">
+				AND a.level &lt;=   #{level}
+			</if>
+		order by a.accunt_id
+	</select>	
+</mapper>

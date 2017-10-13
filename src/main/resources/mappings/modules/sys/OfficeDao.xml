@@ -1,0 +1,541 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.sys.dao.OfficeDao">
+	<sql id="officeColumns">
+		a.id ,
+		a.parent_id AS "parent.id",
+		a.parent_ids AS "parentIds",
+		a.area_id AS "area.id",
+		a.code,
+		a.name AS "name",
+		a.sort,
+		a.type AS "type",
+		a.grade AS "grade",
+		a.address, 
+		a.zip_code, 
+		a.master, 
+		a.phone, 
+		a.fax, 
+		a.email, 
+		a.remarks,
+		a.create_by AS "createBy.id",
+		a.create_date,
+		a.update_by AS "updateBy.id",
+		a.update_date,
+		a.del_flag,
+		a.useable AS useable,
+		a.primary_person AS "primaryPerson.id",
+		a.deputy_person AS "deputyPerson.id",
+		p.name AS "parent.name",
+		ar.name AS "area.name",
+		ar.parent_ids AS "area.parentIds",
+		pp.name AS "primaryPerson.name",
+		dp.name AS "deputyPerson.name"
+	</sql>
+	<sql id="officeColumnsnew">
+		a.id ,
+		a.parent_id AS "parent.id",
+		a.parent_ids AS "parentIds",
+		a.area_id AS "area.id",
+		a.code,
+		a.name AS "name",
+		a.sort,
+		a.type AS "type",
+		a.grade AS "grade",
+		a.address, 
+		a.zip_code, 
+		a.master, 
+		a.phone, 
+		a.fax, 
+		a.email, 
+		a.remarks,
+		a.create_by AS "createBy.id",
+		a.create_date,
+		a.update_by AS "updateBy.id",
+		a.update_date,
+		a.del_flag,
+		a.useable AS useable,
+		a.primary_person AS "primaryPerson.id",
+		a.deputy_person AS "deputyPerson.id",
+		p.name AS "parent.name",
+		ar.name AS "area.name",
+		ar.parent_ids AS "area.parentIds",
+		pp.name AS "primaryPerson.name",
+		dp.name AS "deputyPerson.name",
+		a.chargecomname AS "chargecomname.chargecomname",
+		a.city AS "city.city",
+		a.contectperson AS "contectperson.contectperson",
+		a.mobilenumber AS "mobilenumber.mobilenumber",
+		a.companynumber AS "companynumber.companynumber",
+		a.companyrunrange AS "companyrunrange.companyrunrange",
+		a.servicestatus AS "servicestatus.servicestatus",
+		a.usestatus AS "usestatus.usestatus",
+		a.legalname AS "legalname.legalname",
+		a.contectphone AS "contectphone.contectphone",
+		a.appendixtype AS "appendixtype.appendixtype",
+		a.cardnumber AS "cardnumber.cardnumber",
+		a.runnumber AS "runnumber.runnumber",
+		a.runappendix AS "runappendix.runappendix",
+		a.taxrenum AS "taxrenum.taxrenum",
+		a.taxappendx AS "taxappendx.taxappendx",
+		a.organcode AS "organcode.organcode",
+		a.codeappendx AS "codeappendx.codeappendx",
+		a.abutment AS "abutment.abutment",
+		a.auditbill AS "auditbill.auditbill",
+		a.rapauditnum AS "rapauditnum.rapauditnum",
+		a.province  AS  "province",
+		a.municipality  AS "municipality",
+		a.district   AS "district"
+		
+	</sql>
+	<sql id="officeJoins">
+		LEFT JOIN sys_office p ON p.id = a.parent_id
+		LEFT JOIN sys_area ar ON ar.id = a.area_id
+		LEFT JOIN SYS_USER pp ON pp.id = a.primary_person
+		LEFT JOIN SYS_USER dp ON dp.id = a.deputy_person
+    </sql>
+	<select id="getautoid" resultType="string">
+		select AUTO_INCREMENT from INFORMATION_SCHEMA.TABLES    
+where TABLE_NAME='sys_office'
+	</select>
+	<!-- 存储文件表获得下一个id,yang -->
+	<select id="getautoidfile" resultType="string">
+		select AUTO_INCREMENT from INFORMATION_SCHEMA.TABLES    
+where TABLE_NAME='t_feedback_file'
+	</select>
+	<select id="get" resultType="Office">
+		SELECT
+			<include refid="officeColumns"/>
+		FROM sys_office a
+		<include refid="officeJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Office">
+		SELECT
+			<include refid="officeColumns"/>
+		FROM sys_office a
+		<include refid="officeJoins"/>
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+		<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="parent.id != null and parent.id != ''">
+				AND a.parent_id = #{parent.id}
+			</if>
+			<if test="parentIds != null and parentIds != ''">
+				AND a.parent_ids = #{parentIds}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name = #{name}
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="grade != null and grade != ''">
+				AND a.grade = #{grade}
+			</if>
+		<!-- 数据范围过滤 -->
+		${sqlMap.dsf}
+		OR a.id = #{currentUser.office.id}
+		ORDER BY a.code
+	</select>
+			
+	<select id="findAllList" resultType="Office">
+		SELECT
+			<include refid="officeColumns"/>
+		FROM sys_office a
+		<include refid="officeJoins"/>
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+		ORDER BY a.code
+	</select>
+	
+	<select id="findByParentIdsLike" resultType="Office">
+		SELECT
+			<include refid="officeColumns"/>
+		FROM sys_office a
+		<include refid="officeJoins"/>
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL} AND a.parent_ids=#{id}
+		ORDER BY a.code
+	</select>
+	
+	<select id="getbyOfficeId" parameterType="String" resultType="String">
+		SELECT 
+			ifnull(a.rapauditnum,0)
+		FROM sys_office a
+		WHERE a.id = #{0}
+	</select>
+	
+	<select id="findByParentIds" resultType="Office">
+		SELECT
+			<include refid="officeColumns"/>
+		FROM sys_office a
+		<include refid="officeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="pId != null and pId != ''">
+				AND a.parent_id = #{pId} or a.id = #{pId}
+			</if>
+			<if test="parentIds != null and parentIds != ''">
+				AND a.parent_ids = #{parentIds}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name = #{name}
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="grade != null and grade != ''">
+				AND a.grade = #{grade}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findByParentIdszNodes" resultType="Office">
+		SELECT
+		CONCAT('office', a.id) AS "id",
+		CONCAT('office', a.parent_id) AS "parent.id",
+		a.name AS "name"
+		FROM sys_office a
+		<include refid="officeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="pId != null and pId != ''">
+				AND a.parent_id = #{pId} 
+			</if>
+			<if test="parentIds != null and parentIds != ''">
+				AND a.parent_ids = #{parentIds}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name = #{name}
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="grade != null and grade != ''">
+				AND a.grade = #{grade}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert"  keyProperty="id" useGeneratedKeys="true">
+		INSERT INTO sys_office(
+			parent_id, 
+			parent_ids, 
+			area_id, 
+			code, 
+			name, 
+			sort, 
+			type, 
+			grade, 
+			address, 
+			zip_code, 
+			master, 
+			phone, 
+			fax, 
+			email, 
+			create_by, 
+			create_date, 
+			update_by, 
+			update_date, 
+			remarks, 
+			del_flag,
+			useable,
+			primary_person,
+			deputy_person
+		) VALUES (
+			#{parent.id}, 
+			#{parentIds}, 
+			#{area.id}, 
+			#{code}, 
+			#{name}, 
+			#{sort}, 
+			#{type}, 
+			#{grade}, 
+			#{address}, 
+			#{zipCode}, 
+			#{master}, 
+			#{phone}, 
+			#{fax}, 
+			#{email}, 
+			#{createBy.id}, 
+			#{createDate}, 
+			#{updateBy.id}, 
+			#{updateDate}, 
+			#{remarks}, 
+			#{delFlag},
+			#{useable},
+			#{primaryPerson.id},
+			#{deputyPerson.id}
+		)
+	</insert>
+	<insert id="insertCompany"  keyProperty="id" useGeneratedKeys="true">
+		INSERT INTO sys_office(
+			parent_id, 
+			parent_ids, 
+			area_id, 
+			code, 
+			name, 
+			sort, 
+			type, 
+			grade, 
+			address, 
+			zip_code, 
+			master, 
+			phone, 
+			fax, 
+			email, 
+			create_by, 
+			create_date, 
+			update_by, 
+			update_date, 
+			remarks, 
+			del_flag,
+			useable,
+			primary_person,
+			deputy_person
+		) VALUES (
+			#{pId}, 
+			#{parentIds}, 
+			#{area.id}, 
+			#{code}, 
+			#{name}, 
+			#{sort}, 
+			#{type}, 
+			#{grade}, 
+			#{address}, 
+			#{zipCode}, 
+			#{master}, 
+			#{phone}, 
+			#{fax}, 
+			#{email}, 
+			#{createBy.id}, 
+			#{createDate}, 
+			#{updateBy.id}, 
+			#{updateDate}, 
+			#{remarks}, 
+			#{delFlag},
+			#{useable},
+			#{primaryPerson.id},
+			#{deputyPerson.id}
+		)
+	</insert>
+	<insert id="insertChargeCompany" keyProperty="id" useGeneratedKeys="true">
+		INSERT INTO sys_office(
+			parent_id, 
+			parent_ids, 
+			area_id, 
+			code, 
+			name, 
+			sort, 
+			type, 
+			grade, 
+			address, 
+			zip_code, 
+			master, 
+			phone, 
+			fax, 
+			email, 
+			create_by, 
+			create_date, 
+			update_by, 
+			update_date, 
+			remarks, 
+			del_flag,
+			useable,
+			primary_person,
+			deputy_person,
+			chargecomname,
+			city,
+			contectperson,
+			mobilenumber,
+			companynumber,
+			companyrunrange,
+			servicestatus,
+			usestatus,
+			legalname,
+			contectphone,
+			appendixtype,
+			cardnumber,
+			runnumber,
+			runappendix,
+			taxrenum,
+			taxappendx,
+			organcode,
+			codeappendx,
+			abutment,
+			auditbill,
+			rapauditnum,
+			province,
+			municipality, 
+			district
+			
+			
+		) VALUES (
+			#{pId}, 
+			#{parentIds}, 
+			#{area.id}, 
+			#{code}, 
+			#{name}, 
+			#{sort}, 
+			#{type}, 
+			#{grade}, 
+			#{address}, 
+			#{zipCode}, 
+			#{master}, 
+			#{phone}, 
+			#{fax}, 
+			#{email}, 
+			#{createBy.id}, 
+			#{createDate}, 
+			#{updateBy.id}, 
+			#{updateDate}, 
+			#{remarks}, 
+			#{delFlag},
+			#{useable},
+			#{primaryPerson.id},
+			#{deputyPerson.id},
+			#{chargecomname.chargecomname},
+			#{city.city},
+			#{contectperson.contectperson},
+			#{mobilenumber.mobilenumber},
+			#{companynumber.companynumber},
+			#{companyrunrange.companyrunrange},
+			#{servicestatus.servicestatus},
+			#{usestatus.usestatus},
+			#{legalname.legalname},
+			#{contectphone.contectphone},
+			#{appendixtype.appendixtype},
+			#{cardnumber.cardnumber},
+			#{runnumber.runnumber},
+			#{runappendix.runappendix},
+			#{taxrenum.taxrenum},
+			#{taxappendx.taxappendx},
+			#{organcode.organcode},
+			#{codeappendx.codeappendx},
+			#{abutment.abutment},
+			#{auditbill.auditbill},
+			#{rapauditnum.rapauditnum},
+			#{province},
+			#{municipality},
+			#{district}
+			
+		)
+	</insert>
+	
+
+	
+	<update id="update">
+		UPDATE sys_office SET 
+			parent_id = #{parent.id}, 
+			parent_ids = #{parentIds}, 
+			area_id = #{area.id}, 
+			code = #{code}, 
+			name = #{name}, 
+			type = #{type}, 
+			grade = #{grade}, 
+			address = #{address}, 
+			zip_code = #{zipCode}, 
+			master = #{master}, 
+			phone = #{phone}, 
+			fax = #{fax}, 
+			email = #{email}, 
+			update_by = #{updateBy.id}, 
+			update_date = #{updateDate}, 
+			remarks = #{remarks},
+			useable=#{useable},
+			primary_person=#{primaryPerson.id},
+			deputy_person=#{deputyPerson.id}
+		WHERE id = #{id}
+	</update>
+	<update id="updatenew">
+		UPDATE sys_office SET 
+			parent_id = #{pId}, 
+			parent_ids = #{parentIds}, 
+			area_id = #{area.id}, 
+			code = #{code}, 
+			name = #{name}, 
+			type = #{type}, 
+			grade = #{grade}, 
+			address = #{address}, 
+			zip_code = #{zipCode}, 
+			master = #{master}, 
+			phone = #{phone}, 
+			fax = #{fax}, 
+			email = #{email}, 
+			update_by = #{updateBy.id}, 
+			update_date = #{updateDate}, 
+			remarks = #{remarks},
+			useable=#{useable},
+			primary_person=#{primaryPerson.id},
+			deputy_person=#{deputyPerson.id},
+			chargecomname = #{chargecomname.chargecomname},
+			city =  #{city.city},
+			contectperson = #{contectperson.contectperson},
+			mobilenumber =  #{mobilenumber.mobilenumber},
+			companynumber = #{companynumber.companynumber},
+			companyrunrange = #{companyrunrange.companyrunrange},
+			servicestatus =  #{servicestatus.servicestatus},
+			usestatus =  #{usestatus.usestatus},
+			legalname =  #{legalname.legalname},
+			contectphone =  #{contectphone.contectphone},
+			appendixtype =  #{appendixtype.appendixtype},
+			cardnumber =  #{cardnumber.cardnumber},
+			runnumber =  #{runnumber.runnumber},
+			runappendix =  #{runappendix.runappendix},
+			taxrenum =  #{taxrenum.taxrenum},
+			taxappendx = #{taxappendx.taxappendx},
+			organcode =  #{organcode.organcode},
+			codeappendx =  #{codeappendx.codeappendx},
+			abutment =  #{abutment.abutment},
+			auditbill =  #{auditbill.auditbill},
+			rapauditnum = #{rapauditnum.rapauditnum},
+			province  = #{province},
+		    municipality = #{municipality},
+		    district = #{district}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateParentIds">
+		UPDATE sys_office SET 
+			parent_id = #{parent.id}, 
+			parent_ids = #{parentIds}
+		WHERE id = #{id}
+	</update>
+	<update id="deletes">
+		UPDATE sys_office SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id} 
+	</update>
+	<update id="delete">
+		UPDATE sys_office SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id} OR parent_ids LIKE 
+					<if test="dbName == 'oracle'">'%,'||#{id}||',%'</if>
+					<if test="dbName == 'mssql'">'%,'+#{id}+',%'</if>
+					<if test="dbName == 'mysql'">CONCAT('%,', #{id}, ',%')</if>
+	</update>
+	
+</mapper>

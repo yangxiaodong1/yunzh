@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.vouchertemplate.dao.TVoucherTemplateDao">
+   	<!-- add by:zt -->
+    <resultMap type="com.thinkgem.jeesite.modules.vouchertemplate.entity.TVoucherTemplate" id="tVoucherTemplateMap">
+    	<id column="id" property="id" jdbcType="VARCHAR"/>
+    	<result column="templateTypeId" property="templateTypeId" jdbcType="VARCHAR"/>
+    	<result column="templateName" property="templateName" jdbcType="VARCHAR"/>
+    	<result column="fdbid" property="fdbid" jdbcType="VARCHAR"/>
+    	<collection property="exps" javaType="java.util.List" ofType="com.thinkgem.jeesite.modules.vouchertemplateexp.entity.TVoucherTemplateExp">    		
+    		<result column="e_templateId" property="templateId" jdbcType="VARCHAR"/>
+    		<result column="e_expRowNumber" property="expRowNumber" jdbcType="VARCHAR"/>
+    		<result column="e_exp" property="exp" jdbcType="VARCHAR"/>
+    		<result column="e_accountId" property="accountId" jdbcType="VARCHAR"/>
+    		<result column="e_accountName" property="accountName" jdbcType="VARCHAR"/>
+    		<result column="e_debit" property="debit" />
+    		<result column="e_credit" property="credit" />
+    		<result column="e_dc" property="dc" />
+    	</collection>
+    </resultMap>
+	<sql id="tVoucherTemplateColumns">
+		a.id AS "id",
+		a.template_type_id AS "templateTypeId",
+		a.template_name AS "templateName",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.fdbid AS "fdbid"
+	</sql>
+	
+	<sql id="tVoucherTemplateJoins">
+	</sql>
+    
+	<select id="get" resultType="TVoucherTemplate">
+		SELECT 
+			<include refid="tVoucherTemplateColumns"/>
+		FROM t_voucher_template a
+		<include refid="tVoucherTemplateJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TVoucherTemplate">
+		SELECT 
+			<include refid="tVoucherTemplateColumns"/>
+		FROM t_voucher_template a
+		<include refid="tVoucherTemplateJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TVoucherTemplate">
+		SELECT 
+			<include refid="tVoucherTemplateColumns"/>
+		FROM t_voucher_template a
+		<include refid="tVoucherTemplateJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.thinkgem.jeesite.modules.vouchertemplate.entity.TVoucherTemplate">
+		INSERT INTO t_voucher_template(
+		<!-- 	id, -->
+			template_type_id,
+			template_name,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			fdbid
+		) VALUES (
+			<!-- #{id}, -->
+			#{templateTypeId},
+			#{templateName},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{fdbid}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_voucher_template SET 	
+			template_type_id = #{templateTypeId},
+			template_name = #{templateName},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE t_voucher_template SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	<select id="findAllListByType" resultType="TVoucherTemplate">
+		SELECT 
+			<include refid="tVoucherTemplateColumns"/>
+		FROM t_voucher_template a
+		<where>
+		 1 = 1
+		  <if test="templateTypeId != null and templateTypeId != ''">
+			AND a.template_type_id = #{templateTypeId}
+		  </if>
+		  <if test="fdbid != null and fdbid != ''">
+		  	AND a.fdbid = #{fdbid}
+		  </if>
+		</where>		
+	</select>
+	
+	<delete id="deleteById">
+		delete from t_voucher_template where id = #{id}
+	</delete>
+	<select id="findAllListByTypeAndFdbid" resultMap="tVoucherTemplateMap">
+		SELECT 
+			a.id ,
+			a.template_type_id  templateTypeId,
+			a.template_name  templateName,
+			b.template_id  e_templateId,
+			b.exp_row_number  e_expRowNumber,
+			b.exp e_exp,
+			b.account_id e_accountId,
+			b.account_name e_accountName,
+			b.debit e_debit,
+			b.credit e_credit
+		
+		FROM t_voucher_template a 
+			LEFT JOIN  t_voucher_template_exp b 
+		ON  
+          a.id = b.template_id 
+		<where>
+		 1 = 1
+		  <if test="templateTypeId != null and templateTypeId != ''">
+			AND a.template_type_id = #{templateTypeId}
+		  </if>
+		  <if test="fdbid != null and fdbid != ''">
+		  	AND a.fdbid = #{fdbid}
+		  </if>
+		</where>
+		ORDER BY b.exp_row_number
+	</select>
+	
+	<select id="findAllListByIdAndFdbid" resultMap="tVoucherTemplateMap">
+		SELECT 
+			a.id ,
+			a.template_type_id  templateTypeId,
+			a.template_name  templateName,
+			b.template_id  e_templateId,
+			b.exp_row_number  e_expRowNumber,
+			b.exp e_exp,
+			b.account_id e_accountId,
+			b.account_name e_accountName,
+			b.debit e_debit,
+			b.credit e_credit,
+			(select dc from t_account ta where ta.id = b.account_id ) e_dc
+		
+		FROM t_voucher_template a 
+			LEFT JOIN  t_voucher_template_exp b 
+		ON  
+          a.id = b.template_id 
+		<where>
+		 1 = 1
+		  <if test="id != null and id != ''">
+			AND a.id = #{id}
+		  </if>
+		  <if test="fdbid != null and fdbid != ''">
+		  	AND a.fdbid = #{fdbid}
+		  </if>
+		</where>
+		ORDER BY exp_row_number	
+	</select>
+</mapper>

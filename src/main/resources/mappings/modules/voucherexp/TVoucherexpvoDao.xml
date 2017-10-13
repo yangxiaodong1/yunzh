@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.voucherexp.dao.TVoucherexpvoDao">
+    
+	<sql id="tVoucherexpvoColumns">
+		a.tvoucherexptvid AS "tvoucherexptvid",
+		a.username AS "username",
+		a.vouchertitlenumber AS "vouchertitlenumber",
+		a.accountdate AS "accountdate",
+		a.totalamount AS "totalamount",
+		a.expcomment AS "expcomment",
+		a.commenresult AS "commenresult",
+		a.count AS "count",
+		a.showdebit AS "showdebit",
+		a.showcredit AS "showcredit",
+		a.selecttvoucher AS "selecttvoucher",
+		a.money AS "money"
+	</sql>
+	
+	<sql id="tVoucherexpvoJoins">
+	</sql>
+    
+	<select id="get" resultType="TVoucherexpvo">
+		SELECT 
+			<include refid="tVoucherexpvoColumns"/>
+		FROM t_voucherexpvo a
+		<include refid="tVoucherexpvoJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TVoucherexpvo">
+		SELECT 
+			<include refid="tVoucherexpvoColumns"/>
+		FROM t_voucherexpvo a
+		<include refid="tVoucherexpvoJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TVoucherexpvo">
+		SELECT 
+			<include refid="tVoucherexpvoColumns"/>
+		FROM t_voucherexpvo a
+		<include refid="tVoucherexpvoJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_voucherexpvo(
+			tvoucherexptvid,
+			username,
+			vouchertitlenumber,
+			accountdate,
+			totalamount,
+			expcomment,
+			commenresult,
+			count,
+			showdebit,
+			showcredit,
+			selecttvoucher,
+			money
+		) VALUES (
+			#{tvoucherexptvid},
+			#{username},
+			#{vouchertitlenumber},
+			#{accountdate},
+			#{totalamount},
+			#{expcomment},
+			#{commenresult},
+			#{count},
+			#{showdebit},
+			#{showcredit},
+			#{selecttvoucher},
+			#{money}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_voucherexpvo SET 	
+			tvoucherexptvid = #{tvoucherexptvid},
+			username = #{username},
+			vouchertitlenumber = #{vouchertitlenumber},
+			accountdate = #{accountdate},
+			totalamount = #{totalamount},
+			expcomment = #{expcomment},
+			commenresult = #{commenresult},
+			count = #{count},
+			showdebit = #{showdebit},
+			showcredit = #{showcredit},
+			selecttvoucher = #{selecttvoucher},
+			money = #{money}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_voucherexpvo
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.taxbaseformula.dao.VTaxbaseformulaDao">
+    
+	<sql id="vTaxbaseformulaColumns">
+		a.id AS "id",
+		a.fdbid AS "fdbid",
+		a.taxcategory AS "taxcategory",
+		a.accountid AS "accountid",
+		a.ftype AS "ftype",
+		a.op AS "op",
+		a.acc_id AS "accId",
+		a.accunt_id AS "accuntId",
+		a.account_name AS "accountName",
+		a.acc_dc AS "accDc",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="vTaxbaseformulaJoins">
+	</sql>
+    
+	<select id="get" resultType="VTaxbaseformula">
+		SELECT 
+			<include refid="vTaxbaseformulaColumns"/>
+		FROM v_taxbaseformula a
+		<include refid="vTaxbaseformulaJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="VTaxbaseformula">
+		SELECT 
+			<include refid="vTaxbaseformulaColumns"/>
+		FROM v_taxbaseformula a
+		<include refid="vTaxbaseformulaJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="VTaxbaseformula">
+		SELECT 
+			<include refid="vTaxbaseformulaColumns"/>
+		FROM v_taxbaseformula a
+		<include refid="vTaxbaseformulaJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO v_taxbaseformula(
+			id,
+			fdbid,
+			taxcategory,
+			accountid,
+			ftype,
+			op,
+			acc_id,
+			accunt_id,
+			account_name,
+			acc_dc,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{fdbid},
+			#{taxcategory},
+			#{accountid},
+			#{ftype},
+			#{op},
+			#{accId},
+			#{accuntId},
+			#{accountName},
+			#{accDc},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE v_taxbaseformula SET 	
+			fdbid = #{fdbid},
+			taxcategory = #{taxcategory},
+			accountid = #{accountid},
+			ftype = #{ftype},
+			op = #{op},
+			acc_id = #{accId},
+			accunt_id = #{accuntId},
+			account_name = #{accountName},
+			acc_dc = #{accDc},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE v_taxbaseformula SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	<select id="findTTaxbaseFormulaByfdbIdAndTaxCategory" resultType="VTaxbaseformula">
+		select <include refid="vTaxbaseformulaColumns"/>
+		FROM v_taxbaseformula a
+		<where>
+			AND 1 = 1
+			<if test="fdbid !=null and fdbid !=''">
+			AND	a.fdbid = #{fdbid}
+			</if>
+			<if test="taxCategory !=null and taxCategory !=''">
+			AND	a.taxCategory like #{taxCategory}
+			</if>
+		</where>
+		order by a.id
+	</select>
+</mapper>

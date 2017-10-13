@@ -1,0 +1,29 @@
+/* reset 重置样式 */
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td,hr,button,article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section {margin:0;padding:0;}
+html {-webkit-text-size-adjust: none;background: #eff1f3;}
+body{font:12px/1.5 \5B8B\4F53;text-align:center;color: #555;font-family:Microsoft Yahei;}
+ol,ul{list-style:none;}
+h1,h2,h3,h4,h5,h6 { font-size: 100%;}
+img{border:none;vertical-align: top}
+i,em{font-style:normal;}
+input,select,option,textarea,button{font-size:12px;outline: none;}
+a{text-decoration:none;} 
+a:hover{text-decoration:underline;}
+noscript,.spanclass,.contentdiv,.hidden{display:none;}
+.show,.block{display:block;}
+.mark,.fl,.subMark,.fr {display: inline;}
+.mark,.fl{float:left;} .subMark,.fr {float:right;}
+.f14 {font-size:14px;} .f16 {font-size:16px;}
+.clear{clear:both;height:0;line-height:0;font-size:0;overflow:hidden;}
+.clearfix{*zoom:1} .clearfix:after{content:"\20";clear:both;height:0;display:block;overflow:hidden}
+
+.breadcrumb {background: none;padding: 0;}
+.text-left{text-align:left;}
+.sel_yn { width: 122px; height: 26px; line-height: 26px; color: #767677;}
+.left{float:left;}
+.right{float:right;}
+.pad_t_b5{padding:5px 0;}
+span.span_sta{line-height:27px;margin-right: 20px;}
+.tit_p3 .btn-c1,.tit_p3 .btn-c2,.tit_p3 .btn-c3{z-index:4;}
+/*IE input X 去掉文本框的叉叉和密码输入框的眼睛图标 */
+::-ms-clear, ::-ms-reveal{display: none;}

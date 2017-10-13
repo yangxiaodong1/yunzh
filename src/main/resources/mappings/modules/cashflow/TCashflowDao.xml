@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.cashflow.dao.TCashflowDao">
+    
+	<sql id="tCashflowColumns">
+		a.id AS "id",
+		a.fdbid AS "fdbid",
+		a.reportitem AS "reportitem",
+		a.groupid AS "groupid",
+		a.yearperiod AS "yearperiod",
+		a.fcur AS "fcur",
+		a.ytdendamount AS "ytdendamount",
+		a.ytdbeginamount AS "ytdbeginamount",
+		a.lytdendamount AS "lytdendamount",
+		a.lytdbeginamount AS "lytdbeginamount",
+		a.flowtype AS "flowtype",
+		a.fadddate AS "fadddate",
+		a.periodtype AS "periodtype",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="tCashflowJoins">
+	</sql>
+    
+	<select id="get" resultType="TCashflow">
+		SELECT 
+			<include refid="tCashflowColumns"/>
+		FROM t_cashflow a
+		<include refid="tCashflowJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TCashflow">
+		SELECT 
+			<include refid="tCashflowColumns"/>
+		FROM t_cashflow a
+		<include refid="tCashflowJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TCashflow">
+		SELECT 
+			<include refid="tCashflowColumns"/>
+		FROM t_cashflow a
+		<include refid="tCashflowJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_cashflow(
+			id,
+			fdbid,
+			reportitem,
+			groupid,
+			yearperiod,
+			fcur,
+			ytdendamount,
+			ytdbeginamount,
+			lytdendamount,
+			lytdbeginamount,
+			flowtype,
+			fadddate,
+			periodtype,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{fdbid},
+			#{reportitem},
+			#{groupid},
+			#{yearperiod},
+			#{fcur},
+			#{ytdendamount},
+			#{ytdbeginamount},
+			#{lytdendamount},
+			#{lytdbeginamount},
+			#{flowtype},
+			#{fadddate},
+			#{periodtype},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_cashflow SET 	
+			fdbid = #{fdbid},
+			reportitem = #{reportitem},
+			groupid = #{groupid},
+			yearperiod = #{yearperiod},
+			fcur = #{fcur},
+			ytdendamount = #{ytdendamount},
+			ytdbeginamount = #{ytdbeginamount},
+			lytdendamount = #{lytdendamount},
+			lytdbeginamount = #{lytdbeginamount},
+			flowtype = #{flowtype},
+			fadddate = #{fadddate},
+			periodtype = #{periodtype},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE t_cashflow SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 根据报表编号和账期查询	现金流量附加表使用 -->
+	<select id="findCashflowByRepAndPer" resultType="TCashflow">
+		select * from t_cashflow
+		<where>
+			<if test="reportitem != null and reportitem != '' ">
+			AND reportitem= #{reportitem }
+			</if>
+			<if test="yearperiod != null and yearperiod != '' ">
+			AND yearperiod=#{yearperiod }
+			</if>
+			<if test="fdbid != null and fdbid != '' ">
+			AND fdbid=#{fdbid }
+			</if>
+			<if test="periodtype != null and periodtype != '' ">
+			AND periodtype=#{periodtype }
+			</if>
+		</where>
+	</select>
+	
+	<!--  批量保存数据				流量附加表使用 -->
+	 <insert id="savaListCashflow" parameterType="java.util.List">
+	 	 insert into t_cashflow (fdbid,reportitem,groupid,yearperiod,fcur,ytdendamount,ytdbeginamount,lytdendamount,lytdbeginamount,flowtype,fadddate,periodtype)   
+	    values  
+	    <foreach collection="list" item="item" index="index" separator="," >  
+	        (#{item.fdbid},#{item.reportitem},#{item.groupid},#{item.yearperiod},#{item.fcur},#{item.ytdendamount},#{item.ytdbeginamount},#{item.lytdendamount},#{item.lytdbeginamount},#{item.flowtype},#{item.fadddate},#{item.periodtype})  
+	    </foreach> 
+	 </insert>
+	 <!--  批量更新数据				流量附加表使用 -->
+	 <update id="updateListCashflow" parameterType="java.util.List">
+	 	update t_cashflow
+	 	<trim prefix="set" suffixOverrides=",">
+	 		 <trim prefix="ytdendamount =case" suffix="end,">
+                 <foreach collection="list" item="i" index="index">
+                         <if test="i.ytdendamount!=null">
+                          when id=#{i.id} then #{i.ytdendamount}
+                         </if>
+                 </foreach>
+             </trim>
+             <trim prefix="ytdbeginamount =case" suffix="end,">
+                 <foreach collection="list" item="i" index="index">
+                         <if test="i.ytdbeginamount!=null">
+                          when id=#{i.id} then #{i.ytdbeginamount}
+                         </if>
+                 </foreach>
+             </trim>
+             <trim prefix="lytdendamount =case" suffix="end,">
+                 <foreach collection="list" item="i" index="index">
+                         <if test="i.lytdendamount!=null">
+                          when id=#{i.id} then #{i.lytdendamount}
+                         </if>
+                 </foreach>
+             </trim>
+             <trim prefix="lytdbeginamount =case" suffix="end,">
+                 <foreach collection="list" item="i" index="index">
+                         <if test="i.lytdbeginamount!=null">
+                          when id=#{i.id} then #{i.lytdbeginamount}
+                         </if>
+                 </foreach>
+             </trim>
+             <trim prefix="fadddate =case" suffix="end,">
+                 <foreach collection="list" item="i" index="index">
+                         <if test="i.fadddate!=null">
+                          when id=#{i.id} then #{i.fadddate}
+                         </if>
+                 </foreach>
+             </trim>
+	 	</trim>
+	 	where
+	 	<foreach collection="list" separator="or" item="i" index="index" >
+              id=#{i.id}
+        </foreach>
+	 </update>
+	<!--  查询数据				流量附加表使用 -->
+	 <select id="findListCashflow" resultType="TCashflow">
+	 	select * from t_cashflow a
+	 	<where>
+	 		<if test="groupId != null and groupId != '' ">
+			AND a.groupid= #{groupId }
+			</if>
+			<if test="yearPeriod != null and yearPeriod != '' ">
+			AND a.yearperiod=#{yearPeriod }
+			</if>
+			<if test="fdbid != null and fdbid != '' ">
+			AND a.fdbid=#{fdbid }
+			</if>
+	 	</where>
+	 </select>	
+</mapper>

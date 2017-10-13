@@ -1,0 +1,39 @@
+body{background:url(ydkjdl-02.jpg) center bottom no-repeat #fff;font-family:"Microsoft YaHei";font-size:14px}
+.hr,.hr_10,.hr_150,.hr_30,.hr_40,.hr_60{font-size:1px;line-height:1px;clear:both;overflow:hidden}
+.hr_10{height:10px}
+.hr_30{height:30px}
+.hr_40{height:40px}
+.hr_60{height:60px}
+.hr_150{height:150px}
+.box-bg{background:url(ydkjdl-01.jpg) repeat-x;padding-bottom:40px;overflow:hidden}
+.cloum-700{width:400px;margin:0 auto}
+.login-box{position:relative;background:#fff;padding:30px 50px;border-radius:10px;
+-webkit-border-radius:10px;
+-moz-border-radius:10px;
+-o-border-radius:10px;
+box-shadow:0 0 10px rgba(51,51,51,.8);-
+webkit-box-shadow:0 0 10px rgba(51,51,51,.8);
+-moz-box-shadow:0 0 10px rgba(51,51,51,.8);
+-o-box-shadow:0 0 10px rgba(51,51,51,.8)}
+.logon-logo{width:300px;position:absolute;left:50px;top:-85px;text-align:center}
+.f-white,.forgot{color:#666!important}
+input[type=text],input[type=password],input[type=email],input[type=date],textarea
+{font-size:16px;height:50px!important;border-radius:10px;
+-webkit-border-radius:10px;-moz-border-radius:10px;-o-border-radius:10px;
+border:1px solid #bcbcbc;background:#fff}
+.btn-primary{background-color:#3d8ae2;box-shadow:none;height:50px}
+.tab-info{font-size:14px;color:#ff6c62;line-height:25px}
+.col-A{padding-left:0}
+.validateCode img{width:90px;height:50px;border:none;float:left;margin-left:10px;}
+#validateCode{width:150px;float:left;}
+.validateCode{text-align:right;line-height: 50px;padding-right:3px;}
+@media only screen and (min-width:320px) and (max-width:1023px){
+	.col-xs-12{padding:0}
+	.cloum-700{width:98%;padding:0 1%}.
+	.login-box{padding:50px 3%}
+	.logon-logo{width:94%}
+	.hr_60{height:90px}
+	.box-bg{padding-bottom:100px}
+	.tab-info{font-size:18px}
+	#validateCode{width:100%;}
+}

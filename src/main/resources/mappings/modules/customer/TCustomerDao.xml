@@ -1,0 +1,1114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.customer.dao.TCustomerDao">
+    
+	<sql id="tCustomerColumns">
+		a.id AS "id",
+		a.customer_name AS "customerName",
+		a.abbr_name AS "abbrName",
+		a.industry AS "industry",
+		a.legal_representative AS "legalRepresentative",
+		a.id_number AS "idNumber",
+		a.business_license_number AS "businessLicenseNumber",
+		a.organization_code AS "organizationCode",
+		a.establishment_date AS "establishmentDate",
+		a.start_date AS "startDate",
+		a.supervisor AS "supervisor",
+		a.audit_person AS "auditPerson",
+		a.remarks AS "remarks",
+		a.contact_person AS "contactPerson",
+		a.office_phone AS "officePhone",
+		a.phone_number AS "phoneNumber",
+		a.mobile_phone AS "mobilePhone",
+		a.fax_number AS "faxNumber",
+		a.qq AS "qq",
+		a.e_mail AS "eMail",
+		a.other AS "other",
+		a.detailed_address AS "detailedAddress",
+		a.value_added_tax AS "valueAddedTax",
+		a.tax_rate AS "taxRate",
+		a.state_tax_registration_number AS "stateTaxRegistrationNumber",
+		a.computer_code1 AS "computerCode1",
+		a.state_tax_bureau AS "stateTaxBureau",
+		a.remarks1 AS "remarks1",
+		a.local_tax_registration_number AS "localTaxRegistrationNumber",
+		a.computer_code2 AS "computerCode2",
+		a.local_tax_bureau AS "localTaxBureau",
+		a.remarks2 AS "remarks2",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks3 AS "remarks3",
+		a.system AS "system",
+		a.state_tax_registration_admin AS "statetaxregistrationadmin",
+		a.certificates_mature AS "certificatesmature",
+		a.local_tax_registration_admin AS "localtaxregistrationadmin",
+		a.current_period AS "currentperiod",
+		a.lately_period AS "latelyperiod",
+		a.init_period AS "initperiod",
+		a.service_expiration_date AS "serviceexpirationdate",
+		a.del_flag AS "delFlag",
+		a.carry_forward_percentage AS "carryForwardPercentage",
+		a.urgent AS "urgent",
+		a.out_of_service AS "outOfService"
+	</sql>
+	
+	<sql id="tCustomerJoins">
+	</sql>	
+	
+	
+	
+	 <sql id="aa">
+		a.customer_name AS "customerName"
+	</sql>
+	
+	<sql id="bb">
+		a.id AS "id"
+	</sql>
+	
+	
+	
+	
+	<select id="getName"  resultType="TCustomer">
+		SELECT
+		a.id AS "id",a.customer_name AS "customerName"
+		FROM   t_customer a
+			<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<choose>
+				<when test="currentUser.roleNames=='记账公司管理员'">
+					AND a.supervisor in (SELECT	b.id FROM sys_user b WHERE b.del_flag = #{DEL_FLAG_NORMAL}	AND b.company_id = #{currentUser.company.id})
+				</when>
+				<otherwise>
+				<if test="supervisor != null and supervisor != ''">
+					AND a.supervisor =#{supervisor}
+					</if>
+				</otherwise>
+			</choose>
+			<if test="outOfService != null and outOfService != ''">
+				AND a.out_of_service =#{outOfService}
+			</if>
+			<if test="customerName!= null and customerName != ''">
+			AND  a.customer_name LIKE CONCAT('%', #{customerName}, '%')
+		</if>
+		</where>
+			
+		
+	</select>
+	
+	<!-- chf -->
+	<select id="getId"  resultType="TCustomer">
+		SELECT
+		<include refid="bb"></include>
+		FROM   t_customer a
+			<if test="customerName!= null and customerName != ''">
+			where  a.customer_name=#{customerName}
+		</if>
+	</select>
+	
+	<select id="get" resultType="TCustomer">
+		SELECT 
+			<include refid="tCustomerColumns"/>
+		FROM t_customer a
+		<include refid="tCustomerJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TCustomer">
+		SELECT 
+			<include refid="tCustomerColumns"/>
+		FROM t_customer a
+		<include refid="tCustomerJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TCustomer">
+		SELECT 
+			<include refid="tCustomerColumns"/>
+		FROM t_customer a
+		<include refid="tCustomerJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY (a.id+0)
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="listTCustomerBySupervisor" resultType="TCustomer">
+		SELECT 
+			<include refid="tCustomerColumns"/>,c.name AS "supervisorName"
+		FROM t_customer a
+		INNER JOIN sys_user c on a.supervisor=c.id
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			
+			<if test="outOfService != null and outOfService != ''">
+				AND a.out_of_service =#{outOfService}
+			</if>
+			<if test="urgent != null and urgent != ''">
+				AND a.urgent =#{urgent}
+			</if>
+			
+			<if test="serviceexpirationdate != null and serviceexpirationdate != ''">
+				AND (a.service_expiration_date <![CDATA[   < ]]> #{serviceexpirationdate} OR a.service_expiration_date is null OR a.service_expiration_date='')
+			</if>
+			
+			<choose>
+				<when test="currentUser.roleNames=='记账公司管理员'">
+					AND a.supervisor in (SELECT	b.id FROM sys_user b WHERE b.del_flag = #{DEL_FLAG_NORMAL}	AND b.company_id = #{currentUser.company.id})
+				</when>
+				<otherwise>
+				<if test="supervisor != null and supervisor != ''">
+					AND a.supervisor =#{supervisor}
+					</if>
+				</otherwise>
+			</choose>
+			
+			<if test="customerName != null and customerName != ''">
+			AND a.customer_name like 
+					<if test="dbName == 'oracle'">'%'||#{customerName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{customerName}+'%'</if>
+					<if test="dbName == 'mysql'">CONCAT('%', #{customerName}, '%')</if>
+			</if>
+		
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY (a.id+0)
+			</otherwise>
+		</choose>
+	</select>
+	
+	
+	<select id="listTCustomerBySupervisors" resultType="TCustomer">
+		SELECT 
+			<include refid="tCustomerColumns"/>,c.name AS "supervisorName"
+		FROM t_customer a
+		INNER JOIN sys_user c on a.supervisor=c.id
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="supervisor != null and supervisor != ''">
+				AND a.supervisor =#{supervisor}
+			</if>
+			<if test="outOfService != null and outOfService != ''">
+				AND a.out_of_service =#{outOfService}
+			</if>
+			<if test="urgent != null and urgent != ''">
+				AND a.urgent =#{urgent}
+			</if>
+			
+			<if test="serviceexpirationdate != null and serviceexpirationdate != ''">
+				AND (a.service_expiration_date <![CDATA[   < ]]> #{serviceexpirationdate} OR a.service_expiration_date is null OR a.service_expiration_date='')
+			</if>
+			<if test="supervisor == null or supervisor == ''">
+				AND a.supervisor in (SELECT	b.id FROM sys_user b WHERE b.del_flag = #{DEL_FLAG_NORMAL}	AND b.company_id = #{currentUser.company.id} 	
+				<if test="officeId != null and officeId != ''">
+						AND b.office_id =#{officeId}
+				 </if>
+				 )
+			</if>
+			<if test="customerName != null and customerName != ''">
+			AND a.customer_name like 
+					<if test="dbName == 'oracle'">'%'||#{customerName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{customerName}+'%'</if>
+					<if test="dbName == 'mysql'">CONCAT('%', #{customerName}, '%')</if>
+			</if>
+			
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY (a.id+0)
+			</otherwise>
+		</choose>
+	</select>
+	
+	
+	<select id="countTCustomerBySupervisor" resultType="int">
+		SELECT 
+			count(*)
+		FROM t_customer a
+		INNER JOIN sys_user c on a.supervisor=c.id
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			
+			<if test="outOfService != null and outOfService != ''">
+				AND a.out_of_service =#{outOfService}
+			</if>
+			<if test="urgent != null and urgent != ''">
+				AND a.urgent =#{urgent}
+			</if>
+			
+			<if test="serviceexpirationdate != null and serviceexpirationdate != ''">
+				AND (a.service_expiration_date <![CDATA[   < ]]> #{serviceexpirationdate} OR a.service_expiration_date is null OR a.service_expiration_date='')
+			</if>
+			
+				<if test="supervisor != null and supervisor != ''">
+					AND a.supervisor =#{supervisor}
+					</if>
+			<if test="customerName != null and customerName != ''">
+			AND a.customer_name like 
+					<if test="dbName == 'oracle'">'%'||#{customerName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{customerName}+'%'</if>
+					<if test="dbName == 'mysql'">CONCAT('%', #{customerName}, '%')</if>
+			</if>
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY (a.id+0)
+			</otherwise>
+		</choose>
+	</select>
+	
+	
+	
+	
+	<select id="listDelectBySupervisor" resultType="TCustomer">
+		SELECT 
+			<include refid="tCustomerColumns"/>
+		FROM t_customer a
+		<include refid="tCustomerJoins"/>
+		<where>
+			a.del_flag = #{delFlag}
+			<choose>
+				<when test="currentUser.roleNames=='记账公司管理员'">
+					AND a.supervisor in (SELECT	b.id FROM sys_user b WHERE b.del_flag = #{DEL_FLAG_NORMAL}	AND b.company_id = #{currentUser.company.id})
+				</when>
+				<otherwise>
+				<if test="supervisor != null and supervisor != ''">
+					AND a.supervisor =#{supervisor}
+					</if>
+				</otherwise>
+			</choose>
+			AND a.out_of_service=#{outOfService}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY (a.id+0)
+			</otherwise>
+		</choose>
+	</select>
+	
+				<!-- 首页统计数量-->
+		<select id="homePageCount" resultType="WagesVo">
+		<![CDATA[
+select 
+count(if(DATE_FORMAT(b.settle_date,'%Y%m%d')=CURDATE()+0,true,null)) AS 'montharray1',
+count(if(DATE_FORMAT(b.settle_date,'%Y%m%d')=date_sub(CURDATE(),interval 1 day)+0,true,null)) AS 'montharray2',
+count(if(ifnull(a.current_period,a.init_period)<DATE_FORMAT(CURDATE(),'%Y%m'),true,null)) AS 'montharray3',
+count(if(DATE_FORMAT(c.tax_date,'%Y%m%d')=CURDATE()+0,true,null)) AS 'montharray4',
+count(if(DATE_FORMAT(c.tax_date,'%Y%m%d')=date_sub(CURDATE(),interval 1 day)+0,true,null)) AS 'montharray5',
+count(if(ifnull(c.tax_period,a.init_period)<DATE_FORMAT(CURDATE(),'%Y%m') and ifnull(c.tax_period,a.init_period)<ifnull(a.current_period,a.init_period),true,null)) AS 'montharray6',
+count(if(DATE_FORMAT(d.up_time,'%Y%m%d')=CURDATE()+0,true,null)) AS 'montharray7',
+count(if(DATE_FORMAT(d.up_time,'%Y%m%d')=date_sub(CURDATE(),interval 1 day)+0,true,null)) AS 'montharray8',
+count(if(a.id is not null,true,null)) AS 'montharray9'
+from t_customer a 
+left join (select fdbid,max(settle_date) AS 'settle_date' from t_customer_settle_record group by fdbid) b on a.id=b.fdbid
+left join (select customer_id,date_format(DATE_SUB(str_to_date(CONCAT(max(tax_period),'01'), '%Y%m%d'), INTERVAL -1 MONTH),'%Y%m') AS 'tax_period',tax_date AS 'tax_date' from t_customer_tax where del_flag = #{DEL_FLAG_NORMAL}  group by customer_id) c on a.id=c.customer_id
+left join (select customer_id,max(up_time) AS 'up_time' from t_follow_up where del_flag = #{DEL_FLAG_NORMAL} group by customer_id ) d 
+on a.id=d.customer_id ]]>
+where
+a.del_flag = #{DEL_FLAG_NORMAL}   
+<choose>
+				<when test="currentUser.roleNames=='记账公司管理员'">
+					AND a.supervisor in (SELECT	b.id FROM sys_user b WHERE b.del_flag = #{DEL_FLAG_NORMAL}	AND b.company_id = #{currentUser.company.id})
+				</when>
+				<otherwise>
+				<if test="supervisor != null and supervisor != ''">
+					AND a.supervisor =#{supervisor}
+					</if>
+				</otherwise>
+			</choose>
+			 and
+a.out_of_service=#{outOfService}
+
+	</select>
+	
+	
+	<select id="customercount" resultType="TCustomer">
+	<![CDATA[
+	select count(if(str_to_date(#{byYearMonth}, '%Y%m') >= str_to_date(t_customer.init_period, '%Y%m') and str_to_date(#{byYearMonth}, '%Y%m') < str_to_date(t_customer.current_period, '%Y%m'),true,null))  as 'doneCount',
+count(if(str_to_date(#{byYearMonth}, '%Y%m') = str_to_date(t_customer.current_period, '%Y%m'),true,null)) as 'doIngCount',
+count(if(str_to_date(#{byYearMonth}, '%Y%m') > str_to_date(t_customer.current_period, '%Y%m') OR t_customer.current_period is null,true,null)) as 'doWillCount'
+from t_customer
+]]>
+where
+t_customer.del_flag = #{DEL_FLAG_NORMAL}
+<choose>
+				<when test="currentUser.roleNames=='记账公司管理员'">
+					AND supervisor in (SELECT	b.id FROM sys_user b WHERE b.del_flag = #{DEL_FLAG_NORMAL}	AND b.company_id = #{currentUser.company.id})
+				</when>
+				<otherwise>
+				<if test="supervisor != null and supervisor != ''">
+					AND supervisor =#{supervisor}
+					</if>
+				</otherwise>
+			</choose>
+			 and out_of_service=#{outOfService}
+	</select>
+	<!-- 报税 count-->
+	<select id="taxcount" resultType="TCustomer">
+
+
+select  count(a.id)-count(c.customer_id) AS 'doWillCount',
+		count(c.customer_id) AS 'doneCount'
+from t_customer a left join
+(
+select distinct customer_id from t_customer_tax b 
+where b.tax_period=#{byYearMonth} 
+and b.del_flag = #{DEL_FLAG_NORMAL}
+ group by b.customer_id 
+ ) 
+ c on a.id=c.customer_id
+where
+a.del_flag = #{DEL_FLAG_NORMAL}
+<choose>
+				<when test="currentUser.roleNames=='记账公司管理员'">
+					AND a.supervisor in (SELECT	b.id FROM sys_user b WHERE b.del_flag = #{DEL_FLAG_NORMAL}	AND b.company_id = #{currentUser.company.id})
+				</when>
+				<otherwise>
+				<if test="supervisor != null and supervisor != ''">
+					AND a.supervisor =#{supervisor}
+					</if>
+				</otherwise>
+			</choose>
+ and
+a.out_of_service=#{outOfService}
+	</select>
+	
+	
+			<!-- 日常 count-->
+		<select id="dailyCount" resultType="WagesVo">
+<![CDATA[  
+	select 
+count(if(find_in_set('信息公示已完成',d.upcontent)>0,true,null)) as 'montharray1',
+count(if(find_in_set('残疾人保证金缴纳',d.upcontent)>0,true,null)) as 'montharray3',
+count(if(find_in_set('企业所得税汇算缴纳',d.upcontent)>0,true,null)) as 'montharray5',
+count(if(a.del_flag='0',true,null)) as 'montharray7'
+from  t_customer a left join
+(SELECT c.id as 'id',GROUP_CONCAT(b.up_content) as 'upContent'
+FROM t_customer c   inner join t_follow_up b on c.id=b.customer_id
+where date_format(b.up_time,'%Y%m')=#{byYearMonth} and b.del_flag = #{DEL_FLAG_NORMAL} and c.del_flag = #{DEL_FLAG_NORMAL}
+GROUP BY c.id) d 
+on a.id=d.id
+where
+a.del_flag = #{DEL_FLAG_NORMAL} ]]>
+<choose>
+				<when test="currentUser.roleNames=='记账公司管理员'">
+					AND a.supervisor in (SELECT	b.id FROM sys_user b WHERE b.del_flag = #{DEL_FLAG_NORMAL}	AND b.company_id = #{currentUser.company.id})
+				</when>
+				<otherwise>
+				<if test="supervisor != null and supervisor != ''">
+					AND a.supervisor =#{supervisor}
+					</if>
+				</otherwise>
+			</choose>
+ and
+a.out_of_service=#{outOfService}
+
+	</select>
+	<!-- 工资 count-->
+		<select id="wagesCount" resultType="TCustomer">
+
+select  count(a.id)-count(c.customer_id) AS 'doWillCount',
+		count(c.customer_id) AS 'doneCount'
+from t_customer a left join
+(select distinct customer_id from t_customer_salary b 
+where b.salary_period=#{byYearMonth} 
+and b.del_flag = #{DEL_FLAG_NORMAL
+
+}
+ group by b.customer_id ) 
+ c on a.id=c.customer_id
+where
+a.del_flag = #{DEL_FLAG_NORMAL}
+<choose>
+				<when test="currentUser.roleNames=='记账公司管理员'">
+					AND a.supervisor in (SELECT	b.id FROM sys_user b WHERE b.del_flag = #{DEL_FLAG_NORMAL}	AND b.company_id = #{currentUser.company.id})
+				</when>
+				<otherwise>
+				<if test="supervisor != null and supervisor != ''">
+					AND a.supervisor =#{supervisor}
+					</if>
+				</otherwise>
+			</choose>
+ and
+a.out_of_service=#{outOfService}
+	</select>
+	
+	<!-- 记账list-->
+	<select id="ChargeToAccountBySupervisor" resultType="TCustomer">		
+		SELECT 
+		<include refid="tCustomerColumns"/>,<![CDATA[
+	(CASE WHEN  CONCAT(#{byYear},'01')>=a.init_period and CONCAT(#{byYear},'01')<a.current_period   THEN 'btn_sta02' WHEN CONCAT(#{byYear},'01')=a.current_period THEN 'going'  ELSE ' ' END)  AS 'wagesVo.montharray1',
+	(CASE WHEN  CONCAT(#{byYear},'02')>=a.init_period and CONCAT(#{byYear},'02')<a.current_period   THEN 'btn_sta02' WHEN CONCAT(#{byYear},'02')=a.current_period THEN 'going'  ELSE ' ' END)  AS 'wagesVo.montharray2',
+	(CASE WHEN  CONCAT(#{byYear},'03')>=a.init_period and CONCAT(#{byYear},'03')<a.current_period   THEN 'btn_sta02' WHEN CONCAT(#{byYear},'03')=a.current_period THEN 'going'  ELSE ' ' END)  AS 'wagesVo.montharray3',
+	(CASE WHEN  CONCAT(#{byYear},'04')>=a.init_period and CONCAT(#{byYear},'04')<a.current_period   THEN 'btn_sta02' WHEN CONCAT(#{byYear},'04')=a.current_period THEN 'going'  ELSE ' ' END)  AS 'wagesVo.montharray4',
+	(CASE WHEN  CONCAT(#{byYear},'05')>=a.init_period and CONCAT(#{byYear},'05')<a.current_period   THEN 'btn_sta02' WHEN CONCAT(#{byYear},'05')=a.current_period THEN 'going'  ELSE ' ' END)  AS 'wagesVo.montharray5',
+	(CASE WHEN  CONCAT(#{byYear},'06')>=a.init_period and CONCAT(#{byYear},'06')<a.current_period   THEN 'btn_sta02' WHEN CONCAT(#{byYear},'06')=a.current_period THEN 'going'  ELSE ' ' END)  AS 'wagesVo.montharray6',
+	(CASE WHEN  CONCAT(#{byYear},'07')>=a.init_period and CONCAT(#{byYear},'07')<a.current_period   THEN 'btn_sta02' WHEN CONCAT(#{byYear},'07')=a.current_period THEN 'going'  ELSE ' ' END)  AS 'wagesVo.montharray7',
+	(CASE WHEN  CONCAT(#{byYear},'08')>=a.init_period and CONCAT(#{byYear},'08')<a.current_period   THEN 'btn_sta02' WHEN CONCAT(#{byYear},'08')=a.current_period THEN 'going'  ELSE ' ' END)  AS 'wagesVo.montharray8',
+	(CASE WHEN  CONCAT(#{byYear},'09')>=a.init_period and CONCAT(#{byYear},'09')<a.current_period   THEN 'btn_sta02' WHEN CONCAT(#{byYear},'09')=a.current_period THEN 'going'  ELSE ' ' END)  AS 'wagesVo.montharray9',
+	(CASE WHEN  CONCAT(#{byYear},'10')>=a.init_period and CONCAT(#{byYear},'10')<a.current_period   THEN 'btn_sta02' WHEN CONCAT(#{byYear},'10')=a.current_period THEN 'going'  ELSE ' ' END)  AS 'wagesVo.montharray10',
+	(CASE WHEN  CONCAT(#{byYear},'11')>=a.init_period and CONCAT(#{byYear},'11')<a.current_period   THEN 'btn_sta02' WHEN CONCAT(#{byYear},'11')=a.current_period THEN 'going'  ELSE ' ' END)  AS 'wagesVo.montharray11',
+	(CASE WHEN  CONCAT(#{byYear},'12')>=a.init_period and CONCAT(#{byYear},'12')<a.current_period   THEN 'btn_sta02' WHEN CONCAT(#{byYear},'12')=a.current_period THEN 'going'  ELSE ' ' END)  AS 'wagesVo.montharray12'
+	
+	]]>
+		FROM t_customer a 
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			
+			<choose>
+				<when test="currentUser.roleNames=='记账公司管理员'">
+					AND a.supervisor in (SELECT	b.id FROM sys_user b WHERE b.del_flag = #{DEL_FLAG_NORMAL}	AND b.company_id = #{currentUser.company.id})
+				</when>
+				<otherwise>
+				<if test="supervisor != null and supervisor != ''">
+					AND a.supervisor =#{supervisor}
+					</if>
+				</otherwise>
+			</choose>
+			<if test="outOfService != null and outOfService != ''">
+				AND a.out_of_service =#{outOfService}
+			</if>
+			
+		</where>	
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY (a.id+0)
+			</otherwise>
+		</choose>
+	</select>
+	
+	<!-- 报税list-->
+	<select id="listTaxBySupervisor" resultType="TCustomer">		
+		SELECT 
+		<include refid="tCustomerColumns"/>,<![CDATA[
+	(CASE WHEN CONCAT(#{byYear},'01')<a.init_period or CONCAT(#{byYear},'01')>a.current_period or a.current_period is null  THEN ' ' WHEN d.tax_period=CONCAT(#{byYear},'01') and d.tax_period<a.current_period THEN 'going'  WHEN locate(CONCAT(#{byYear},'01'),d.tax_periods) THEN 'btn_sta02' ELSE 'btn_sta01' END)  AS 'wagesVo.montharray1',
+	(CASE WHEN CONCAT(#{byYear},'02')<a.init_period or CONCAT(#{byYear},'02')>a.current_period or a.current_period is null  THEN ' ' WHEN d.tax_period=CONCAT(#{byYear},'02') and d.tax_period<a.current_period THEN 'going'  WHEN locate(CONCAT(#{byYear},'02'),d.tax_periods) THEN 'btn_sta02' ELSE 'btn_sta01' END)  AS 'wagesVo.montharray2',
+	(CASE WHEN CONCAT(#{byYear},'03')<a.init_period or CONCAT(#{byYear},'03')>a.current_period or a.current_period is null  THEN ' ' WHEN d.tax_period=CONCAT(#{byYear},'03') and d.tax_period<a.current_period THEN 'going'  WHEN locate(CONCAT(#{byYear},'03'),d.tax_periods) THEN 'btn_sta02' ELSE 'btn_sta01' END)  AS 'wagesVo.montharray3',
+	(CASE WHEN CONCAT(#{byYear},'04')<a.init_period or CONCAT(#{byYear},'04')>a.current_period or a.current_period is null  THEN ' ' WHEN d.tax_period=CONCAT(#{byYear},'04') and d.tax_period<a.current_period THEN 'going'  WHEN locate(CONCAT(#{byYear},'04'),d.tax_periods) THEN 'btn_sta02' ELSE 'btn_sta01' END)  AS 'wagesVo.montharray4',
+	(CASE WHEN CONCAT(#{byYear},'05')<a.init_period or CONCAT(#{byYear},'05')>a.current_period or a.current_period is null  THEN ' ' WHEN d.tax_period=CONCAT(#{byYear},'05') and d.tax_period<a.current_period THEN 'going'  WHEN locate(CONCAT(#{byYear},'05'),d.tax_periods) THEN 'btn_sta02' ELSE 'btn_sta01' END)  AS 'wagesVo.montharray5',
+	(CASE WHEN CONCAT(#{byYear},'06')<a.init_period or CONCAT(#{byYear},'06')>a.current_period or a.current_period is null  THEN ' ' WHEN d.tax_period=CONCAT(#{byYear},'06') and d.tax_period<a.current_period THEN 'going'  WHEN locate(CONCAT(#{byYear},'06'),d.tax_periods) THEN 'btn_sta02' ELSE 'btn_sta01' END)  AS 'wagesVo.montharray6',
+	(CASE WHEN CONCAT(#{byYear},'07')<a.init_period or CONCAT(#{byYear},'07')>a.current_period or a.current_period is null  THEN ' ' WHEN d.tax_period=CONCAT(#{byYear},'07') and d.tax_period<a.current_period THEN 'going'  WHEN locate(CONCAT(#{byYear},'07'),d.tax_periods) THEN 'btn_sta02' ELSE 'btn_sta01' END)  AS 'wagesVo.montharray7',
+	(CASE WHEN CONCAT(#{byYear},'08')<a.init_period or CONCAT(#{byYear},'08')>a.current_period or a.current_period is null  THEN ' ' WHEN d.tax_period=CONCAT(#{byYear},'08') and d.tax_period<a.current_period THEN 'going'  WHEN locate(CONCAT(#{byYear},'08'),d.tax_periods) THEN 'btn_sta02' ELSE 'btn_sta01' END)  AS 'wagesVo.montharray8',
+	(CASE WHEN CONCAT(#{byYear},'09')<a.init_period or CONCAT(#{byYear},'09')>a.current_period or a.current_period is null  THEN ' ' WHEN d.tax_period=CONCAT(#{byYear},'09') and d.tax_period<a.current_period THEN 'going'  WHEN locate(CONCAT(#{byYear},'09'),d.tax_periods) THEN 'btn_sta02' ELSE 'btn_sta01' END)  AS 'wagesVo.montharray9',
+	(CASE WHEN CONCAT(#{byYear},'10')<a.init_period or CONCAT(#{byYear},'10')>a.current_period or a.current_period is null  THEN ' ' WHEN d.tax_period=CONCAT(#{byYear},'10') and d.tax_period<a.current_period THEN 'going'  WHEN locate(CONCAT(#{byYear},'10'),d.tax_periods) THEN 'btn_sta02' ELSE 'btn_sta01' END)  AS 'wagesVo.montharray10',
+	(CASE WHEN CONCAT(#{byYear},'11')<a.init_period or CONCAT(#{byYear},'11')>a.current_period or a.current_period is null  THEN ' ' WHEN d.tax_period=CONCAT(#{byYear},'11') and d.tax_period<a.current_period THEN 'going'  WHEN locate(CONCAT(#{byYear},'11'),d.tax_periods) THEN 'btn_sta02' ELSE 'btn_sta01' END)  AS 'wagesVo.montharray11',
+	(CASE WHEN CONCAT(#{byYear},'12')<a.init_period or CONCAT(#{byYear},'12')>a.current_period or a.current_period is null  THEN ' ' WHEN d.tax_period=CONCAT(#{byYear},'12') and d.tax_period<a.current_period THEN 'going'  WHEN locate(CONCAT(#{byYear},'12'),d.tax_periods) THEN 'btn_sta02' ELSE 'btn_sta01' END)  AS 'wagesVo.montharray12'
+	
+		FROM t_customer a left join
+		(SELECT 
+			c.id AS 'cid',
+			ifnull(date_format(DATE_SUB(str_to_date(CONCAT(max(b.tax_period),'01'), '%Y%m%d'), INTERVAL -1 MONTH),'%Y%m'),c.init_period) AS 'tax_period',
+			GROUP_CONCAT(b.tax_period) AS 'tax_periods'
+			
+		]]>
+		FROM t_customer c
+		 left join t_customer_tax b  on c.id=b.customer_id
+		<where>
+			c.del_flag = #{DEL_FLAG_NORMAL}
+			<!-- and
+			b.del_flag = #{DEL_FLAG_NORMAL}
+			 <if test="byYear != null and byYear!= ''">
+			AND <![CDATA[  left(b.tax_period,4) = #{byYear}  ]]>
+		</if>-->
+			<choose>
+				<when test="currentUser.roleNames=='记账公司管理员'">
+					AND c.supervisor in (SELECT	b.id FROM sys_user b WHERE b.del_flag = #{DEL_FLAG_NORMAL}	AND b.company_id = #{currentUser.company.id})
+				</when>
+				<otherwise>
+				<if test="supervisor != null and supervisor != ''">
+					AND c.supervisor =#{supervisor}
+					</if>
+				</otherwise>
+			</choose>
+			<if test="outOfService != null and outOfService != ''">
+				AND c.out_of_service =#{outOfService}
+			</if> 
+		</where>	
+		 group by c.id	
+		) 
+		
+		d on a.id=d.cid
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			
+			<choose>
+				<when test="currentUser.roleNames=='记账公司管理员'">
+					AND a.supervisor in (SELECT	b.id FROM sys_user b WHERE b.del_flag = #{DEL_FLAG_NORMAL}	AND b.company_id = #{currentUser.company.id})
+				</when>
+				<otherwise>
+				<if test="supervisor != null and supervisor != ''">
+					AND a.supervisor =#{supervisor}
+					</if>
+				</otherwise>
+			</choose>
+			<if test="outOfService != null and outOfService != ''">
+				AND a.out_of_service =#{outOfService}
+			</if>
+			
+		</where>	
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY (a.id+0)
+			</otherwise>
+		</choose>
+	</select>
+	
+	
+	<!-- 工资 -->
+	<select id="listWagesBySupervisor" resultType="TCustomer">
+		
+		SELECT 
+		<include refid="tCustomerColumns"/>,<![CDATA[
+	(CASE WHEN CONCAT(#{byYear},'01')<a.init_period or CONCAT(#{byYear},'01')>a.current_period or a.current_period is null  THEN ' ' WHEN d.salary_period=CONCAT(#{byYear},'01') and d.salary_period<a.current_period THEN 'going'  WHEN locate(CONCAT(#{byYear},'01'),d.salary_periods) THEN 'bg_p6 btn_sta03' ELSE 'btn_sta01' END)  AS 'wagesVo.montharray1',
+	(CASE WHEN CONCAT(#{byYear},'02')<a.init_period or CONCAT(#{byYear},'02')>a.current_period or a.current_period is null  THEN ' ' WHEN d.salary_period=CONCAT(#{byYear},'02') and d.salary_period<a.current_period THEN 'going'  WHEN locate(CONCAT(#{byYear},'02'),d.salary_periods) THEN 'bg_p6 btn_sta03' ELSE 'btn_sta01' END)  AS 'wagesVo.montharray2',
+	(CASE WHEN CONCAT(#{byYear},'03')<a.init_period or CONCAT(#{byYear},'03')>a.current_period or a.current_period is null  THEN ' ' WHEN d.salary_period=CONCAT(#{byYear},'03') and d.salary_period<a.current_period THEN 'going'  WHEN locate(CONCAT(#{byYear},'03'),d.salary_periods) THEN 'bg_p6 btn_sta03' ELSE 'btn_sta01' END)  AS 'wagesVo.montharray3',
+	(CASE WHEN CONCAT(#{byYear},'04')<a.init_period or CONCAT(#{byYear},'04')>a.current_period or a.current_period is null  THEN ' ' WHEN d.salary_period=CONCAT(#{byYear},'04') and d.salary_period<a.current_period THEN 'going'  WHEN locate(CONCAT(#{byYear},'04'),d.salary_periods) THEN 'bg_p6 btn_sta03' ELSE 'btn_sta01' END)  AS 'wagesVo.montharray4',
+	(CASE WHEN CONCAT(#{byYear},'05')<a.init_period or CONCAT(#{byYear},'05')>a.current_period or a.current_period is null  THEN ' ' WHEN d.salary_period=CONCAT(#{byYear},'05') and d.salary_period<a.current_period THEN 'going'  WHEN locate(CONCAT(#{byYear},'05'),d.salary_periods) THEN 'bg_p6 btn_sta03' ELSE 'btn_sta01' END)  AS 'wagesVo.montharray5',
+	(CASE WHEN CONCAT(#{byYear},'06')<a.init_period or CONCAT(#{byYear},'06')>a.current_period or a.current_period is null  THEN ' ' WHEN d.salary_period=CONCAT(#{byYear},'06') and d.salary_period<a.current_period THEN 'going'  WHEN locate(CONCAT(#{byYear},'06'),d.salary_periods) THEN 'bg_p6 btn_sta03' ELSE 'btn_sta01' END)  AS 'wagesVo.montharray6',
+	(CASE WHEN CONCAT(#{byYear},'07')<a.init_period or CONCAT(#{byYear},'07')>a.current_period or a.current_period is null  THEN ' ' WHEN d.salary_period=CONCAT(#{byYear},'07') and d.salary_period<a.current_period THEN 'going'  WHEN locate(CONCAT(#{byYear},'07'),d.salary_periods) THEN 'bg_p6 btn_sta03' ELSE 'btn_sta01' END)  AS 'wagesVo.montharray7',
+	(CASE WHEN CONCAT(#{byYear},'08')<a.init_period or CONCAT(#{byYear},'08')>a.current_period or a.current_period is null  THEN ' ' WHEN d.salary_period=CONCAT(#{byYear},'08') and d.salary_period<a.current_period THEN 'going'  WHEN locate(CONCAT(#{byYear},'08'),d.salary_periods) THEN 'bg_p6 btn_sta03' ELSE 'btn_sta01' END)  AS 'wagesVo.montharray8',
+	(CASE WHEN CONCAT(#{byYear},'09')<a.init_period or CONCAT(#{byYear},'09')>a.current_period or a.current_period is null  THEN ' ' WHEN d.salary_period=CONCAT(#{byYear},'09') and d.salary_period<a.current_period THEN 'going'  WHEN locate(CONCAT(#{byYear},'09'),d.salary_periods) THEN 'bg_p6 btn_sta03' ELSE 'btn_sta01' END)  AS 'wagesVo.montharray9',
+	(CASE WHEN CONCAT(#{byYear},'10')<a.init_period or CONCAT(#{byYear},'10')>a.current_period or a.current_period is null  THEN ' ' WHEN d.salary_period=CONCAT(#{byYear},'10') and d.salary_period<a.current_period THEN 'going'  WHEN locate(CONCAT(#{byYear},'10'),d.salary_periods) THEN 'bg_p6 btn_sta03' ELSE 'btn_sta01' END)  AS 'wagesVo.montharray10',
+	(CASE WHEN CONCAT(#{byYear},'11')<a.init_period or CONCAT(#{byYear},'11')>a.current_period or a.current_period is null  THEN ' ' WHEN d.salary_period=CONCAT(#{byYear},'11') and d.salary_period<a.current_period THEN 'going'  WHEN locate(CONCAT(#{byYear},'11'),d.salary_periods) THEN 'bg_p6 btn_sta03' ELSE 'btn_sta01' END)  AS 'wagesVo.montharray11',
+	(CASE WHEN CONCAT(#{byYear},'12')<a.init_period or CONCAT(#{byYear},'12')>a.current_period or a.current_period is null  THEN ' ' WHEN d.salary_period=CONCAT(#{byYear},'12') and d.salary_period<a.current_period THEN 'going'  WHEN locate(CONCAT(#{byYear},'12'),d.salary_periods) THEN 'bg_p6 btn_sta03' ELSE 'btn_sta01' END)  AS 'wagesVo.montharray12'
+
+		FROM t_customer a left join
+		(SELECT 
+			c.id AS 'cid',
+			ifnull(date_format(DATE_SUB(str_to_date(CONCAT(max(b.salary_period),'01'), '%Y%m%d'), INTERVAL -1 MONTH),'%Y%m'),c.init_period) AS 'salary_period',
+			
+		GROUP_CONCAT(b.salary_period) AS 'salary_periods'
+		]]>
+		FROM t_customer c
+		 inner join t_customer_salary b  on c.id=b.customer_id
+		<where>
+			c.del_flag = #{DEL_FLAG_NORMAL} 			
+			<choose>
+				<when test="currentUser.roleNames=='记账公司管理员'">
+					AND c.supervisor in (SELECT	b.id FROM sys_user b WHERE b.del_flag = #{DEL_FLAG_NORMAL}	AND b.company_id = #{currentUser.company.id})
+				</when>
+				<otherwise>
+				<if test="supervisor != null and supervisor != ''">
+					AND c.supervisor =#{supervisor}
+					</if>
+				</otherwise>
+			</choose>
+			<if test="outOfService != null and outOfService != ''">
+				AND c.out_of_service =#{outOfService}
+			</if>
+		</where>		
+		GROUP BY c.id) 
+		
+		d on a.id=d.cid
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			
+			<choose>
+				<when test="currentUser.roleNames=='记账公司管理员'">
+					AND a.supervisor in (SELECT	b.id FROM sys_user b WHERE b.del_flag = #{DEL_FLAG_NORMAL}	AND b.company_id = #{currentUser.company.id})
+				</when>
+				<otherwise>
+				<if test="supervisor != null and supervisor != ''">
+					AND a.supervisor =#{supervisor}
+					</if>
+				</otherwise>
+			</choose>
+			<if test="outOfService != null and outOfService != ''">
+				AND a.out_of_service =#{outOfService}
+			</if>
+		</where>	
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY (a.id+0)
+			</otherwise>
+		</choose>
+	</select>
+	
+	
+	<!-- 日常 -->
+	<select id="listDailyBySupervisor" resultType="TCustomer">
+		
+		SELECT 
+		<include refid="tCustomerColumns"/>,
+		d.upContent AS 'upContent'
+		FROM t_customer a left join
+		(SELECT 
+			c.id AS 'cid',<![CDATA[ GROUP_CONCAT(b.up_content,date_format(b.up_time,'%m')) ]]> AS 'upContent'
+		
+		FROM t_customer c
+		 inner join t_follow_up b  on c.id=b.customer_id
+		<where>
+			c.del_flag = #{DEL_FLAG_NORMAL}
+			and
+			b.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="byYear != null and byYear!= ''">
+			AND <![CDATA[  YEAR(b.up_time) = #{byYear}  ]]>
+		</if>
+			<choose>
+				<when test="currentUser.roleNames=='记账公司管理员'">
+					AND c.supervisor in (SELECT	b.id FROM sys_user b WHERE b.del_flag = #{DEL_FLAG_NORMAL}	AND b.company_id = #{currentUser.company.id})
+				</when>
+				<otherwise>
+				<if test="supervisor != null and supervisor != ''">
+					AND c.supervisor =#{supervisor}
+					</if>
+				</otherwise>
+			</choose>
+			<if test="outOfService != null and outOfService != ''">
+				AND c.out_of_service =#{outOfService}
+			</if>
+		</where>		
+		GROUP BY b.customer_id) 
+		
+		d on a.id=d.cid
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			
+			<choose>
+				<when test="currentUser.roleNames=='记账公司管理员'">
+					AND a.supervisor in (SELECT	b.id FROM sys_user b WHERE b.del_flag = #{DEL_FLAG_NORMAL}	AND b.company_id = #{currentUser.company.id})
+				</when>
+				<otherwise>
+				<if test="supervisor != null and supervisor != ''">
+					AND a.supervisor =#{supervisor}
+					</if>
+				</otherwise>
+			</choose>
+			<if test="outOfService != null and outOfService != ''">
+				AND a.out_of_service =#{outOfService}
+			</if>
+		</where>	
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY (a.id+0)
+			</otherwise>
+		</choose>
+	</select>
+	
+	
+	
+
+
+	
+	
+	
+	
+	
+	
+	
+	<insert id="insert">
+		INSERT INTO t_customer(
+			id,
+			customer_name,
+			abbr_name,
+			industry,
+			legal_representative,
+			id_number,
+			business_license_number,
+			organization_code,
+			establishment_date,
+			start_date,
+			supervisor,
+			audit_person,
+			remarks,
+			contact_person,
+			office_phone,
+			phone_number,
+			mobile_phone,
+			fax_number,
+			qq,
+			e_mail,
+			other,
+			detailed_address,
+			value_added_tax,
+			tax_rate,
+			state_tax_registration_number,
+			computer_code1,
+			state_tax_bureau,
+			remarks1,
+			local_tax_registration_number,
+			current_period,
+			init_period,
+			computer_code2,
+			local_tax_bureau,
+			remarks2,
+			system,
+			state_tax_registration_admin,
+			certificates_mature,
+			local_tax_registration_admin,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks3,
+			service_expiration_date,
+			del_flag,
+			carry_forward_percentage,
+			urgent,
+		    out_of_service
+		) VALUES (
+			#{id},
+			#{customerName},
+			#{abbrName},
+			#{industry},
+			#{legalRepresentative},
+			#{idNumber},
+			#{businessLicenseNumber},
+			#{organizationCode},
+			#{establishmentDate},
+			#{startDate},
+			#{supervisor},
+			#{auditPerson},
+			#{remarks},
+			#{contactPerson},
+			#{officePhone},
+			#{phoneNumber},
+			#{mobilePhone},
+			#{faxNumber},
+			#{qq},
+			#{eMail},
+			#{other},
+			#{detailedAddress},
+			#{valueAddedTax},
+			#{taxRate},
+			#{stateTaxRegistrationNumber},
+			#{computerCode1},
+			#{stateTaxBureau},
+			#{remarks1},
+			#{localTaxRegistrationNumber},
+			#{currentperiod},
+			#{initperiod},
+			#{computerCode2},
+			#{localTaxBureau},
+			#{remarks2},
+			#{system},
+			#{statetaxregistrationadmin},
+			#{certificatesmature},
+			#{localtaxregistrationadmin},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks3},
+			#{serviceexpirationdate},
+			#{delFlag},
+			#{carryForwardPercentage},
+			#{urgent},
+			#{outOfService}
+		)
+	</insert>
+	
+	<insert id="insertcustomer" keyProperty="id" useGeneratedKeys="true">
+		INSERT INTO t_customer(
+			<!-- id, -->
+			customer_name,
+			abbr_name,
+			industry,
+			legal_representative,
+			id_number,
+			business_license_number,
+			organization_code,
+			establishment_date,
+			start_date,
+			supervisor,
+			audit_person,
+			remarks,
+			contact_person,
+			office_phone,
+			phone_number,
+			mobile_phone,
+			fax_number,
+			qq,
+			e_mail,
+			other,
+			detailed_address,
+			value_added_tax,
+			tax_rate,
+			state_tax_registration_number,
+			computer_code1,
+			state_tax_bureau,
+			remarks1,
+			local_tax_registration_number,
+			current_period,
+			init_period,
+			computer_code2,
+			local_tax_bureau,
+			remarks2,
+			system,
+			state_tax_registration_admin,
+			certificates_mature,
+			local_tax_registration_admin,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks3,
+			service_expiration_date,
+			del_flag,
+			carry_forward_percentage,
+			urgent,
+			out_of_service
+		) VALUES (
+			<!-- #{id}, -->
+			#{customerName},
+			#{abbrName},
+			#{industry},
+			#{legalRepresentative},
+			#{idNumber},
+			#{businessLicenseNumber},
+			#{organizationCode},
+			#{establishmentDate},
+			#{startDate},
+			#{supervisor},
+			#{auditPerson},
+			#{remarks},
+			#{contactPerson},
+			#{officePhone},
+			#{phoneNumber},
+			#{mobilePhone},
+			#{faxNumber},
+			#{qq},
+			#{eMail},
+			#{other},
+			#{detailedAddress},
+			#{valueAddedTax},
+			#{taxRate},
+			#{stateTaxRegistrationNumber},
+			#{computerCode1},
+			#{stateTaxBureau},
+			#{remarks1},
+			#{localTaxRegistrationNumber},
+			#{currentperiod},
+			#{initperiod},
+			#{computerCode2},
+			#{localTaxBureau},
+			#{remarks2},
+			#{system},
+			#{statetaxregistrationadmin},
+			#{certificatesmature},
+			#{localtaxregistrationadmin},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks3},
+			#{serviceexpirationdate},
+			#{delFlag},
+			#{carryForwardPercentage},
+			#{urgent},
+			#{outOfService}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_customer SET 	
+			customer_name = #{customerName},
+			abbr_name = #{abbrName},
+			industry = #{industry},
+			legal_representative = #{legalRepresentative},
+			id_number = #{idNumber},
+			business_license_number = #{businessLicenseNumber},
+			organization_code = #{organizationCode},
+			establishment_date = #{establishmentDate},
+			start_date = #{startDate},
+			supervisor = #{supervisor},
+			audit_person = #{auditPerson},
+			remarks = #{remarks},
+			contact_person = #{contactPerson},
+			office_phone = #{officePhone},
+			phone_number = #{phoneNumber},
+			mobile_phone = #{mobilePhone},
+			fax_number = #{faxNumber},
+			qq = #{qq},
+			e_mail = #{eMail},
+			other = #{other},
+			detailed_address = #{detailedAddress},
+			value_added_tax = #{valueAddedTax},
+			tax_rate = #{taxRate},
+			state_tax_registration_number = #{stateTaxRegistrationNumber},
+			computer_code1 = #{computerCode1},
+			state_tax_bureau = #{stateTaxBureau},
+			remarks1 = #{remarks1},
+			local_tax_registration_number = #{localTaxRegistrationNumber},
+			current_period=#{currentperiod},
+			init_period=#{initperiod},
+			lately_period=#{latelyperiod},
+			computer_code2 = #{computerCode2},
+			local_tax_bureau = #{localTaxBureau},
+			remarks2 = #{remarks2},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks3 = #{remarks3},
+			system=#{system},
+			state_tax_registration_admin=#{statetaxregistrationadmin},
+			certificates_mature=#{certificatesmature},
+			local_tax_registration_admin=#{localtaxregistrationadmin},
+			service_expiration_date=#{serviceexpirationdate},
+			carry_forward_percentage=#{carryForwardPercentage},
+			
+			urgent=#{urgent},
+			out_of_service=#{outOfService}
+			
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateServiceexpirationdate">
+		UPDATE t_customer SET 	
+	
+			service_expiration_date=#{serviceexpirationdate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE t_customer SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id=#{id}
+	</update>
+	<update id="restore" parameterType="String">
+		UPDATE t_customer SET 
+			del_flag = '0'
+		WHERE id = #{id}
+	</update>
+	<update id="deleteCustomer" parameterType="String">
+		UPDATE t_customer SET 
+			del_flag = '1'
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 获取所有信息 -->
+	<select id="AllList" resultType="TCustomer">
+		select 
+			<include refid="tCustomerColumns"></include>
+		from t_customer a
+	</select>
+	<select id="findBySupervisor" resultType="TCustomer">
+		select 
+			<include refid="tCustomerColumns"></include>
+		from t_customer a where 1=1 <choose>
+				<when test="currentUser.roleNames=='记账公司管理员'">
+					AND a.supervisor in (SELECT	b.id FROM sys_user b WHERE b.del_flag = #{DEL_FLAG_NORMAL}	AND b.company_id = #{currentUser.company.id})
+				</when>
+				<otherwise>
+				<if test="supervisor != null and supervisor != ''">
+					AND a.supervisor =#{supervisor}
+					</if>
+				</otherwise>
+			</choose> AND a.current_period IS NOT NULL AND a.del_flag = '0' AND a.out_of_service ='0'
+	</select>
+	<!-- 根据 审核人id，获取所有的信息 -->
+	<select id="listBySupervisor" resultType="TCustomer">
+		select 
+			<include refid="tCustomerColumns"></include>
+		from  t_customer a where  a.del_flag = '0' 
+<choose>
+				<when test="currentUser.roleNames=='记账公司管理员'">
+					AND a.supervisor in (SELECT	b.id FROM sys_user b WHERE b.del_flag = #{DEL_FLAG_NORMAL}	AND b.company_id = #{currentUser.company.id})
+				</when>
+				<otherwise>
+				<if test="supervisor != null and supervisor != ''">
+					AND a.supervisor =#{supervisor}
+					</if>
+				</otherwise>
+			</choose>
+				AND a.out_of_service ='0'
+		 
+	</select>
+	
+	<!-- 根据企业id修改企业的审核人 -->
+	<update id="updateSupervisor">
+		UPDATE t_customer SET 
+			supervisor = #{supervisor}
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 当当前账期的值为空时将起始账期的值赋给当前账期 -->
+	<update id="updatecurrentPeriod">
+		UPDATE t_customer SET 
+			
+			current_period=#{currentperiod}
+		WHERE id = #{id}
+	</update>
+	
+	<select id="selectId" resultType="string">
+		select  NEXTVAL('TestSeq');
+	</select>
+	<update id="urgentupdates1" parameterType="java.util.List">
+		UPDATE t_customer SET 
+			urgent = '1'
+		WHERE id in 
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")"> 
+       		 #{item} 
+   	 	</foreach>
+    </update>
+    <update id="urgentupdates0" parameterType="java.util.List">
+		UPDATE t_customer SET 
+			urgent = '0'
+		WHERE id in 
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")"> 
+       		 #{item} 
+   	 	</foreach>
+    </update>
+    
+    <update id="outOfServiceupdates1" parameterType="java.util.List">
+		UPDATE t_customer SET 
+			out_of_service = '1'
+		WHERE id in 
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")"> 
+       		 #{item} 
+   	 	</foreach>
+    </update>
+    
+    <update id="outOfServiceupdate0" parameterType="String">
+		UPDATE t_customer SET 
+			out_of_service = '0'
+		WHERE id =#{id}
+    </update>
+	
+	
+	
+</mapper>

@@ -1,0 +1,47 @@
+.SelectTemplate{ width: 850px; height: auto;margin: 0 auto;position: fixed;top: 50%;margin-top: -266px;left: 50%;margin-left: -420px;font-family: "MicroSoft YaHei";background: #ffffff;overflow: hidden;}
+.h6-kr{height: 30px;line-height: 30px;background: #4f9de8;text-align: left;color: #fff;font-size: 14px;text-indent: 11px;}
+.h6-kr i,.cont-txt .th,.iwrite,.emclose,.jiahao{background: url(../images/icon.png) no-repeat;}
+.h6-kr i{position: absolute;width: 33px;height: 30px;background-position: 11px -452px;top: 0;right: 0;}
+
+.content{padding: 20px 15px 47px;/* height: 423px; */}
+.switch{float: left;}
+.switch a{position: relative;display: inline-block;float: left;width: 117px;height: 26px;line-height: 26px;font-size: 14px;color: #818181;border: 1px solid #dfdfdf;border-top-left-radius: 4px;border-top-right-radius: 4px;border-bottom: none;margin-right: -1px;}
+.switch a i{position: absolute;width: 117px;height: 2px;background: #3d8ae2;top: 0px;left: 1px;border-top-left-radius: 4px;border-top-right-radius: 4px;display: none;}
+.switch a:hover{text-decoration: none;}
+.switch a.on{height: 33px;font-size: 16px;color: #4f9de8;line-height: 33px;margin-top: -7px;border-bottom: 1px solid #fff;}
+.switch a.on i{display: block;}
+
+.tabCont{padding: 18px 8px 10px;border: 1px solid #dfdfdf;margin-top: -1px; overflow-y: auto;}
+.mt15{margin-top: 15px;}
+.mr10{margin-right: 9px;}
+.lay{float: left;}
+.jia{width:250px;height: 174px;border: 1px solid #dfdfdf;border-radius: 4px;display:table-cell;vertical-align:middle;float: left;cursor: pointer;position: relative;}
+.jiahao{width: 83px;height: 83px;background-position: 0 -551px;margin:0 auto;position: absolute;top: 50%;margin-top: -41px;left: 50%;margin-left: -41px;}
+.contlist{margin: 15px 9px 0 0;}
+.cont-txt{width: 250px;border: 1px solid #dfdfdf;border-radius: 4px;float: left;position: relative;}
+.cont-txt .th{height: 24px;line-height: 24px;border-bottom: 1px solid #dfdfdf;background-position: 10px -489px;text-align: left;text-indent: 30px;color: #4f9de8;position: relative;}
+.dlcont{padding: 23px 29px 26px 20px;position: relative;float: left;}
+.dlcont dt{float: left;width: 25px;height: 25px;line-height: 25px;border-radius: 100%;color: #fff;text-align: center;}
+.dl-borrow dt{background: #56cacb;}
+.dlcont dd i{font-size: 14px;position: absolute;top: 0px;left: 38px;line-height: 25px;}
+.dlcont dd{color: #818181;text-align: left;padding-left: 47px;line-height: 25px;position: relative;}
+.dl-lend dt{background: #e8854f;}
+.line{width: 200px;border-bottom: 1px solid #dfdfdf;margin-left:20px;float: left;display: inline;}
+
+.iwrite{position: absolute;width: 20px;height: 20px;top:3px;right: 23px;background-position: 4px -511px;cursor: pointer;display: none;}
+.emclose{position: absolute;width: 20px;height: 20px;top:3px;right: 2px;background-position: 4px -529px;cursor: pointer;display: none;}
+.cont-txt:hover{border: 1px solid #4f9de8;/*width: 248px;*/}
+.cont-txt:hover .iwrite{display: block;}
+.cont-txt:hover .emclose{display: block;}
+.usetemplate{/* float: left; */width: 252px;height: 0px;background: #4f9de8;margin-left: -1px;margin-top: -2px;border-bottom-left-radius: 4px;border-bottom-right-radius: 4px;color: #fff;line-height: 30px;display: none;
+position: absolute;bottom: 0;left: 0;}
+.cont-txt:hover .usetemplate{display: block;height: 30px;cursor:pointer;}
+
+/*узуж╡Ц*/
+.mask{display: none;position: absolute;top: 0;left: 0;width: 100%;height: 100%;background: #000;opacity: 0.5;filter:alpha(opacity=50);    z-index: 5;}
+/*.amortize{float:right;margin-right:-70px;color:#4f9de8;}*/
+.span-tip{padding-top:4px;padding-bottom:4px;background:#4f9de8;color:#fff;border-radius:0;position:absolute;right:-595px;bottom:-2px;width:246px;display:block;}
+.edit .th .th-left span.span-tip{width:246px;height:auto;}
+
+#title{  padding-top:5px;}
+h2{font-size:28px;}

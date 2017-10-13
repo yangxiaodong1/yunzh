@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.amortize.dao.TAmortizeDao">
+    
+	<sql id="tAmortizeColumns">
+		a.id AS "id",
+		a.exp_name AS "expName",
+		a.enter_account_date AS "enterAccountDate",
+		a.original_value AS "originalValue",
+		a.scrap_value_rate AS "scrapValueRate",
+		a.scrap_value AS "scrapValue",
+		a.amortize_age_limit AS "amortizeAgeLimit",
+		a.month_discount_old_position AS "monthDiscountOldPosition",
+		a.total_old_position AS "totalOldPosition",
+		a.net_value AS "netValue",
+		a.amortize_status AS "amortizeStatus",
+		a.t_voucher_exp_id AS "tVoucherExpId",
+		a.amortize_account_id AS "amortizeAccountId",
+		a.account_id AS "accountId",
+		a.dc AS "dc",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+		,a.fdbid AS "fdbid"
+		,a.current_period AS "currentPeriod",
+		a.if_init As "ifInit"
+	</sql>
+	
+	<sql id="tAmortizeJoins">
+	</sql>
+    
+	<select id="get" resultType="TAmortize">
+		SELECT 
+			<include refid="tAmortizeColumns"/>
+		FROM t_amortize a
+		<include refid="tAmortizeJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<update id="update_status">
+	   UPDATE t_amortize SET 
+	   amortize_status = #{amortizeStatus}
+	   
+	   where t_voucher_exp_id = #{tVoucherExpId}
+	
+	</update>
+	
+	<select id="findList" resultType="TAmortize">
+		SELECT 
+			<include refid="tAmortizeColumns"/>
+		FROM t_amortize a
+		<include refid="tAmortizeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TAmortize">
+		SELECT 
+			<include refid="tAmortizeColumns"/>
+		FROM t_amortize a
+		<include refid="tAmortizeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_amortize(
+			<!--id,-->
+			exp_name,
+			enter_account_date,
+			original_value,
+			scrap_value_rate,
+			scrap_value,
+			amortize_age_limit,
+			month_discount_old_position,
+			total_old_position,
+			net_value,
+			amortize_status,
+			t_voucher_exp_id ,
+			amortize_account_id,
+		    account_id,
+			dc,
+			create_by,
+			create_date,
+			update_date,
+			update_by,
+			remarks,
+			del_flag,
+			fdbid			
+		,current_period,
+		if_init
+		) VALUES (
+			<!--#{id},-->
+			#{expName},
+			#{enterAccountDate},
+			#{originalValue},
+			#{scrapValueRate},
+			#{scrapValue},
+			#{amortizeAgeLimit},
+			(#{originalValue}-#{scrapValue})/#{amortizeAgeLimit},
+			0,
+			#{netValue},
+			#{amortizeStatus},
+			#{tVoucherExpId},
+			#{amortizeAccountId},
+			#{accountId},
+			#{dc},
+			#{createBy.id},
+			#{createDate},
+			#{updateDate},
+			#{updateBy.id},
+			#{remarks},
+			#{delFlag}
+			,#{fdbid}
+			,#{currentPeriod},
+			#{ifInit}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_amortize SET 	
+			exp_name = #{expName},
+			enter_account_date = #{enterAccountDate},
+			original_value = #{originalValue},
+			scrap_value_rate = #{scrapValueRate},
+			scrap_value = #{scrapValue},
+			amortize_age_limit = #{amortizeAgeLimit},
+			month_discount_old_position = (#{originalValue}-#{scrapValue})/#{amortizeAgeLimit},
+			net_value = #{netValue},
+			amortize_status = #{amortizeStatus},
+			account_id = #{accountId},
+			amortize_account_id = #{amortizeAccountId},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE t_amortize SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	<select id="settleAccounts" resultType="TAmortize">
+		SELECT 
+			<!-- sum(original_value/amortize_age_limit) as 'beginBalance' -->
+		a.amortize_account_id AS "amortizeAccountId",
+		a.original_value AS "originalValue",
+		a.scrap_value AS "scrapValue",
+		a.amortize_age_limit AS "amortizeAgeLimit",
+		a.if_init As "ifInit",
+		a.total_old_position AS "totalOldPosition",
+		a.account_id as 'debitAccountId',
+		(select ta.account_id FROM t_amortize ta  where ta.t_voucher_exp_id = a.t_voucher_exp_id AND ta.id != a.id AND ta.fdbid = #{fdbid}) as 'creditAccountId'
+		FROM t_amortize a
+		<where>
+		   1 = 1 AND a.dc = 1 AND a.amortize_status = 1
+			<if test="fdbid != null and fdbid != ''">
+				AND a.fdbid = #{fdbid}
+			</if>
+			<if test="accountId != null and accountId != ''">
+				AND a.account_id = #{accountId}
+			</if>
+			<if test="expName != null and expName != ''">
+				AND a.exp_name = #{expName}
+			</if>
+			<if test="accountPeriod != null and accountPeriod != ''">
+			<!-- 	AND a.account_period = #{accountPeriod} -->
+			<![CDATA[
+				AND str_to_date( concat(current_period,'01'),'%Y%m%d') <= str_to_date( concat(#{accountPeriod},'01'),'%Y%m%d')
+				AND date_add(str_to_date( concat(current_period,'01'),'%Y%m%d'),interval amortize_age_limit month) > str_to_date( concat(#{accountPeriod},'01'),'%Y%m%d')
+			]]>   
+			</if>
+		</where>
+
+	<!-- AND str_to_date( concat(current_period,'01'),'%Y%m%d') <= str_to_date( concat('201512','01'),'%Y%m%d')
+	AND date_add(str_to_date( concat(current_period,'01'),'%Y%m%d'),interval 9 month) >= str_to_date( concat('201512','01'),'%Y%m%d')
+ -->	</select>
+
+	<!-- 计提折旧 -->
+	<select id="settleAccountsProvisionDepreciation" resultType="TAmortize">
+		SELECT 
+		a.amortize_account_id AS "amortizeAccountId",
+		a.original_value AS "originalValue",
+		a.scrap_value AS "scrapValue",
+		a.amortize_age_limit AS "amortizeAgeLimit",
+		a.if_init As "ifInit",
+		a.total_old_position AS "totalOldPosition",
+		a.account_id as 'debitAccountId',
+		(select ta.account_id FROM t_amortize ta where ta.t_voucher_exp_id = a.t_voucher_exp_id AND ta.id != a.id AND ta.fdbid = #{fdbid}  ) as 'creditAccountId'
+		FROM t_amortize a
+		<where>
+			1 = 1 AND a.dc = 1 AND a.amortize_status = 1
+			<if test="fdbid != null and fdbid != ''">
+				AND a.fdbid = #{fdbid}
+			</if>
+			<if test="accountId != null and accountId != ''">
+				AND a.account_id = #{accountId}
+			</if>
+			<if test="expName != null and expName != ''">
+				AND a.exp_name = #{expName}
+			</if>
+			<if test="accountPeriod != null and accountPeriod != ''">
+			<![CDATA[
+				AND (
+			(a.if_init = 2 
+				AND date_add(str_to_date(concat(current_period,'01'),'%Y%m%d'),interval 1 month) <= str_to_date( concat(#{accountPeriod},'01'),'%Y%m%d') 
+				AND amortize_age_limit > total_old_position) 
+			OR (a.if_init = 1 
+				AND str_to_date(concat(current_period,'01'),'%Y%m%d') <= str_to_date( concat(#{accountPeriod},'01'),'%Y%m%d') 
+				AND amortize_age_limit > total_old_position)
+) 
+			]]>   
+			</if>
+		</where>
+		<!-- SELECT 
+			sum(original_value/amortize_age_limit) as 'beginBalance'
+		FROM t_amortize a
+		<where>
+			<if test="fdbid != null and fdbid != ''">
+				AND a.fdbid = #{fdbid}
+			</if>
+			<if test="accountId != null and accountId != ''">
+				AND a.account_id = #{accountId}
+			</if>
+			<if test="expName != null and expName != ''">
+				AND a.exp_name = #{expName}
+			</if>
+			<if test="accountPeriod != null and accountPeriod != ''">
+			<![CDATA[
+				AND date_add(str_to_date(concat(current_period,'01'),'%Y%m%d'),interval 1 month) <= str_to_date( concat(#{accountPeriod},'01'),'%Y%m%d')
+				AND date_add(str_to_date(concat(current_period,'01'),'%Y%m%d'),interval amortize_age_limit month) >= str_to_date( concat(#{accountPeriod},'01'),'%Y%m%d')
+			]]>   
+			</if>
+		</where> -->
+	</select>
+
+	<!--chengming 摊销-->
+	<select id="infobyfdbidandaccountid" resultType="AccountAndamortize">
+		SELECT a.*,b.account_name,b.accunt_id FROM (SELECT * from t_amortize WHERE fdbid=#{fdbid} and if_init='1' AND amortize_account_id=#{accountId}) a INNER JOIN t_account b ON a.account_id=b.id  
+	</select>
+     <!--yxd 分组查询-->
+	<select id="selectbyamortize_account_id" resultType="AccountAndamortize">
+	 
+	select * FROM t_amortize a where a.fdbid = #{fdbid} GROUP BY a.t_voucher_exp_id
+
+	</select>
+	
+	<update id="updatetotalOldPositionById">
+		update t_amortize a
+			set total_old_position = total_old_position + 1  
+		<where> 1 = 1 
+			<if test="fdbid != null and fdbid != ''">
+				AND a.fdbid = #{fdbid}
+			</if>
+			<if test="accountId != null and accountId != ''">
+				AND a.account_id = #{accountId}
+			</if>
+			<if test="expName != null and expName != ''">
+				AND a.exp_name = #{expName}
+			</if>
+			<if test="currentPeriod != null and currentPeriod != ''">
+		 	AND a.current_period &lt;= #{currentPeriod} 
+		 	</if>
+		</where>
+	</update>
+	
+	<select id="selectAccountIdByPeriodAndFdbid" resultType="java.lang.String">
+		select accunt_id AS accountId
+			from t_amortize a, t_account b 
+		<where>
+		 	a.amortize_account_id = b.id  and a.fdbid = b.fdbid and a.if_init = 1
+		 	<if test="currentPeriod != null and currentPeriod != ''">
+		 	AND a.current_period =#{currentPeriod} 
+		 	</if>
+		 	<if test="fdbid != null and fdbid != ''">
+		 	AND a.fdbid = #{fdbid}
+		 	</if> 
+		 	AND a.amortize_status = 1
+	 	</where>
+	</select>
+	
+	<update id="updateAmortizeFromOriginalValue">
+		update t_amortize a
+		<trim prefix="set" suffixOverrides=",">
+			<trim prefix="original_value =case" suffix="end,">
+                 <foreach collection="list" item="i" index="index">
+                         <if test="i.level!=null">
+                          when a.amortize_account_id=#{i.id} then  a.original_value + #{i.level}
+                         </if>
+                 </foreach>
+             </trim>
+		</trim>
+		<where>
+			<foreach collection="list" separator="or" item="i" index="index" >
+              a.amortize_account_id=#{i.id}
+        	</foreach>
+        	<if test="currentPeriod != null and currentPeriod != ''">
+		 	AND a.current_period =#{currentPeriod} 
+		 	</if>
+        	<if test="fdbid != null and fdbid != ''">
+		 	AND a.fdbid = #{fdbid}
+		 	</if>
+		 	AND a.if_init = 1
+        </where>
+	</update>
+</mapper>

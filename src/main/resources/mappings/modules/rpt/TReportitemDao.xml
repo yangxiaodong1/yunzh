@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.rpt.dao.TReportitemDao">
+    
+	<sql id="tReportitemColumns">
+		a.id AS "id",
+		a.reportitem AS "reportitem",
+		a.fdesc AS "fdesc",
+		a.nameture AS "nameture",
+		a.dc AS "dc",
+		a.groupid AS "groupid",
+		a.forder AS "forder",
+		a.frownum AS "frownum",
+		a.datasource AS "datasource",
+		a.formula AS "formula",
+		a.fdbid AS "fdbid",
+		a.report_id AS "reportId",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="tReportitemJoins">
+	</sql>
+    
+	<select id="get" resultType="TReportitem">
+		SELECT 
+			<include refid="tReportitemColumns"/>
+		FROM t_reportitem a
+		<include refid="tReportitemJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TReportitem">
+		SELECT 
+			<include refid="tReportitemColumns"/>
+		FROM t_reportitem a
+		<include refid="tReportitemJoins"/>
+		<where>
+			<!-- a.del_flag = #{DEL_FLAG_NORMAL} -->
+			<if test="fdbid != null and fdbid != ''">
+				AND a.fdbid = #{fdbid}
+			</if>
+			<if test="reportId != null and reportId != ''">
+				AND a.report_id = #{reportId}
+			</if>
+		</where>
+		<choose>
+		<!-- 	<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise> -->
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TReportitem">
+		SELECT 
+			<include refid="tReportitemColumns"/>
+		FROM t_reportitem a
+		<include refid="tReportitemJoins"/>
+		<where>
+			<!-- a.del_flag = #{DEL_FLAG_NORMAL} -->
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_reportitem(
+			id,
+			reportitem,
+			fdesc,
+			nameture,
+			dc,
+			groupid,
+			forder,
+			frownum,
+			datasource,
+			formula,
+			fdbid,
+			report_id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{reportitem},
+			#{fdesc},
+			#{nameture},
+			#{dc},
+			#{groupid},
+			#{forder},
+			#{frownum},
+			#{datasource},
+			#{formula},
+			#{fdbid},
+			#{reportId},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_reportitem SET 	
+			reportitem = #{reportitem},
+			fdesc = #{fdesc},
+			nameture = #{nameture},
+			dc = #{dc},
+			groupid = #{groupid},
+			forder = #{forder},
+			frownum = #{frownum},
+			datasource = #{datasource},
+			formula = #{formula},
+			fdbid = #{fdbid},
+			report_id = #{reportId},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE t_reportitem SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	<select id="findModelByReportitem" resultType="TReportitem">
+		select * from t_reportitem where id=#{id}
+	</select>
+	
+	<select id="findForMulaByReportitem" resultType="TReportitem">
+		select * from t_reportitem a
+		<where>
+			<if test="reportitem != null and reportitem != ''">
+				AND a.reportitem = #{reportitem}
+			</if>
+		</where>
+	</select>
+	<select id="findTReportitemByReItems" resultType="TReportitem">
+		select * from t_reportitem a
+		<where>
+		AND 1 = 1
+			<if test="fdbid != null and fdbid != ''">
+				AND a.fdbid = #{fdbid}
+			</if>
+			<if test="list != null and list.size() >0">
+				AND reportitem in 
+				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">  
+	  				#{item}  
+	 			</foreach>
+			</if>
+		</where>
+	</select>
+	<select id="findListByBalanceProfit" resultType="TReportitem">
+		SELECT 
+			<include refid="tReportitemColumns"/>
+		FROM t_reportitem a
+		<include refid="tReportitemJoins"/>
+		<where>
+			<!-- a.del_flag = #{DEL_FLAG_NORMAL} -->
+			<if test="fdbid != null and fdbid != ''">
+				AND a.fdbid = #{fdbid}
+			</if>
+			<if test="reportId != null and reportId != ''">
+				AND a.report_id != #{reportId}
+			</if>
+		</where>
+		<choose>
+		<!-- 	<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise> -->
+		</choose>
+	</select>
+</mapper>
